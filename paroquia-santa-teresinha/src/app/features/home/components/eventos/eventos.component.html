@@ -1,0 +1,39 @@
+<section id="eventos" class="pst-section" aria-labelledby="eventos-titulo">
+
+  <div class="pst-section__header">
+    <h2 id="eventos-titulo" class="pst-section__title">
+      <i class="pi pi-calendar" aria-hidden="true"></i>
+      Próximos Eventos
+    </h2>
+    <a routerLink="/eventos" class="pst-link-ver-tudo" aria-label="Ver todos os eventos">
+      Ver tudo
+      <i class="pi pi-chevron-right" aria-hidden="true"></i>
+    </a>
+  </div>
+
+  <ul class="pst-eventos-list" role="list" aria-label="Próximos eventos da paróquia">
+    <li *ngFor="let evento of eventos" class="pst-evento-card">
+
+      <div
+        class="pst-evento-card__date-chip"
+        [attr.aria-label]="evento.diaSemana + ', ' + evento.dia + ' de ' + evento.mes">
+        <span class="pst-evento-card__mes" aria-hidden="true">{{ evento.mes }}</span>
+        <span class="pst-evento-card__dia" aria-hidden="true">{{ evento.dia }}</span>
+      </div>
+
+      <div class="pst-evento-card__content">
+        <h3 class="pst-evento-card__titulo">{{ evento.titulo }}</h3>
+        <p class="pst-evento-card__local">
+          <i class="pi pi-map-marker" aria-hidden="true"></i>
+          {{ evento.local }}
+        </p>
+        <div class="pst-evento-card__meta">
+          <span class="pst-evento-card__diaSemana">
+            <i class="pi pi-clock" aria-hidden="true"></i>
+            {{ evento.diaSemana }}<span *ngIf="evento.hora">, {{ evento.hora }}</span>
+          </span>
+        </div>
+      </div>
+    </li>
+  </ul>
+</section>

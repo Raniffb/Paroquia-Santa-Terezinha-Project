@@ -1,0 +1,110 @@
+<app-page-hero
+  icon="pi-calendar"
+  titulo="Eventos"
+  subtitulo="Agenda completa de celebrações, retiros e encontros da paróquia">
+</app-page-hero>
+
+<div class="pst-page-content">
+
+  <!-- Filtro de categoria -->
+  <div class="pst-filter" role="tablist" aria-label="Filtrar eventos por categoria">
+    <button
+      *ngFor="let f of filtros"
+      role="tab"
+      class="pst-filter__btn"
+      [class.pst-filter__btn--active]="categoriaAtiva === f.valor"
+      [attr.aria-selected]="categoriaAtiva === f.valor"
+      [attr.aria-label]="'Filtrar por ' + f.label"
+      (click)="filtrarCategoria(f.valor)">
+      <i [class]="'pi ' + f.icon" aria-hidden="true"></i>
+      {{ f.label }}
+    </button>
+  </div>
+
+  <!-- Filtro de mês -->
+  <div class="pst-mes-filter" role="group" aria-label="Filtrar eventos por mês">
+    <span class="pst-mes-filter__label">Mês:</span>
+    <button
+      class="pst-mes-btn"
+      [class.pst-mes-btn--active]="mesFiltro === null"
+      (click)="filtrarMes(null)"
+      [attr.aria-pressed]="mesFiltro === null">
+      Todos
+    </button>
+    <button
+      *ngFor="let m of meses"
+      class="pst-mes-btn"
+      [class.pst-mes-btn--active]="mesFiltro === m"
+      (click)="filtrarMes(m)"
+      [attr.aria-pressed]="mesFiltro === m"
+      [attr.aria-label]="'Filtrar eventos de ' + m">
+      {{ m }}
+    </button>
+  </div>
+
+  <!-- Contagem -->
+  <p class="pst-result-count" aria-live="polite" aria-atomic="true">
+    <strong>{{ visiveis.length }}</strong>
+    {{ visiveis.length === 1 ? 'evento encontrado' : 'eventos encontrados' }}
+  </p>
+
+  <!-- Lista de eventos -->
+  <ul
+    *ngIf="visiveis.length > 0; else semEventos"
+    class="pst-eventos-lista"
+    role="list"
+    aria-label="Lista de eventos"
+    aria-live="polite">
+
+    <li *ngFor="let evento of visiveis" class="pst-evento-item">
+
+      <!-- Chip de data -->
+      <div
+        class="pst-evento-item__date"
+        [attr.aria-label]="evento.diaSemana + ', ' + evento.dia + ' de ' + evento.mes + ' de ' + evento.ano">
+        <span class="pst-evento-item__mes" aria-hidden="true">{{ evento.mes }}</span>
+        <span class="pst-evento-item__dia" aria-hidden="true">{{ evento.dia }}</span>
+        <span class="pst-evento-item__ano" aria-hidden="true">{{ evento.ano }}</span>
+      </div>
+
+      <!-- Conteúdo -->
+      <div class="pst-evento-item__content">
+        <div class="pst-evento-item__meta">
+          <span
+            class="pst-evento-item__cat"
+            [style.background]="corCategoria(evento.categoria) + '18'"
+            [style.color]="corCategoria(evento.categoria)"
+            [style.border-color]="corCategoria(evento.categoria) + '44'"
+            [attr.aria-label]="'Categoria: ' + labelCategoria(evento.categoria)">
+            <i [class]="'pi ' + iconCategoria(evento.categoria)" aria-hidden="true"></i>
+            {{ labelCategoria(evento.categoria) }}
+          </span>
+          <span class="pst-evento-item__diaSemana">
+            {{ evento.diaSemana }}<span *ngIf="evento.hora"> &bull; {{ evento.hora }}</span>
+          </span>
+        </div>
+
+        <h2 class="pst-evento-item__titulo">{{ evento.titulo }}</h2>
+
+        <p class="pst-evento-item__local">
+          <i class="pi pi-map-marker" aria-hidden="true"></i>
+          {{ evento.local }}
+        </p>
+
+        <p *ngIf="evento.descricao" class="pst-evento-item__descricao">
+          {{ evento.descricao }}
+        </p>
+      </div>
+    </li>
+  </ul>
+
+  <ng-template #semEventos>
+    <div class="pst-empty" role="status" aria-live="polite">
+      <i class="pi pi-calendar-times" aria-hidden="true"></i>
+      <p>Nenhum evento encontrado para este filtro.</p>
+      <button class="pst-btn-limpar" (click)="filtrarCategoria(null); filtrarMes(null)">
+        Limpar filtros
+      </button>
+    </div>
+  </ng-template>
+</div>

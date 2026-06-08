@@ -1,0 +1,206 @@
+.pst-page-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+// ── Seção interna ────────────────────────────────────────────────────────────
+.pst-section-bloco {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pst-bloco-titulo {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .pi {
+    color: var(--color-accent);
+    font-size: 1.1rem;
+  }
+}
+
+// ── Card de horários ─────────────────────────────────────────────────────────
+.pst-horarios-card {
+  background: var(--color-card);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+
+  &__intro {
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    line-height: 1.5;
+
+    .pi {
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.pst-horarios-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pst-horarios-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--color-bg);
+
+  &:last-child { border-bottom: none; }
+
+  &__dia {
+    font-weight: 700;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    min-width: 12rem;
+    flex-shrink: 0;
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+}
+
+.pst-horario-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--color-bg);
+  color: var(--color-primary);
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 100px;
+  border: 1.5px solid rgba(19, 51, 92, 0.18);
+
+  .pi { font-size: 0.78rem; }
+
+  &--conf {
+    background: rgba(192, 138, 45, 0.1);
+    color: #7a5620;
+    border-color: rgba(192, 138, 45, 0.3);
+  }
+}
+
+// ── Sacramentos ──────────────────────────────────────────────────────────────
+.pst-sacramentos-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+.pst-sacramento-card {
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-top: 3px solid var(--color-accent);
+
+  &__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 8px;
+    background: rgba(192, 138, 45, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+
+    .pi {
+      font-size: 1.15rem;
+      color: var(--color-accent);
+    }
+  }
+
+  &__titulo {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  &__texto {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// ── Observações ──────────────────────────────────────────────────────────────
+.pst-obs-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pst-obs-item {
+  display: flex;
+  gap: 0.75rem;
+  background: var(--color-card);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  align-items: flex-start;
+
+  &__icon {
+    .pi {
+      font-size: 1.2rem;
+      color: var(--color-accent);
+      flex-shrink: 0;
+    }
+  }
+
+  &__titulo {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 0.3rem;
+  }
+
+  &__texto {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+@media (min-width: 640px) {
+  .pst-page-content { padding: 2rem 1.5rem 3.5rem; }
+  .pst-horarios-item { padding: 1rem 1.5rem; }
+  .pst-sacramentos-grid { grid-template-columns: repeat(2, 1fr); }
+  .pst-bloco-titulo { font-size: 1.4rem; }
+}

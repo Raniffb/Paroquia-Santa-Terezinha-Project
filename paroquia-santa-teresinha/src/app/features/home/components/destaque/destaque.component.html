@@ -1,0 +1,31 @@
+<section
+  id="destaque"
+  class="pst-section"
+  aria-labelledby="destaque-titulo"
+  *ngIf="aviso">
+
+  <article class="pst-destaque-card" aria-label="Aviso em destaque">
+    <div class="pst-destaque-card__badge" aria-label="Destaque">
+      <i class="pi pi-star-fill" aria-hidden="true"></i>
+      Destaque
+    </div>
+
+    <h2 id="destaque-titulo" class="pst-destaque-card__titulo">
+      {{ aviso.titulo }}
+    </h2>
+
+    <p class="pst-destaque-card__data">
+      <i class="pi pi-calendar" aria-hidden="true"></i>
+      <time [dateTime]="aviso.data">{{ formatarData(aviso.data) }}</time>
+    </p>
+
+    <p class="pst-destaque-card__resumo">{{ aviso.resumo }}</p>
+
+    <button
+      class="pst-btn pst-btn--accent"
+      [attr.aria-label]="'Ver detalhes do aviso: ' + aviso.titulo">
+      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+      Ver detalhes
+    </button>
+  </article>
+</section>

@@ -1,0 +1,77 @@
+<app-page-hero
+  icon="pi-bell"
+  titulo="Avisos"
+  subtitulo="Comunicados e informações importantes da paróquia">
+</app-page-hero>
+
+<div class="pst-page-content">
+
+  <!-- Filtro -->
+  <div class="pst-filter" role="tablist" aria-label="Filtrar avisos por categoria">
+    <button
+      *ngFor="let f of filtros"
+      role="tab"
+      class="pst-filter__btn"
+      [class.pst-filter__btn--active]="categoriaAtiva === f.valor"
+      [attr.aria-selected]="categoriaAtiva === f.valor"
+      [attr.aria-label]="'Filtrar por ' + f.label"
+      (click)="filtrar(f.valor)">
+      <i [class]="'pi ' + f.icon" aria-hidden="true"></i>
+      {{ f.label }}
+    </button>
+  </div>
+
+  <!-- Contagem -->
+  <p class="pst-result-count" aria-live="polite" aria-atomic="true">
+    <strong>{{ visiveis.length }}</strong>
+    {{ visiveis.length === 1 ? 'aviso encontrado' : 'avisos encontrados' }}
+  </p>
+
+  <!-- Lista -->
+  <ul
+    *ngIf="visiveis.length > 0; else semAvisos"
+    class="pst-avisos-lista"
+    role="list"
+    aria-label="Lista de avisos"
+    aria-live="polite">
+
+    <li *ngFor="let aviso of visiveis" class="pst-aviso-item">
+
+      <!-- Indicador urgente -->
+      <div *ngIf="aviso.urgente" class="pst-aviso-item__urgente" aria-label="Aviso urgente">
+        <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+        Urgente
+      </div>
+
+      <div class="pst-aviso-item__inner">
+        <!-- Data + Categoria -->
+        <div class="pst-aviso-item__meta">
+          <time
+            class="pst-aviso-item__data"
+            [dateTime]="aviso.data">
+            <i class="pi pi-calendar" aria-hidden="true"></i>
+            {{ formatarData(aviso.data) }}
+          </time>
+          <span
+            *ngIf="aviso.categoria"
+            class="pst-aviso-item__cat"
+            [attr.aria-label]="'Categoria: ' + labelCategoria(aviso.categoria)">
+            <i [class]="'pi ' + iconCategoria(aviso.categoria)" aria-hidden="true"></i>
+            {{ labelCategoria(aviso.categoria) }}
+          </span>
+        </div>
+
+        <!-- Conteúdo -->
+        <h2 class="pst-aviso-item__titulo">{{ aviso.titulo }}</h2>
+        <p class="pst-aviso-item__resumo">{{ aviso.resumo }}</p>
+      </div>
+    </li>
+  </ul>
+
+  <ng-template #semAvisos>
+    <div class="pst-empty" role="status" aria-live="polite">
+      <i class="pi pi-bell-slash" aria-hidden="true"></i>
+      <p>Nenhum aviso encontrado para esta categoria.</p>
+    </div>
+  </ng-template>
+</div>

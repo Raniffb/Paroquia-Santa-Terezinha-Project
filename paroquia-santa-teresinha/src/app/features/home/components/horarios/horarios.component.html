@@ -1,0 +1,38 @@
+<section
+  id="horarios"
+  class="pst-section"
+  aria-labelledby="horarios-titulo">
+
+  <div class="pst-section__header">
+    <h2 id="horarios-titulo" class="pst-section__title">
+      <i class="pi pi-clock" aria-hidden="true"></i>
+      Horários das Missas
+    </h2>
+  </div>
+
+  <div class="pst-horarios-card" role="region" aria-label="Tabela de horários das missas">
+    <div class="pst-horarios-card__intro">
+      <i class="pi pi-info-circle" aria-hidden="true"></i>
+      Os horários podem ser alterados em datas especiais.
+      Confira sempre os avisos.
+    </div>
+
+    <ul class="pst-horarios-list" role="list">
+      <li
+        *ngFor="let missa of missas"
+        class="pst-horarios-item">
+
+        <span class="pst-horarios-item__dia">{{ missa.dia }}</span>
+
+        <div class="pst-horarios-item__horarios" role="group" [attr.aria-label]="'Missas de ' + missa.dia">
+          <span
+            *ngFor="let h of missa.horarios"
+            class="pst-horario-chip">
+            <i class="pi pi-clock" aria-hidden="true"></i>
+            {{ h }}
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>

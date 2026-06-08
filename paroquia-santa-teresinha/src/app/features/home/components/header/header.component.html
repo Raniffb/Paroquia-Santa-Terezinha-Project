@@ -1,0 +1,79 @@
+<header class="pst-header" role="banner">
+  <div class="pst-header__inner">
+
+    <!-- Marca / Home link -->
+    <a
+      class="pst-header__brand"
+      routerLink="/"
+      (click)="closeMenu()"
+      aria-label="Paróquia Santa Teresinha – ir para a página inicial">
+      <div class="pst-header__emblem" aria-hidden="true">
+        <span class="pst-header__initials">PST</span>
+      </div>
+      <div class="pst-header__info">
+        <span class="pst-header__name">Paróquia Santa Teresinha</span>
+        <span class="pst-header__location">
+          <i class="pi pi-map-marker" aria-hidden="true"></i>
+          Manaus &middot; AM
+        </span>
+      </div>
+    </a>
+
+    <!-- Controles direita -->
+    <div class="pst-header__controls">
+
+      <!-- A− / A+ -->
+      <div class="pst-font-controls" role="group" aria-label="Controle de tamanho do texto">
+        <button
+          class="pst-font-btn"
+          (click)="fs.decrease()"
+          [disabled]="!fs.canDecrease"
+          [attr.aria-disabled]="!fs.canDecrease"
+          aria-label="Diminuir tamanho do texto"
+          title="Diminuir texto">
+          A<span class="pst-font-btn__sup">−</span>
+        </button>
+        <button
+          class="pst-font-btn pst-font-btn--large"
+          (click)="fs.increase()"
+          [disabled]="!fs.canIncrease"
+          [attr.aria-disabled]="!fs.canIncrease"
+          aria-label="Aumentar tamanho do texto"
+          title="Aumentar texto">
+          A<span class="pst-font-btn__sup">+</span>
+        </button>
+      </div>
+
+      <!-- Hamburger (mobile) -->
+      <button
+        class="pst-menu-btn"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen"
+        aria-controls="pst-nav"
+        [attr.aria-label]="menuOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'">
+        <i [class]="menuOpen ? 'pi pi-times' : 'pi pi-bars'" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav
+    id="pst-nav"
+    class="pst-nav"
+    [class.pst-nav--open]="menuOpen"
+    aria-label="Menu principal">
+    <ul class="pst-nav__list" role="list">
+      <li *ngFor="let item of navItems">
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="pst-nav__link--active"
+          [routerLinkActiveOptions]="{ exact: item.exact }"
+          class="pst-nav__link"
+          (click)="closeMenu()"
+          [attr.aria-current]="null">
+          {{ item.label }}
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>

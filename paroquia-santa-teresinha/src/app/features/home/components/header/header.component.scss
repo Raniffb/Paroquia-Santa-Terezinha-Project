@@ -1,0 +1,262 @@
+.pst-header {
+  background-color: var(--color-primary);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // gap fixo em px: não escala com A+, evita quebra de layout
+    gap: 8px;
+    padding: 10px 16px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+    min-width: 0;    // permite truncar o nome no flex
+    flex: 1 1 0;     // cresce até onde houver espaço, mas cede para controles
+
+    &:focus-visible {
+      outline: 3px solid var(--color-accent);
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+  }
+
+  // Emblema com tamanho fixo em px — NÃO escala com A+/A-
+  &__emblem {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__initials {
+    font-family: var(--font-serif);
+    font-size: 15px;   // px fixo — emblema não escala
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.04em;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__name {
+    font-family: var(--font-serif);
+    font-size: 1rem;   // em rem: o nome do site DEVE escalar com A+
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Localização oculta no mobile para não quebrar linha com A+
+  // Visível a partir de 640px onde há espaço suficiente
+  &__location {
+    display: none;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;   // controles nunca encolhem
+  }
+}
+
+// ── Controles A− / A+ ─────────────────────────────────────────────────────
+// Tamanhos em px: são chrome de UI, NÃO precisam escalar com o conteúdo
+.pst-font-controls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.pst-font-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  border-radius: 6px;
+  padding: 5px 9px;      // px fixo
+  cursor: pointer;
+  font-family: var(--font-serif);
+  font-size: 14px;        // px fixo
+  font-weight: 700;
+  line-height: 1;
+  transition: background 0.15s, opacity 0.15s;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+
+  &__sup {
+    font-size: 10px;     // px fixo
+    vertical-align: super;
+    font-family: var(--font-sans);
+  }
+
+  &--large {
+    font-size: 16px;      // px fixo
+    padding: 5px 8px;
+  }
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+// ── Botão hamburger ────────────────────────────────────────────────────────
+// px fixo: não deve crescer com A+
+.pst-menu-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  border-radius: 6px;
+  width: 40px;    // px fixo
+  height: 40px;   // px fixo
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  .pi {
+    font-size: 18px;   // px fixo
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+// ── Nav mobile ─────────────────────────────────────────────────────────────
+.pst-nav {
+  background-color: var(--color-primary);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+
+  &--open {
+    // 600px garante espaço para 6 itens mesmo no maior tamanho de fonte (26px)
+    // Cálculo: 6 × (linha ~28px + padding ~34px) ≈ 372px + folga
+    max-height: 600px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0 auto;
+    padding: 6px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 900px;
+  }
+
+  &__link {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.65rem 0.5rem;  // em rem: os links de menu DEVEM escalar com A+
+    border-radius: 6px;
+    font-size: 1rem;           // rem: escala com A+
+    font-weight: 600;
+    transition: background 0.15s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+
+    &--active {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+  }
+}
+
+// ── Desktop (≥ 640px) ───────────────────────────────────────────────────────
+@media (min-width: 640px) {
+  .pst-header {
+    &__inner {
+      padding: 10px 24px;
+      gap: 12px;
+    }
+
+    &__name {
+      font-size: 1.15rem;
+    }
+
+    // Localização visível no desktop
+    &__location {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.78rem;
+      opacity: 0.85;
+      margin-top: 2px;
+      white-space: nowrap;
+
+      .pi { font-size: 12px; }
+    }
+  }
+
+  .pst-menu-btn {
+    display: none;
+  }
+
+  .pst-nav {
+    max-height: none;
+    overflow: visible;
+    border-top: none;
+
+    &__list {
+      flex-direction: row;
+      padding: 0 24px 8px;
+      gap: 4px;
+    }
+
+    &__link {
+      font-size: 0.9rem;
+      padding: 0.4rem 0.6rem;
+      white-space: nowrap;
+    }
+  }
+}

@@ -1,0 +1,191 @@
+.pst-footer {
+  background: var(--color-primary);
+  color: #fff;
+  margin-top: 2rem;
+
+  &__inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__emblem {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    span {
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+    }
+  }
+
+  &__nome {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 0.15rem;
+  }
+
+  &__diocese {
+    font-size: 0.8rem;
+    opacity: 0.75;
+    margin: 0;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  &__address {
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+
+    p {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      margin: 0;
+
+      .pi {
+        font-size: 0.9rem;
+        flex-shrink: 0;
+        margin-top: 0.1rem;
+        color: var(--color-accent);
+      }
+
+      a {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+
+        &:hover {
+          color: #fff;
+          text-decoration: underline;
+        }
+
+        &:focus-visible {
+          outline: 3px solid var(--color-accent);
+          outline-offset: 2px;
+          border-radius: 3px;
+        }
+      }
+    }
+  }
+
+  &__social-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.75;
+    margin: 0 0 0.6rem;
+  }
+
+  &__social-links {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__a11y {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+    .pi {
+      font-size: 1.25rem;
+      color: var(--color-accent);
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    p {
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin: 0;
+      opacity: 0.9;
+    }
+  }
+
+  &__copy {
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 1.25rem;
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      opacity: 0.75;
+    }
+  }
+
+  &__copy-sub {
+    font-size: 0.78rem !important;
+    opacity: 0.55 !important;
+    margin-top: 0.25rem !important;
+  }
+}
+
+.pst-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.15s;
+
+  .pi {
+    font-size: 1.1rem;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+@media (min-width: 640px) {
+  .pst-footer__info {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .pst-footer__address {
+    flex: 1;
+  }
+}

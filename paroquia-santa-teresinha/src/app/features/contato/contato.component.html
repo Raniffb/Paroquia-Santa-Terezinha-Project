@@ -1,0 +1,290 @@
+<app-page-hero
+  icon="pi-envelope"
+  titulo="Contato"
+  subtitulo="Fale conosco — estamos aqui para ajudar">
+</app-page-hero>
+
+<div class="pst-page-content">
+  <div class="pst-contato-grid">
+
+    <!-- ── Formulário ────────────────────────────────── -->
+    <section class="pst-form-section" aria-labelledby="form-titulo">
+      <h2 id="form-titulo" class="pst-bloco-titulo">
+        <i class="pi pi-send" aria-hidden="true"></i>
+        Envie uma mensagem
+      </h2>
+
+      <!-- Feedback sucesso -->
+      <div
+        *ngIf="feedbackSucesso"
+        class="pst-feedback pst-feedback--sucesso"
+        role="alert"
+        aria-live="assertive">
+        <i class="pi pi-check-circle" aria-hidden="true"></i>
+        <div>
+          <strong>Mensagem enviada com sucesso!</strong>
+          <p>Obrigado pelo contato. Retornaremos em breve.</p>
+        </div>
+      </div>
+
+      <!-- Feedback erro -->
+      <div
+        *ngIf="feedbackErro"
+        class="pst-feedback pst-feedback--erro"
+        role="alert"
+        aria-live="assertive">
+        <i class="pi pi-times-circle" aria-hidden="true"></i>
+        <div>
+          <strong>Ocorreu um erro.</strong>
+          <p>Tente novamente ou ligue para a secretaria.</p>
+        </div>
+      </div>
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="enviar()"
+        novalidate
+        aria-label="Formulário de contato">
+
+        <!-- Nome -->
+        <div class="pst-campo" [class.pst-campo--erro]="erroVisivel('nome')">
+          <label class="pst-campo__label" for="nome">
+            Nome completo
+            <span class="pst-campo__req" aria-label="obrigatório">*</span>
+          </label>
+          <input
+            id="nome"
+            type="text"
+            class="pst-campo__input"
+            formControlName="nome"
+            autocomplete="name"
+            required
+            aria-required="true"
+            [attr.aria-describedby]="erroVisivel('nome') ? 'nome-erro' : null"
+            [attr.aria-invalid]="erroVisivel('nome') || null"
+            placeholder="Seu nome completo">
+          <span
+            *ngIf="erroVisivel('nome')"
+            id="nome-erro"
+            class="pst-campo__msg-erro"
+            role="alert">
+            {{ mensagemErro('nome') }}
+          </span>
+        </div>
+
+        <!-- E-mail -->
+        <div class="pst-campo" [class.pst-campo--erro]="erroVisivel('email')">
+          <label class="pst-campo__label" for="email">
+            E-mail
+            <span class="pst-campo__req" aria-label="obrigatório">*</span>
+          </label>
+          <input
+            id="email"
+            type="email"
+            class="pst-campo__input"
+            formControlName="email"
+            autocomplete="email"
+            required
+            aria-required="true"
+            [attr.aria-describedby]="erroVisivel('email') ? 'email-erro' : null"
+            [attr.aria-invalid]="erroVisivel('email') || null"
+            placeholder="seu@email.com.br">
+          <span
+            *ngIf="erroVisivel('email')"
+            id="email-erro"
+            class="pst-campo__msg-erro"
+            role="alert">
+            {{ mensagemErro('email') }}
+          </span>
+        </div>
+
+        <!-- Telefone -->
+        <div class="pst-campo">
+          <label class="pst-campo__label" for="telefone">
+            Telefone / WhatsApp
+            <span class="pst-campo__opt">(opcional)</span>
+          </label>
+          <input
+            id="telefone"
+            type="tel"
+            class="pst-campo__input"
+            formControlName="telefone"
+            autocomplete="tel"
+            placeholder="(92) 90000-0000">
+        </div>
+
+        <!-- Assunto -->
+        <div class="pst-campo" [class.pst-campo--erro]="erroVisivel('assunto')">
+          <label class="pst-campo__label" for="assunto">
+            Assunto
+            <span class="pst-campo__req" aria-label="obrigatório">*</span>
+          </label>
+          <select
+            id="assunto"
+            class="pst-campo__select"
+            formControlName="assunto"
+            required
+            aria-required="true"
+            [attr.aria-describedby]="erroVisivel('assunto') ? 'assunto-erro' : null"
+            [attr.aria-invalid]="erroVisivel('assunto') || null">
+            <option value="" disabled>Selecione um assunto</option>
+            <option *ngFor="let a of assuntos" [value]="a">{{ a }}</option>
+          </select>
+          <span
+            *ngIf="erroVisivel('assunto')"
+            id="assunto-erro"
+            class="pst-campo__msg-erro"
+            role="alert">
+            {{ mensagemErro('assunto') }}
+          </span>
+        </div>
+
+        <!-- Mensagem -->
+        <div class="pst-campo" [class.pst-campo--erro]="erroVisivel('mensagem')">
+          <label class="pst-campo__label" for="mensagem">
+            Mensagem
+            <span class="pst-campo__req" aria-label="obrigatório">*</span>
+          </label>
+          <textarea
+            id="mensagem"
+            class="pst-campo__textarea"
+            formControlName="mensagem"
+            rows="5"
+            required
+            aria-required="true"
+            [attr.aria-describedby]="erroVisivel('mensagem') ? 'mensagem-erro' : null"
+            [attr.aria-invalid]="erroVisivel('mensagem') || null"
+            placeholder="Escreva sua mensagem aqui..."></textarea>
+          <span
+            *ngIf="erroVisivel('mensagem')"
+            id="mensagem-erro"
+            class="pst-campo__msg-erro"
+            role="alert">
+            {{ mensagemErro('mensagem') }}
+          </span>
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="pst-submit-btn"
+          [disabled]="enviando"
+          [attr.aria-disabled]="enviando"
+          [attr.aria-label]="enviando ? 'Enviando mensagem...' : 'Enviar mensagem'">
+          <i
+            [class]="enviando ? 'pi pi-spin pi-spinner' : 'pi pi-send'"
+            aria-hidden="true"></i>
+          {{ enviando ? 'Enviando...' : 'Enviar mensagem' }}
+        </button>
+      </form>
+    </section>
+
+    <!-- ── Informações de contato ─────────────────────── -->
+    <aside class="pst-info-section" aria-labelledby="info-titulo" *ngIf="info">
+      <h2 id="info-titulo" class="pst-bloco-titulo">
+        <i class="pi pi-info-circle" aria-hidden="true"></i>
+        Informações
+      </h2>
+
+      <div class="pst-info-card">
+
+        <!-- Endereço -->
+        <div class="pst-info-item">
+          <div class="pst-info-item__icon" aria-hidden="true">
+            <i class="pi pi-map-marker"></i>
+          </div>
+          <div>
+            <p class="pst-info-item__label">Endereço</p>
+            <address class="pst-info-item__valor">
+              {{ info.endereco }}<br>
+              {{ info.bairro }} – {{ info.cidade }}/{{ info.estado }}<br>
+              CEP: {{ info.cep }}
+            </address>
+          </div>
+        </div>
+
+        <!-- Telefone -->
+        <div class="pst-info-item">
+          <div class="pst-info-item__icon" aria-hidden="true">
+            <i class="pi pi-phone"></i>
+          </div>
+          <div>
+            <p class="pst-info-item__label">Telefone</p>
+            <a
+              [href]="telHref(info.telefone)"
+              class="pst-info-item__valor pst-info-item__link"
+              [attr.aria-label]="'Ligar para ' + info.telefone">
+              {{ info.telefone }}
+            </a>
+          </div>
+        </div>
+
+        <!-- E-mail -->
+        <div class="pst-info-item">
+          <div class="pst-info-item__icon" aria-hidden="true">
+            <i class="pi pi-envelope"></i>
+          </div>
+          <div>
+            <p class="pst-info-item__label">E-mail</p>
+            <a
+              [href]="'mailto:' + info.email"
+              class="pst-info-item__valor pst-info-item__link"
+              [attr.aria-label]="'Enviar e-mail para ' + info.email">
+              {{ info.email }}
+            </a>
+          </div>
+        </div>
+
+        <!-- Horário secretaria -->
+        <div class="pst-info-item">
+          <div class="pst-info-item__icon" aria-hidden="true">
+            <i class="pi pi-clock"></i>
+          </div>
+          <div>
+            <p class="pst-info-item__label">Secretaria Paroquial</p>
+            <ul class="pst-secretaria-lista" role="list">
+              <li *ngFor="let h of info.horariosSecretaria" class="pst-secretaria-item">
+                <strong>{{ h.dias }}:</strong> {{ h.horas }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Redes sociais -->
+        <div class="pst-info-social">
+          <p class="pst-info-item__label">Redes sociais</p>
+          <div class="pst-social-row">
+            <a
+              href="#"
+              class="pst-social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook da Paróquia Santa Teresinha">
+              <i class="pi pi-facebook" aria-hidden="true"></i>
+              Facebook
+            </a>
+            <a
+              href="#"
+              class="pst-social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram da Paróquia Santa Teresinha">
+              <i class="pi pi-instagram" aria-hidden="true"></i>
+              Instagram
+            </a>
+            <a
+              href="#"
+              class="pst-social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp da Paróquia Santa Teresinha">
+              <i class="pi pi-whatsapp" aria-hidden="true"></i>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>

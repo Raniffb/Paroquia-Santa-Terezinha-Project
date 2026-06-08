@@ -1,0 +1,126 @@
+<app-page-hero
+  icon="pi-clock"
+  titulo="Horários das Missas"
+  subtitulo="Confira os horários regulares e informações sobre sacramentos">
+</app-page-hero>
+
+<div class="pst-page-content">
+
+  <!-- Missas regulares -->
+  <section aria-labelledby="missas-titulo" class="pst-section-bloco">
+    <h2 id="missas-titulo" class="pst-bloco-titulo">
+      <i class="pi pi-sun" aria-hidden="true"></i>
+      Missas Regulares
+    </h2>
+
+    <div class="pst-horarios-card" role="region" aria-label="Horários das missas regulares">
+      <ul class="pst-horarios-list" role="list">
+        <li *ngFor="let missa of missas" class="pst-horarios-item">
+          <span class="pst-horarios-item__dia">{{ missa.dia }}</span>
+          <div class="pst-horarios-item__chips" role="group" [attr.aria-label]="'Missas de ' + missa.dia">
+            <span *ngFor="let h of missa.horarios" class="pst-horario-chip">
+              <i class="pi pi-clock" aria-hidden="true"></i>
+              {{ h }}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Confissões -->
+  <section aria-labelledby="confissao-titulo" class="pst-section-bloco">
+    <h2 id="confissao-titulo" class="pst-bloco-titulo">
+      <i class="pi pi-heart" aria-hidden="true"></i>
+      Horários de Confissão
+    </h2>
+
+    <div class="pst-horarios-card" role="region" aria-label="Horários de confissão">
+      <div class="pst-horarios-card__intro">
+        <i class="pi pi-info-circle" aria-hidden="true"></i>
+        A confissão é sempre antes da missa, ou conforme combinado com o padre. Em períodos especiais (Quaresma, Advento), haverá horários extras.
+      </div>
+      <ul class="pst-horarios-list" role="list">
+        <li *ngFor="let conf of confissoes" class="pst-horarios-item">
+          <span class="pst-horarios-item__dia">{{ conf.dia }}</span>
+          <div class="pst-horarios-item__chips">
+            <span class="pst-horario-chip pst-horario-chip--conf">
+              <i class="pi pi-clock" aria-hidden="true"></i>
+              {{ conf.horario }}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Informações sobre sacramentos -->
+  <section aria-labelledby="sacramentos-titulo" class="pst-section-bloco">
+    <h2 id="sacramentos-titulo" class="pst-bloco-titulo">
+      <i class="pi pi-star" aria-hidden="true"></i>
+      Sacramentos e Intenções
+    </h2>
+
+    <div class="pst-sacramentos-grid">
+      <div class="pst-sacramento-card">
+        <div class="pst-sacramento-card__icon" aria-hidden="true">
+          <i class="pi pi-drop"></i>
+        </div>
+        <h3 class="pst-sacramento-card__titulo">Batismo</h3>
+        <p class="pst-sacramento-card__texto">
+          Celebrado aos domingos, às 12h30. Inscrições e preparação na secretaria paroquial. Exige participação em reunião preparatória.
+        </p>
+      </div>
+
+      <div class="pst-sacramento-card">
+        <div class="pst-sacramento-card__icon" aria-hidden="true">
+          <i class="pi pi-heart-fill"></i>
+        </div>
+        <h3 class="pst-sacramento-card__titulo">Casamento</h3>
+        <p class="pst-sacramento-card__texto">
+          Agendar com mínimo de 6 meses de antecedência. Curso pré-matrimonial obrigatório. Procure a secretaria para orientações.
+        </p>
+      </div>
+
+      <div class="pst-sacramento-card">
+        <div class="pst-sacramento-card__icon" aria-hidden="true">
+          <i class="pi pi-bookmark"></i>
+        </div>
+        <h3 class="pst-sacramento-card__titulo">Intenção de Missa</h3>
+        <p class="pst-sacramento-card__texto">
+          Solicite missa em intenção de um familiar (vivo ou falecido) na secretaria paroquial durante o horário de atendimento.
+        </p>
+      </div>
+
+      <div class="pst-sacramento-card">
+        <div class="pst-sacramento-card__icon" aria-hidden="true">
+          <i class="pi pi-home"></i>
+        </div>
+        <h3 class="pst-sacramento-card__titulo">Unção dos Enfermos</h3>
+        <p class="pst-sacramento-card__texto">
+          Em caso de emergência ou doença grave, entre em contato com a secretaria para solicitar visita e unção dos enfermos em domicílio.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Observações -->
+  <section aria-labelledby="obs-titulo" class="pst-section-bloco">
+    <h2 id="obs-titulo" class="pst-bloco-titulo">
+      <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+      Informações Importantes
+    </h2>
+
+    <ul class="pst-obs-lista" role="list">
+      <li *ngFor="let obs of observacoes" class="pst-obs-item">
+        <div class="pst-obs-item__icon" aria-hidden="true">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <div>
+          <h3 class="pst-obs-item__titulo">{{ obs.titulo }}</h3>
+          <p class="pst-obs-item__texto">{{ obs.descricao }}</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+</div>
