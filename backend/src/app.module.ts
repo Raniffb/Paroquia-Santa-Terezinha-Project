@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -43,8 +44,10 @@ import { RealtimeModule } from './realtime/realtime.module';
     HorariosInfoModule,
   ],
   providers: [
-    // Aplica ThrottlerGuard em todas as rotas HTTP automaticamente
+    // ThrottlerGuard avaliado antes do JWT (ordem de registro)
     { provide: APP_GUARD, useClass: ThrottlerGuard },
+    // Fail-closed: todas as rotas exigem JWT exceto as marcadas com @Public()
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
   ],
 })
 export class AppModule {}
