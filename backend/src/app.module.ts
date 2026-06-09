@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -14,6 +16,21 @@ import { RealtimeModule } from './realtime/realtime.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+
+    // ── Rate limiting global ─────────────────────────────────────────────────
+    // Padrão: 100 req / 60s por IP. Sobrescrito por @Throttle() nas rotas.
+    ThrottlerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        throttlers: [
+          {
+            ttl:   config.get<number>('THROTTLE_TTL',   60_000),
+            limit: config.get<number>('THROTTLE_LIMIT', 100),
+          },
+        ],
+      }),
+    }),
+
     RealtimeModule,
     PrismaModule,
     AuthModule,
@@ -24,6 +41,10 @@ import { RealtimeModule } from './realtime/realtime.module';
     MassSchedulesModule,
     SacramentosModule,
     HorariosInfoModule,
+  ],
+  providers: [
+    // Aplica ThrottlerGuard em todas as rotas HTTP automaticamente
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
 })
 export class AppModule {}

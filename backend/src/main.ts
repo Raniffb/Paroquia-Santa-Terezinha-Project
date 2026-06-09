@@ -1,46 +1,69 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const config = app.get(ConfigService);
+  const isProd = config.get<string>('NODE_ENV') === 'production';
+  const port   = config.get<number>('PORT') ?? 3000;
+
+  // ── Helmet — cabeçalhos de segurança HTTP ─────────────────────────────────
+  // Em dev, CSP desativado para não quebrar o Swagger UI
+  app.use(helmet({ contentSecurityPolicy: isProd }));
+
+  // ── CORS ──────────────────────────────────────────────────────────────────
+  // FRONTEND_URL aceita múltiplas origens separadas por vírgula.
+  // Ex: FRONTEND_URL=https://paroquia.com,https://www.paroquia.com
+  const allowedOrigins = config
+    .get<string>('FRONTEND_URL', 'http://localhost:4200')
+    .split(',')
+    .map(u => u.trim())
+    .filter(Boolean);
 
   app.enableCors({
-    origin: (origin, callback) => callback(null, true),
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
 
+  // ── Validação global ──────────────────────────────────────────────────────
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: false,
-      transform: true,
+      whitelist: true,           // remove campos não declarados nos DTOs
+      forbidNonWhitelisted: true, // rejeita requisições com campos desconhecidos
+      transform: true,           // converte tipos automaticamente
     }),
   );
 
-  // ── Swagger ──────────────────────────────────────────────────────────────────
-  const config = new DocumentBuilder()
-    .setTitle('API – Paróquia Santa Teresinha')
-    .setDescription('API REST para gerenciamento do portal paroquial')
-    .setVersion('1.0')
-    .addBearerAuth(
-      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-      'access-token',
-    )
-    .build();
+  // ── Swagger — apenas em desenvolvimento ───────────────────────────────────
+  if (!isProd) {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('API – Paróquia Santa Teresinha')
+      .setDescription('API REST para gerenciamento do portal paroquial')
+      .setVersion('1.0')
+      .addBearerAuth(
+        { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+        'access-token',
+      )
+      .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document, {
-    swaggerOptions: { persistAuthorization: true },
-  });
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('api/docs', app, document, {
+      swaggerOptions: { persistAuthorization: true },
+    });
 
-  const port = process.env.PORT ?? 3000;
+    console.log(`📄 Swagger em   http://localhost:${port}/api/docs`);
+  }
+
   await app.listen(port);
   console.log(`🚀 API rodando em http://localhost:${port}`);
-  console.log(`📄 Swagger em   http://localhost:${port}/api/docs`);
+  console.log(`🌍 Modo: ${isProd ? 'produção' : 'desenvolvimento'}`);
+  console.log(`🔒 CORS permitido para: ${allowedOrigins.join(', ')}`);
 }
 
 bootstrap();
