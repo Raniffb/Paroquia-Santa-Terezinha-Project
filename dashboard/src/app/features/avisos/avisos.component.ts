@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ParishService } from '../../core/services/parish.service';
 import { RealtimeService } from '../../core/services/realtime.service';
@@ -15,7 +16,7 @@ interface FiltroAviso {
 @Component({
   selector: 'app-avisos',
   standalone: true,
-  imports: [CommonModule, PageHeroComponent],
+  imports: [CommonModule, RouterLink, PageHeroComponent],
   templateUrl: './avisos.component.html',
   styleUrl: './avisos.component.scss'
 })

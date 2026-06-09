@@ -59,7 +59,7 @@
           {{ noticia.autor }}
         </span>
         <a
-          href="#"
+          [routerLink]="['/noticias', noticia.id]"
           class="pst-noticia-card__link"
           [attr.aria-label]="'Ler notícia completa: ' + noticia.titulo">
           Ler mais

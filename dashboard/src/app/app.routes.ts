@@ -109,10 +109,22 @@ export const routes: Routes = [
         title: 'Notícias – Paróquia Santa Teresinha'
       },
       {
+        path: 'noticias/:id',
+        loadComponent: () =>
+          import('./features/noticias/noticias-detalhe.component').then(m => m.NoticiasDetalheComponent),
+        title: 'Notícia – Paróquia Santa Teresinha'
+      },
+      {
         path: 'avisos',
         loadComponent: () =>
           import('./features/avisos/avisos.component').then(m => m.AvisosComponent),
         title: 'Avisos – Paróquia Santa Teresinha'
+      },
+      {
+        path: 'avisos/:id',
+        loadComponent: () =>
+          import('./features/avisos/avisos-detalhe.component').then(m => m.AvisosDetalheComponent),
+        title: 'Aviso – Paróquia Santa Teresinha'
       },
       {
         path: 'horarios',

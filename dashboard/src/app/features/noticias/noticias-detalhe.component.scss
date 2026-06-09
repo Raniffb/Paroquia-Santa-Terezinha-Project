@@ -1,0 +1,152 @@
+.pst-detalhe-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+// ── Estados ───────────────────────────────────────────────────────────────────
+
+.pst-detalhe-estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 4rem 1rem;
+  text-align: center;
+  color: var(--color-text-muted);
+
+  &__icone { font-size: 2.5rem; opacity: 0.4; }
+
+  &--erro { color: var(--color-text-muted); }
+}
+
+// ── Artigo ────────────────────────────────────────────────────────────────────
+
+.pst-detalhe {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pst-detalhe__voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 0.25rem;
+
+  &:hover { text-decoration: underline; }
+
+  &--btn {
+    background: var(--color-card);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+
+    &:hover { background: var(--color-bg); text-decoration: none; }
+  }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.pst-detalhe__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pst-detalhe__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.pst-detalhe__categoria {
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.65rem;
+  border-radius: 100px;
+}
+
+.pst-detalhe__data {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+
+  .pi { font-size: 0.85rem; }
+}
+
+.pst-detalhe__titulo {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.pst-detalhe__subtitulo {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.pst-detalhe__autor {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+
+  .pi { font-size: 0.85rem; }
+}
+
+// ── Divisor ───────────────────────────────────────────────────────────────────
+
+.pst-detalhe__divisor {
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent) 0%, transparent 100%);
+  border-radius: 2px;
+}
+
+// ── Corpo ─────────────────────────────────────────────────────────────────────
+
+.pst-detalhe__resumo {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.65;
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--color-accent);
+  background: var(--color-card);
+  border-radius: 0 8px 8px 0;
+}
+
+.pst-detalhe__corpo {
+  font-size: 1rem;
+  color: var(--color-text);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+// ── Responsivo ────────────────────────────────────────────────────────────────
+
+@media (min-width: 640px) {
+  .pst-detalhe-page { padding: 2rem 1.5rem 4rem; }
+  .pst-detalhe__titulo { font-size: 2.1rem; }
+}

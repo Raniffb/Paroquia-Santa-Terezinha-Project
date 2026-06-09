@@ -1,0 +1,53 @@
+<div class="pst-detalhe-page">
+
+  <!-- Carregando -->
+  <div *ngIf="carregando" class="pst-detalhe-estado">
+    <i class="pi pi-spin pi-spinner pst-detalhe-estado__icone" aria-hidden="true"></i>
+    <p>Carregando notícia…</p>
+  </div>
+
+  <!-- Erro -->
+  <div *ngIf="!carregando && erro" class="pst-detalhe-estado pst-detalhe-estado--erro">
+    <i class="pi pi-exclamation-circle pst-detalhe-estado__icone" aria-hidden="true"></i>
+    <p>Notícia não encontrada.</p>
+    <a routerLink="/noticias" class="pst-detalhe__voltar pst-detalhe__voltar--btn">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i> Ver todas as notícias
+    </a>
+  </div>
+
+  <!-- Conteúdo -->
+  <article *ngIf="!carregando && noticia" class="pst-detalhe">
+
+    <a routerLink="/noticias" class="pst-detalhe__voltar" aria-label="Voltar para notícias">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i>
+      Voltar para notícias
+    </a>
+
+    <header class="pst-detalhe__header">
+      <div class="pst-detalhe__meta">
+        <span class="pst-detalhe__categoria">{{ labelCategoria(noticia.categoria) }}</span>
+        <time class="pst-detalhe__data" [dateTime]="noticia.data">
+          <i class="pi pi-calendar" aria-hidden="true"></i>
+          {{ formatarData(noticia.data) }}
+        </time>
+      </div>
+
+      <h1 class="pst-detalhe__titulo">{{ noticia.titulo }}</h1>
+
+      <p *ngIf="noticia.subtitulo" class="pst-detalhe__subtitulo">{{ noticia.subtitulo }}</p>
+
+      <div *ngIf="noticia.autor" class="pst-detalhe__autor">
+        <i class="pi pi-user" aria-hidden="true"></i>
+        {{ noticia.autor }}
+      </div>
+    </header>
+
+    <div class="pst-detalhe__divisor"></div>
+
+    <p class="pst-detalhe__resumo">{{ noticia.resumo }}</p>
+
+    <div class="pst-detalhe__corpo">{{ noticia.corpo }}</div>
+
+  </article>
+
+</div>

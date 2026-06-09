@@ -53,7 +53,7 @@ export class AvisosComponent implements OnInit {
             resumo: a.resumo,
             data: a.data,
             urgente: a.urgente,
-            rota: '/avisos',
+            rota: `/avisos/${a.id}`,
           })),
           ...noticias.map(n => ({
             tipo: 'noticia' as const,
@@ -61,7 +61,7 @@ export class AvisosComponent implements OnInit {
             titulo: n.titulo,
             resumo: n.resumo,
             data: n.data,
-            rota: '/noticias',
+            rota: `/noticias/${n.id}`,
           })),
         ];
         this.itens = combinados.sort((a, b) => b.data.localeCompare(a.data)).slice(0, 4);

@@ -127,6 +127,20 @@ export class ParishService {
     );
   }
 
+  getAviso(id: number): Observable<Aviso> {
+    return this.http.get<ApiAviso>(`${environment.apiUrl}/notices/${id}`).pipe(
+      map(a => ({
+        id: a.id,
+        titulo: a.title,
+        resumo: a.description,
+        data: a.date.split('T')[0],
+        urgente: a.priority === 'urgent',
+        featured: a.featured,
+        categoria: a.category as CategoriaAviso
+      }))
+    );
+  }
+
   // ── Notícias ────────────────────────────────────────────────────────────────
 
   getNoticias(categoria?: CategoriaNoticia): Observable<Noticia[]> {
@@ -184,7 +198,7 @@ export class ParishService {
               resumo: a.description,
               data: a.date.split('T')[0],
               urgente: a.priority === 'urgent',
-              rota: '/avisos',
+              rota: `/avisos/${a.id}`,
             })),
           ...noticias
             .filter(n => n.published && n.featured)
@@ -194,7 +208,7 @@ export class ParishService {
               titulo: n.title,
               resumo: n.summary,
               data: n.date.split('T')[0],
-              rota: '/noticias',
+              rota: `/noticias/${n.id}`,
             })),
           ...eventos
             .filter(e => e.published && e.featured)

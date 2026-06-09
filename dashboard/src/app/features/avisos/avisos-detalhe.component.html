@@ -1,0 +1,49 @@
+<div class="pst-detalhe-page">
+
+  <!-- Carregando -->
+  <div *ngIf="carregando" class="pst-detalhe-estado">
+    <i class="pi pi-spin pi-spinner pst-detalhe-estado__icone" aria-hidden="true"></i>
+    <p>Carregando aviso…</p>
+  </div>
+
+  <!-- Erro -->
+  <div *ngIf="!carregando && erro" class="pst-detalhe-estado pst-detalhe-estado--erro">
+    <i class="pi pi-exclamation-circle pst-detalhe-estado__icone" aria-hidden="true"></i>
+    <p>Aviso não encontrado.</p>
+    <a routerLink="/avisos" class="pst-detalhe__voltar pst-detalhe__voltar--btn">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i> Ver todos os avisos
+    </a>
+  </div>
+
+  <!-- Conteúdo -->
+  <article *ngIf="!carregando && aviso" class="pst-detalhe">
+
+    <a routerLink="/avisos" class="pst-detalhe__voltar" aria-label="Voltar para avisos">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i>
+      Voltar para avisos
+    </a>
+
+    <header class="pst-detalhe__header">
+      <div class="pst-detalhe__badges">
+        <span *ngIf="aviso!.urgente" class="pst-detalhe__badge-urgente">
+          <i class="pi pi-exclamation-triangle" aria-hidden="true"></i> Urgente
+        </span>
+        <span *ngIf="aviso!.categoria" class="pst-detalhe__categoria">
+          {{ labelCategoria(aviso!.categoria!) }}
+        </span>
+        <time class="pst-detalhe__data" [dateTime]="aviso!.data">
+          <i class="pi pi-calendar" aria-hidden="true"></i>
+          {{ formatarData(aviso!.data) }}
+        </time>
+      </div>
+
+      <h1 class="pst-detalhe__titulo">{{ aviso!.titulo }}</h1>
+    </header>
+
+    <div class="pst-detalhe__divisor"></div>
+
+    <div class="pst-detalhe__corpo">{{ aviso!.resumo }}</div>
+
+  </article>
+
+</div>

@@ -139,7 +139,20 @@
     font-size: 0.9rem;
     color: var(--color-text-muted);
     line-height: 1.65;
-    margin: 0;
+    margin: 0 0 0.75rem;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    .pi { font-size: 0.75rem; transition: transform 0.15s; }
+    &:hover .pi { transform: translateX(3px); }
   }
 }
 

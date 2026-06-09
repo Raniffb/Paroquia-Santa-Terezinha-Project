@@ -64,6 +64,13 @@
         <!-- Conteúdo -->
         <h2 class="pst-aviso-item__titulo">{{ aviso.titulo }}</h2>
         <p class="pst-aviso-item__resumo">{{ aviso.resumo }}</p>
+        <a
+          [routerLink]="['/avisos', aviso.id]"
+          class="pst-aviso-item__link"
+          [attr.aria-label]="'Ver aviso completo: ' + aviso.titulo">
+          Ler mais
+          <i class="pi pi-arrow-right" aria-hidden="true"></i>
+        </a>
       </div>
     </li>
   </ul>
