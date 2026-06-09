@@ -125,6 +125,8 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
   }
 
   &__footer {
@@ -198,7 +200,12 @@
 
   .pst-noticia-card--destaque {
     grid-column: 1 / -1;
-    flex-direction: row;
-    gap: 1.5rem;
+    padding: 1.75rem;
+
+    .pst-noticia-card__titulo { font-size: 1.35rem; }
+
+    .pst-noticia-card__resumo {
+      -webkit-line-clamp: 4;
+    }
   }
 }

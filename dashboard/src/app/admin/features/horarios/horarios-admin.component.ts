@@ -38,6 +38,41 @@ export class HorariosAdminComponent {
   mostrarFormObservacao = signal(false);
   mostrarFormSacramento = signal(false);
 
+  mostrarPickerNovo  = signal(false);
+  mostrarPickerEdit  = signal(false);
+
+  readonly ICONES_CATEGORIAS = [
+    {
+      label: 'Liturgia e Fé',
+      icones: ['pi-sun', 'pi-star', 'pi-star-fill', 'pi-crown', 'pi-cloud', 'pi-fire', 'pi-sparkles', 'pi-moon']
+    },
+    {
+      label: 'Sacramentos',
+      icones: ['pi-drop', 'pi-heart', 'pi-heart-fill', 'pi-bookmark', 'pi-bookmark-fill', 'pi-shield', 'pi-check-circle', 'pi-circle']
+    },
+    {
+      label: 'Comunidade',
+      icones: ['pi-user', 'pi-users', 'pi-home', 'pi-building', 'pi-globe', 'pi-map-marker']
+    },
+    {
+      label: 'Geral',
+      icones: ['pi-calendar', 'pi-clock', 'pi-bell', 'pi-book', 'pi-info-circle', 'pi-envelope', 'pi-phone', 'pi-gift', 'pi-thumbs-up']
+    }
+  ];
+
+  togglePickerNovo(): void { this.mostrarPickerNovo.update(v => !v); }
+  togglePickerEdit(): void { this.mostrarPickerEdit.update(v => !v); }
+
+  selecionarIconeNovo(icone: string): void {
+    this.novoSacramento.icone = icone;
+    this.mostrarPickerNovo.set(false);
+  }
+
+  selecionarIconeEdit(icone: string): void {
+    this.editSacramento.icone = icone;
+    this.mostrarPickerEdit.set(false);
+  }
+
   salvo = signal<string | null>(null);
 
   private flashSalvo(msg: string): void {

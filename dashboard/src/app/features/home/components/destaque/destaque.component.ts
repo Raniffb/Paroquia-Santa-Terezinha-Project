@@ -66,7 +66,7 @@ export class DestaqueComponent implements OnInit, OnDestroy {
   private reiniciarTimer(): void {
     this.pararTimer();
     if (this.itens.length > 1) {
-      this.timer = setInterval(() => this.avancar(), this.INTERVALO_MS);
+      this.timer = setInterval(() => this.avancarAuto(), this.INTERVALO_MS);
     }
   }
 
@@ -74,14 +74,21 @@ export class DestaqueComponent implements OnInit, OnDestroy {
     if (this.timer) { clearInterval(this.timer); this.timer = null; }
   }
 
+  private avancarAuto(): void {
+    this.animDir++;
+    this.indiceAtual = (this.indiceAtual + 1) % this.itens.length;
+  }
+
   avancar(): void {
     this.animDir++;
     this.indiceAtual = (this.indiceAtual + 1) % this.itens.length;
+    this.reiniciarTimer();
   }
 
   recuar(): void {
     this.animDir--;
     this.indiceAtual = (this.indiceAtual - 1 + this.itens.length) % this.itens.length;
+    this.reiniciarTimer();
   }
 
   irPara(i: number): void {

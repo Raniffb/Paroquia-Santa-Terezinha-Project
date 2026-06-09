@@ -91,14 +91,30 @@
           <label for="sac-desc" class="adm-field__label">Descrição</label>
           <textarea id="sac-desc" [(ngModel)]="novoSacramento.descricao" class="adm-field__input adm-field__textarea" rows="3" placeholder="Texto descritivo"></textarea>
         </div>
-        <div class="adm-field">
-          <label for="sac-icone" class="adm-field__label">
-            Ícone PrimeIcons
-            <span class="adm-field__hint">(ex: pi-drop, pi-heart-fill, pi-bookmark)</span>
-          </label>
-          <div class="adm-field__icone-wrap">
-            <input id="sac-icone" type="text" [(ngModel)]="novoSacramento.icone" class="adm-field__input" placeholder="pi-star">
-            <i class="pi adm-field__icone-preview" [ngClass]="novoSacramento.icone || 'pi-star'" aria-hidden="true"></i>
+        <div class="adm-field adm-field--full">
+          <label class="adm-field__label">Ícone</label>
+          <div class="adm-icone-picker__wrap">
+            <button type="button" class="adm-icone-picker__trigger" (click)="togglePickerNovo()">
+              <i class="pi adm-icone-picker__atual" [ngClass]="novoSacramento.icone || 'pi-star'" aria-hidden="true"></i>
+              <i class="pi pi-chevron-down adm-icone-picker__seta" aria-hidden="true"></i>
+            </button>
+          @if (mostrarPickerNovo()) {
+            <div class="adm-icone-picker__panel">
+              @for (cat of ICONES_CATEGORIAS; track cat.label) {
+                <div class="adm-icone-picker__cat-label">{{ cat.label }}</div>
+                <div class="adm-icone-picker__grade">
+                  @for (ic of cat.icones; track ic) {
+                    <button type="button" class="adm-icone-picker__btn"
+                      [class.adm-icone-picker__btn--ativo]="novoSacramento.icone === ic"
+                      (click)="selecionarIconeNovo(ic)"
+                      [title]="ic">
+                      <i class="pi" [ngClass]="ic" aria-hidden="true"></i>
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+          }
           </div>
         </div>
         <div class="adm-inline-form__acoes">
@@ -121,11 +137,30 @@
                 <label [for]="'sac-e-desc-' + s.id" class="adm-field__label">Descrição</label>
                 <textarea [id]="'sac-e-desc-' + s.id" [(ngModel)]="editSacramento.descricao" class="adm-field__input adm-field__textarea" rows="3"></textarea>
               </div>
-              <div class="adm-field">
-                <label [for]="'sac-e-icone-' + s.id" class="adm-field__label">Ícone PrimeIcons</label>
-                <div class="adm-field__icone-wrap">
-                  <input [id]="'sac-e-icone-' + s.id" type="text" [(ngModel)]="editSacramento.icone" class="adm-field__input" placeholder="pi-star">
-                  <i class="pi adm-field__icone-preview" [ngClass]="editSacramento.icone || 'pi-star'" aria-hidden="true"></i>
+              <div class="adm-field adm-field--full">
+                <label class="adm-field__label">Ícone</label>
+                <div class="adm-icone-picker__wrap">
+                  <button type="button" class="adm-icone-picker__trigger" (click)="togglePickerEdit()">
+                    <i class="pi adm-icone-picker__atual" [ngClass]="editSacramento.icone || 'pi-star'" aria-hidden="true"></i>
+                    <i class="pi pi-chevron-down adm-icone-picker__seta" aria-hidden="true"></i>
+                  </button>
+                  @if (mostrarPickerEdit()) {
+                    <div class="adm-icone-picker__panel">
+                      @for (cat of ICONES_CATEGORIAS; track cat.label) {
+                        <div class="adm-icone-picker__cat-label">{{ cat.label }}</div>
+                        <div class="adm-icone-picker__grade">
+                          @for (ic of cat.icones; track ic) {
+                            <button type="button" class="adm-icone-picker__btn"
+                              [class.adm-icone-picker__btn--ativo]="editSacramento.icone === ic"
+                              (click)="selecionarIconeEdit(ic)"
+                              [title]="ic">
+                              <i class="pi" [ngClass]="ic" aria-hidden="true"></i>
+                            </button>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
                 </div>
               </div>
               <div class="adm-obs-item__acoes">

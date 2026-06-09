@@ -411,6 +411,8 @@ p {
   align-items: center;
   gap: 12px;
   margin-bottom: 24px;
+
+  .adm-page-titulo { margin: 0; }
 }
 
 .adm-voltar {
@@ -561,6 +563,8 @@ p {
 
     i { color: #c8971c; }
   }
+
+  &__head &__titulo { margin: 0; }
 }
 
 /* Success / error toasts */
