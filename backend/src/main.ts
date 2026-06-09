@@ -5,7 +5,26 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 
+// ── Variáveis obrigatórias para a aplicação funcionar ────────────────────────
+const REQUIRED_ENV = ['DATABASE_URL', 'JWT_SECRET'];
+
+function assertRequiredEnv(): void {
+  const missing = REQUIRED_ENV.filter(k => !process.env[k]?.trim());
+  if (missing.length > 0) {
+    console.error('');
+    console.error('❌  Variáveis de ambiente obrigatórias ausentes:');
+    missing.forEach(k => console.error(`     • ${k}`));
+    console.error('');
+    console.error('    Defina-as no arquivo .env antes de iniciar o servidor.');
+    console.error('    Consulte .env.example para referência.');
+    console.error('');
+    process.exit(1);
+  }
+}
+
 async function bootstrap() {
+  assertRequiredEnv();
+
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
   const isProd = config.get<string>('NODE_ENV') === 'production';
@@ -62,8 +81,9 @@ async function bootstrap() {
 
   await app.listen(port);
   console.log(`🚀 API rodando em http://localhost:${port}`);
-  console.log(`🌍 Modo: ${isProd ? 'produção' : 'desenvolvimento'}`);
-  console.log(`🔒 CORS permitido para: ${allowedOrigins.join(', ')}`);
+  console.log(`❤️  Health:       http://localhost:${port}/health`);
+  console.log(`🌍 Modo:          ${isProd ? 'produção' : 'desenvolvimento'}`);
+  console.log(`🔒 CORS:          ${allowedOrigins.join(', ')}`);
 }
 
 bootstrap();
