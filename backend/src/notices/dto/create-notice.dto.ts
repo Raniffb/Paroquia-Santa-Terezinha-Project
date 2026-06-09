@@ -1,5 +1,7 @@
-import { IsDateString, IsIn, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsBoolean, IsDateString, IsIn, IsOptional, IsString, MinLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
+const CATEGORIAS = ['liturgia', 'comunidade', 'administrativo', 'formacao', 'social', 'geral'];
 
 export class CreateNoticeDto {
   @ApiProperty({ example: 'Campanha do Agasalho 2026' })
@@ -20,4 +22,14 @@ export class CreateNoticeDto {
   @IsOptional()
   @IsIn(['normal', 'urgent', 'low'])
   priority?: string;
+
+  @ApiPropertyOptional({ example: 'geral', enum: CATEGORIAS })
+  @IsOptional()
+  @IsIn(CATEGORIAS)
+  category?: string;
+
+  @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
+  active?: boolean;
 }

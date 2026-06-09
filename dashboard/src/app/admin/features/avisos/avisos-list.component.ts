@@ -13,6 +13,7 @@ import { AdminCatAviso } from '../../core/models/admin.models';
 export class AvisosListComponent {
   private svc = inject(AdminAvisosService);
 
+  loading         = this.svc.loading;
   filtroCategoria = signal<AdminCatAviso | 'todas'>('todas');
   deleteConfirmId = signal<number | null>(null);
 

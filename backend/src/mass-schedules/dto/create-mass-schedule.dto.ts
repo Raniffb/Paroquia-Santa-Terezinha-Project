@@ -7,9 +7,9 @@ export class CreateMassScheduleDto {
   @MinLength(3)
   day: string;
 
-  @ApiProperty({ example: '09h00' })
+  @ApiProperty({ example: '07h00,09h00,11h00,18h00', description: 'Horários separados por vírgula' })
   @IsString()
-  time: string;
+  times: string;
 
   @ApiPropertyOptional({ example: 'Missa com grupo de jovens' })
   @IsOptional()

@@ -58,3 +58,10 @@ export interface AdminObservacao {
   titulo: string;
   descricao: string;
 }
+
+export interface AdminSacramento {
+  id: number;
+  titulo: string;
+  descricao: string;
+  icone: string;
+}

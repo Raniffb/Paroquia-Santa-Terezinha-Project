@@ -1,43 +1,96 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map, of } from 'rxjs';
 import { AdminAviso, AdminCatAviso } from '../models/admin.models';
+import { environment } from '../../../../environments/environment';
 
-const SEED: AdminAviso[] = [
-  { id: 1, ativo: true, urgente: false, categoria: 'liturgia',       titulo: 'Festa de Santa Teresinha – 1º de outubro', data: '2026-10-01', resumo: 'Programação especial com missa solene, procissão e apresentações culturais.' },
-  { id: 2, ativo: true, urgente: true,  categoria: 'social',         titulo: 'Campanha do Agasalho 2026',                data: '2026-06-01', resumo: 'Arrecadação de roupas e cobertores para famílias carentes. Entrega até 30 de junho.' },
-  { id: 3, ativo: true, urgente: false, categoria: 'formacao',       titulo: 'Primeira Comunhão – Inscrições Abertas',   data: '2026-05-20', resumo: 'Crianças a partir de 9 anos. Curso preparatório às quartas-feiras, das 18h às 19h30.' },
-  { id: 4, ativo: true, urgente: false, categoria: 'formacao',       titulo: 'Retiro Espiritual para Adultos',            data: '2026-05-15', resumo: 'Dias 12 e 13 de julho no Sítio Esperança. Vagas limitadas a 40 participantes.' },
-  { id: 5, ativo: true, urgente: false, categoria: 'administrativo', titulo: 'Reunião do Conselho Paroquial',             data: '2026-06-05', resumo: 'Reunião ordinária do Conselho Paroquial Financeiro e Pastoral.' },
-  { id: 6, ativo: true, urgente: false, categoria: 'comunidade',     titulo: 'Grupo Jovem – Novos Integrantes',           data: '2026-06-03', resumo: 'O Grupo Jovem está com inscrições abertas para jovens de 15 a 30 anos.' },
-  { id: 7, ativo: true, urgente: false, categoria: 'administrativo', titulo: 'Secretaria Paroquial – Novo Horário',       data: '2026-06-01', resumo: 'A partir de julho, a secretaria funcionará de segunda a sexta, das 7h30 às 17h.' }
-];
+const BASE = `${environment.apiUrl}/notices`;
+
+interface ApiAviso {
+  id: number;
+  title: string;
+  date: string;
+  description: string;
+  priority: string;
+  category: string;
+  active: boolean;
+}
+
+function toAdmin(r: ApiAviso): AdminAviso {
+  return {
+    id: r.id,
+    titulo: r.title,
+    data: r.date.split('T')[0],
+    resumo: r.description,
+    categoria: r.category as AdminCatAviso,
+    urgente: r.priority === 'urgent',
+    ativo: r.active
+  };
+}
+
+function toApi(v: Omit<AdminAviso, 'id'>): object {
+  return {
+    title: v.titulo,
+    date: v.data,
+    description: v.resumo,
+    priority: v.urgente ? 'urgent' : 'normal',
+    category: v.categoria,
+    active: v.ativo
+  };
+}
 
 @Injectable({ providedIn: 'root' })
 export class AdminAvisosService {
-  private _items = signal<AdminAviso[]>(SEED.map(a => ({ ...a })));
-  readonly items = this._items.asReadonly();
+  private http = inject(HttpClient);
+
+  private _items   = signal<AdminAviso[]>([]);
+  private _loading = signal(false);
+
+  readonly items   = this._items.asReadonly();
+  readonly loading = this._loading.asReadonly();
+
+  constructor() { this.carregar(); }
+
+  carregar(): void {
+    this._loading.set(true);
+    this.http.get<ApiAviso[]>(BASE).subscribe({
+      next: data => { this._items.set(data.map(toAdmin)); this._loading.set(false); },
+      error: ()   => this._loading.set(false)
+    });
+  }
 
   getAll(): AdminAviso[] { return this._items(); }
 
-  getById(id: number): AdminAviso | undefined {
-    return this._items().find(a => a.id === id);
+  getById(id: number): Observable<AdminAviso | undefined> {
+    const local = this._items().find(a => a.id === id);
+    if (local) return of(local);
+    return this.http.get<ApiAviso>(`${BASE}/${id}`).pipe(map(toAdmin));
   }
 
-  create(data: Omit<AdminAviso, 'id'>): AdminAviso {
-    const item: AdminAviso = { ...data, id: Date.now() };
-    this._items.update(list => [item, ...list]);
-    return item;
+  create(data: Omit<AdminAviso, 'id'>): Observable<AdminAviso> {
+    return this.http.post<ApiAviso>(BASE, toApi(data)).pipe(
+      map(r => {
+        const item = toAdmin(r);
+        this._items.update(l => [item, ...l]);
+        return item;
+      })
+    );
   }
 
-  update(id: number, data: Omit<AdminAviso, 'id'>): boolean {
-    if (!this._items().some(a => a.id === id)) return false;
-    this._items.update(list => list.map(a => a.id === id ? { ...data, id } : a));
-    return true;
+  update(id: number, data: Omit<AdminAviso, 'id'>): Observable<AdminAviso> {
+    return this.http.patch<ApiAviso>(`${BASE}/${id}`, toApi(data)).pipe(
+      map(r => {
+        const item = toAdmin(r);
+        this._items.update(l => l.map(a => a.id === id ? item : a));
+        return item;
+      })
+    );
   }
 
-  delete(id: number): boolean {
-    if (!this._items().some(a => a.id === id)) return false;
-    this._items.update(list => list.filter(a => a.id !== id));
-    return true;
+  delete(id: number): void {
+    this.http.delete(`${BASE}/${id}`).subscribe(() => {
+      this._items.update(l => l.filter(a => a.id !== id));
+    });
   }
 
   labelCategoria(cat: AdminCatAviso): string {

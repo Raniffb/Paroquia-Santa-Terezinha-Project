@@ -13,6 +13,12 @@
       Evento salvo com sucesso! Redirecionando…
     </div>
   }
+  @if (erro()) {
+    <div class="adm-form-erro" role="alert" aria-live="assertive">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      {{ erro() }}
+    </div>
+  }
 
   <form [formGroup]="form" (ngSubmit)="salvar()" novalidate class="adm-form">
     <div class="adm-form__grid">
@@ -73,9 +79,14 @@
 
     <div class="adm-form__acoes">
       <a routerLink="/admin/eventos" class="adm-btn adm-btn--secondary">Cancelar</a>
-      <button type="submit" class="adm-btn adm-btn--primary">
-        <i class="pi pi-save" aria-hidden="true"></i>
-        {{ modoEdicao ? 'Salvar alterações' : 'Criar evento' }}
+      <button type="submit" class="adm-btn adm-btn--primary" [disabled]="carregando()" [attr.aria-busy]="carregando()">
+        @if (carregando()) {
+          <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+          Salvando…
+        } @else {
+          <i class="pi pi-save" aria-hidden="true"></i>
+          {{ modoEdicao ? 'Salvar alterações' : 'Criar evento' }}
+        }
       </button>
     </div>
   </form>

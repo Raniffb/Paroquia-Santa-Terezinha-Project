@@ -17,8 +17,10 @@ export class EventosFormComponent implements OnInit {
   private router = inject(Router);
   private route  = inject(ActivatedRoute);
 
-  editId = signal<number | null>(null);
-  salvo  = signal(false);
+  editId     = signal<number | null>(null);
+  salvo      = signal(false);
+  carregando = signal(false);
+  erro       = signal<string | null>(null);
 
   categorias: { value: AdminCatEvento; label: string }[] = [
     { value: 'missa',    label: 'Missa' },
@@ -43,27 +45,41 @@ export class EventosFormComponent implements OnInit {
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) {
-      const item = this.svc.getById(id);
+    if (!id) return;
+
+    this.svc.getById(id).subscribe(item => {
       if (item) {
         this.editId.set(id);
-        this.form.patchValue(item);
+        this.form.patchValue({
+          titulo: item.titulo, data: item.data, hora: item.hora,
+          local: item.local, categoria: item.categoria,
+          descricao: item.descricao, publicado: item.publicado
+        });
       }
-    }
+    });
   }
 
   salvar(): void {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+    this.erro.set(null);
+    this.carregando.set(true);
     const v = this.form.value as any;
 
-    if (this.modoEdicao) {
-      this.svc.update(this.editId()!, v);
-    } else {
-      this.svc.create(v);
-    }
+    const op = this.modoEdicao
+      ? this.svc.update(this.editId()!, v)
+      : this.svc.create(v);
 
-    this.salvo.set(true);
-    setTimeout(() => this.router.navigate(['/admin/eventos']), 800);
+    op.subscribe({
+      next: () => {
+        this.carregando.set(false);
+        this.salvo.set(true);
+        setTimeout(() => this.router.navigate(['/admin/eventos']), 800);
+      },
+      error: () => {
+        this.carregando.set(false);
+        this.erro.set('Erro ao salvar. Verifique os dados e tente novamente.');
+      }
+    });
   }
 
   f(campo: string) { return this.form.get(campo)!; }

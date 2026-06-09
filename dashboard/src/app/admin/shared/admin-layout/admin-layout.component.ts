@@ -25,7 +25,7 @@ export class AdminLayoutComponent {
     { label: 'Horários',   route: '/admin/horarios', icon: 'pi pi-clock' }
   ];
 
-  get nomeUsuario(): string { return this.auth.nomeUsuario; }
+  get nomeUsuario(): string { return this.auth.nomeUsuario(); }
 
   toggleDrawer(): void { this.drawerAberto.update(v => !v); }
   fecharDrawer(): void  { this.drawerAberto.set(false); }

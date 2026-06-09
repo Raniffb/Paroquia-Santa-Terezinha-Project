@@ -1,5 +1,7 @@
-import { IsBoolean, IsDateString, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsBoolean, IsDateString, IsIn, IsOptional, IsString, MinLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
+const CATEGORIAS = ['paroquia', 'diocese', 'social', 'liturgia', 'formacao'];
 
 export class CreateNewsDto {
   @ApiProperty({ example: 'Missa Solene de Santa Teresinha' })
@@ -30,4 +32,19 @@ export class CreateNewsDto {
   @IsOptional()
   @IsBoolean()
   featured?: boolean;
+
+  @ApiPropertyOptional({ example: 'paroquia', enum: CATEGORIAS })
+  @IsOptional()
+  @IsIn(CATEGORIAS)
+  category?: string;
+
+  @ApiPropertyOptional({ example: 'Secretaria Paroquial' })
+  @IsOptional()
+  @IsString()
+  author?: string;
+
+  @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
+  published?: boolean;
 }

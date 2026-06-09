@@ -7,6 +7,8 @@ import { NewsModule } from './news/news.module';
 import { NoticesModule } from './notices/notices.module';
 import { EventsModule } from './events/events.module';
 import { MassSchedulesModule } from './mass-schedules/mass-schedules.module';
+import { SacramentosModule } from './sacramentos/sacramentos.module';
+import { HorariosInfoModule } from './horarios-info/horarios-info.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { MassSchedulesModule } from './mass-schedules/mass-schedules.module';
     NoticesModule,
     EventsModule,
     MassSchedulesModule,
+    SacramentosModule,
+    HorariosInfoModule,
   ],
 })
 export class AppModule {}

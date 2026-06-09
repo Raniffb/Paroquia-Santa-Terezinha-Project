@@ -11,7 +11,19 @@
     </a>
   </div>
 
-  <ul class="pst-avisos-list" role="list" aria-label="Lista de avisos recentes">
+  <div *ngIf="carregando" class="pst-estado-vazio" aria-live="polite" aria-busy="true">
+    <i class="pi pi-spin pi-spinner pst-estado-vazio__icone" aria-hidden="true"></i>
+    <p class="pst-estado-vazio__texto">Carregando avisos…</p>
+  </div>
+
+  <div *ngIf="!carregando && avisos.length === 0" class="pst-estado-vazio">
+    <i class="pi pi-bell-slash pst-estado-vazio__icone" aria-hidden="true"></i>
+    <p class="pst-estado-vazio__texto">Nenhum aviso no momento.</p>
+    <p class="pst-estado-vazio__subtexto">Volte em breve para acompanhar as novidades da paróquia.</p>
+  </div>
+
+  <ul *ngIf="!carregando && avisos.length > 0"
+      class="pst-avisos-list" role="list" aria-label="Lista de avisos recentes">
     <li *ngFor="let aviso of avisos" class="pst-aviso-card">
 
       <div class="pst-aviso-card__data">
@@ -34,4 +46,5 @@
       </div>
     </li>
   </ul>
+
 </section>

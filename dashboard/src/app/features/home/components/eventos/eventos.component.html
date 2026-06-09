@@ -11,7 +11,19 @@
     </a>
   </div>
 
-  <ul class="pst-eventos-list" role="list" aria-label="Próximos eventos da paróquia">
+  <div *ngIf="carregando" class="pst-estado-vazio" aria-live="polite" aria-busy="true">
+    <i class="pi pi-spin pi-spinner pst-estado-vazio__icone" aria-hidden="true"></i>
+    <p class="pst-estado-vazio__texto">Carregando eventos…</p>
+  </div>
+
+  <div *ngIf="!carregando && eventos.length === 0" class="pst-estado-vazio">
+    <i class="pi pi-calendar-times pst-estado-vazio__icone" aria-hidden="true"></i>
+    <p class="pst-estado-vazio__texto">Nenhum evento programado no momento.</p>
+    <p class="pst-estado-vazio__subtexto">Em breve novos eventos serão anunciados. Acompanhe os avisos.</p>
+  </div>
+
+  <ul *ngIf="!carregando && eventos.length > 0"
+      class="pst-eventos-list" role="list" aria-label="Próximos eventos da paróquia">
     <li *ngFor="let evento of eventos" class="pst-evento-card">
 
       <div
@@ -36,4 +48,5 @@
       </div>
     </li>
   </ul>
+
 </section>

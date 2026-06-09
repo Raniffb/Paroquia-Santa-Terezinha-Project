@@ -14,9 +14,13 @@ import { Aviso } from '../../../../core/models/parish.models';
 export class AvisosComponent implements OnInit {
   private service = inject(ParishService);
   avisos: Aviso[] = [];
+  carregando = true;
 
   ngOnInit(): void {
-    this.service.getAvisos().subscribe(a => this.avisos = a.slice(0, 4));
+    this.service.getAvisos().subscribe({
+      next: a => { this.avisos = a.slice(0, 4); this.carregando = false; },
+      error: ()  => { this.carregando = false; }
+    });
   }
 
   formatarData(iso: string): string {

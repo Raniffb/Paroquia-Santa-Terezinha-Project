@@ -51,8 +51,16 @@ export interface Confissao {
 }
 
 export interface ObservacaoMissa {
+  id: number;
   titulo: string;
   descricao: string;
+}
+
+export interface Sacramento {
+  id: number;
+  titulo: string;
+  descricao: string;
+  icone: string;
 }
 
 // ── Eventos ───────────────────────────────────────────────────────────────────

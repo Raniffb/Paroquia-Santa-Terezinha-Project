@@ -15,13 +15,13 @@ export class LoginComponent {
   private auth   = inject(AuthService);
   private router = inject(Router);
 
-  erro       = signal<string | null>(null);
-  carregando = signal(false);
+  erro         = signal<string | null>(null);
+  carregando   = signal(false);
   mostrarSenha = signal(false);
 
   form = this.fb.group({
-    usuario: ['', [Validators.required]],
-    senha:   ['', [Validators.required]]
+    email: ['', [Validators.required, Validators.email]],
+    senha: ['', [Validators.required]]
   });
 
   toggleSenha(): void { this.mostrarSenha.update(v => !v); }
@@ -31,17 +31,17 @@ export class LoginComponent {
     this.erro.set(null);
     this.carregando.set(true);
 
-    const { usuario, senha } = this.form.value;
-    const ok = this.auth.login(usuario!, senha!);
-
-    this.carregando.set(false);
-    if (ok) {
-      this.router.navigate(['/admin']);
-    } else {
-      this.erro.set('Usuário ou senha inválidos.');
-    }
+    const { email, senha } = this.form.value;
+    this.auth.login(email!, senha!).subscribe(ok => {
+      this.carregando.set(false);
+      if (ok) {
+        this.router.navigate(['/admin']);
+      } else {
+        this.erro.set('E-mail ou senha inválidos.');
+      }
+    });
   }
 
-  get campoUsuario() { return this.form.get('usuario')!; }
-  get campoSenha()   { return this.form.get('senha')!; }
+  get campoEmail() { return this.form.get('email')!; }
+  get campoSenha() { return this.form.get('senha')!; }
 }

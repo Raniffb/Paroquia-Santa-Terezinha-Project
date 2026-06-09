@@ -61,45 +61,24 @@
       Sacramentos e Intenções
     </h2>
 
-    <div class="pst-sacramentos-grid">
-      <div class="pst-sacramento-card">
-        <div class="pst-sacramento-card__icon" aria-hidden="true">
-          <i class="pi pi-drop"></i>
-        </div>
-        <h3 class="pst-sacramento-card__titulo">Batismo</h3>
-        <p class="pst-sacramento-card__texto">
-          Celebrado aos domingos, às 12h30. Inscrições e preparação na secretaria paroquial. Exige participação em reunião preparatória.
-        </p>
-      </div>
+    <div *ngIf="carregandoSacramentos" class="pst-estado-vazio" aria-live="polite" aria-busy="true">
+      <i class="pi pi-spin pi-spinner pst-estado-vazio__icone" aria-hidden="true"></i>
+      <p class="pst-estado-vazio__texto">Carregando sacramentos…</p>
+    </div>
 
-      <div class="pst-sacramento-card">
-        <div class="pst-sacramento-card__icon" aria-hidden="true">
-          <i class="pi pi-heart-fill"></i>
-        </div>
-        <h3 class="pst-sacramento-card__titulo">Casamento</h3>
-        <p class="pst-sacramento-card__texto">
-          Agendar com mínimo de 6 meses de antecedência. Curso pré-matrimonial obrigatório. Procure a secretaria para orientações.
-        </p>
-      </div>
+    <div *ngIf="!carregandoSacramentos && sacramentos.length === 0" class="pst-estado-vazio">
+      <i class="pi pi-star pst-estado-vazio__icone" aria-hidden="true"></i>
+      <p class="pst-estado-vazio__texto">Nenhuma informação sobre sacramentos no momento.</p>
+      <p class="pst-estado-vazio__subtexto">Procure a secretaria paroquial para mais informações.</p>
+    </div>
 
-      <div class="pst-sacramento-card">
+    <div *ngIf="!carregandoSacramentos && sacramentos.length > 0" class="pst-sacramentos-grid">
+      <div *ngFor="let s of sacramentos" class="pst-sacramento-card">
         <div class="pst-sacramento-card__icon" aria-hidden="true">
-          <i class="pi pi-bookmark"></i>
+          <i class="pi" [ngClass]="s.icone"></i>
         </div>
-        <h3 class="pst-sacramento-card__titulo">Intenção de Missa</h3>
-        <p class="pst-sacramento-card__texto">
-          Solicite missa em intenção de um familiar (vivo ou falecido) na secretaria paroquial durante o horário de atendimento.
-        </p>
-      </div>
-
-      <div class="pst-sacramento-card">
-        <div class="pst-sacramento-card__icon" aria-hidden="true">
-          <i class="pi pi-home"></i>
-        </div>
-        <h3 class="pst-sacramento-card__titulo">Unção dos Enfermos</h3>
-        <p class="pst-sacramento-card__texto">
-          Em caso de emergência ou doença grave, entre em contato com a secretaria para solicitar visita e unção dos enfermos em domicílio.
-        </p>
+        <h3 class="pst-sacramento-card__titulo">{{ s.titulo }}</h3>
+        <p class="pst-sacramento-card__texto">{{ s.descricao }}</p>
       </div>
     </div>
   </section>
@@ -111,7 +90,18 @@
       Informações Importantes
     </h2>
 
-    <ul class="pst-obs-lista" role="list">
+    <div *ngIf="carregandoObservacoes" class="pst-estado-vazio" aria-live="polite" aria-busy="true">
+      <i class="pi pi-spin pi-spinner pst-estado-vazio__icone" aria-hidden="true"></i>
+      <p class="pst-estado-vazio__texto">Carregando informações…</p>
+    </div>
+
+    <div *ngIf="!carregandoObservacoes && observacoes.length === 0" class="pst-estado-vazio">
+      <i class="pi pi-info-circle pst-estado-vazio__icone" aria-hidden="true"></i>
+      <p class="pst-estado-vazio__texto">Nenhuma informação disponível no momento.</p>
+      <p class="pst-estado-vazio__subtexto">Em breve o administrador adicionará informações importantes sobre os horários.</p>
+    </div>
+
+    <ul *ngIf="!carregandoObservacoes && observacoes.length > 0" class="pst-obs-lista" role="list">
       <li *ngFor="let obs of observacoes" class="pst-obs-item">
         <div class="pst-obs-item__icon" aria-hidden="true">
           <i class="pi pi-check-circle"></i>

@@ -14,8 +14,12 @@ import { Evento } from '../../../../core/models/parish.models';
 export class EventosComponent implements OnInit {
   private service = inject(ParishService);
   eventos: Evento[] = [];
+  carregando = true;
 
   ngOnInit(): void {
-    this.service.getEventos().subscribe(e => this.eventos = e.slice(0, 4));
+    this.service.getEventos().subscribe({
+      next: e => { this.eventos = e.slice(0, 4); this.carregando = false; },
+      error: ()  => { this.carregando = false; }
+    });
   }
 }

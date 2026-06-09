@@ -1,30 +1,55 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, catchError, map, of } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
-const TOKEN_KEY = 'pst_admin_auth';
-const CREDENCIAIS = { usuario: 'admin', senha: 'admin123' };
+const TOKEN_KEY = 'pst_admin_token';
+const NAME_KEY  = 'pst_admin_name';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private _loggedIn = signal<boolean>(this.checkStored());
+  private http = inject(HttpClient);
 
-  readonly isLoggedIn = this._loggedIn.asReadonly();
-  readonly nomeUsuario = CREDENCIAIS.usuario;
+  private _loggedIn     = signal<boolean>(this.checkStored());
+  private _nomeUsuario  = signal<string>(this.getStoredName());
 
-  login(usuario: string, senha: string): boolean {
-    if (usuario === CREDENCIAIS.usuario && senha === CREDENCIAIS.senha) {
-      try { localStorage.setItem(TOKEN_KEY, 'mock-ok'); } catch { /* ignore */ }
-      this._loggedIn.set(true);
-      return true;
-    }
-    return false;
+  readonly isLoggedIn   = this._loggedIn.asReadonly();
+  readonly nomeUsuario  = this._nomeUsuario.asReadonly();
+
+  login(email: string, senha: string): Observable<boolean> {
+    return this.http
+      .post<{ access_token: string; user: { id: number; name: string; email: string } }>(
+        `${environment.apiUrl}/auth/login`,
+        { email, password: senha }
+      )
+      .pipe(
+        map(res => {
+          try {
+            localStorage.setItem(TOKEN_KEY, res.access_token);
+            localStorage.setItem(NAME_KEY, res.user.name);
+          } catch { /* ignore */ }
+          this._loggedIn.set(true);
+          this._nomeUsuario.set(res.user.name);
+          return true;
+        }),
+        catchError(() => of(false))
+      );
   }
 
   logout(): void {
-    try { localStorage.removeItem(TOKEN_KEY); } catch { /* ignore */ }
+    try {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(NAME_KEY);
+    } catch { /* ignore */ }
     this._loggedIn.set(false);
+    this._nomeUsuario.set('');
   }
 
   private checkStored(): boolean {
     try { return !!localStorage.getItem(TOKEN_KEY); } catch { return false; }
+  }
+
+  private getStoredName(): string {
+    try { return localStorage.getItem(NAME_KEY) ?? 'Administrador'; } catch { return 'Administrador'; }
   }
 }

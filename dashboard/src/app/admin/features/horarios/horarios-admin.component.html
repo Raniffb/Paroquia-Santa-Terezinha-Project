@@ -22,7 +22,6 @@
           <div class="adm-horario-card__dia">{{ missa.dia }}</div>
 
           @if (editMissaId() === missa.id) {
-            <!-- Modo edição -->
             <div class="adm-horario-card__edit">
               @for (h of editMissaHorarios; track trackByIndex($index)) {
                 <div class="adm-horario-card__edit-linha">
@@ -50,7 +49,6 @@
               </div>
             </div>
           } @else {
-            <!-- Modo visualização -->
             <ul class="adm-horario-card__horarios" role="list">
               @for (h of missa.horarios; track h) {
                 <li>{{ h }}</li>
@@ -63,6 +61,96 @@
               [attr.aria-label]="'Editar horários de ' + missa.dia">
               <i class="pi pi-pencil" aria-hidden="true"></i>
             </button>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ── Sacramentos e Intenções ──────────────────────────────────────────── -->
+  <section class="adm-secao" aria-labelledby="adm-sacramentos-titulo">
+    <div class="adm-secao__head">
+      <h2 id="adm-sacramentos-titulo" class="adm-secao__titulo">
+        <i class="pi pi-star" aria-hidden="true"></i>
+        Sacramentos e Intenções
+      </h2>
+      <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm"
+        (click)="toggleFormSacramento()"
+        [attr.aria-expanded]="mostrarFormSacramento()">
+        <i class="pi pi-plus" aria-hidden="true"></i> Adicionar
+      </button>
+    </div>
+
+    @if (mostrarFormSacramento()) {
+      <div class="adm-inline-form" role="form" aria-label="Adicionar sacramento">
+        <div class="adm-field adm-field--full">
+          <label for="sac-titulo" class="adm-field__label">Título</label>
+          <input id="sac-titulo" type="text" [(ngModel)]="novoSacramento.titulo" class="adm-field__input" placeholder="Ex: Batismo">
+        </div>
+        <div class="adm-field adm-field--full">
+          <label for="sac-desc" class="adm-field__label">Descrição</label>
+          <textarea id="sac-desc" [(ngModel)]="novoSacramento.descricao" class="adm-field__input adm-field__textarea" rows="3" placeholder="Texto descritivo"></textarea>
+        </div>
+        <div class="adm-field">
+          <label for="sac-icone" class="adm-field__label">
+            Ícone PrimeIcons
+            <span class="adm-field__hint">(ex: pi-drop, pi-heart-fill, pi-bookmark)</span>
+          </label>
+          <div class="adm-field__icone-wrap">
+            <input id="sac-icone" type="text" [(ngModel)]="novoSacramento.icone" class="adm-field__input" placeholder="pi-star">
+            <i class="pi adm-field__icone-preview" [ngClass]="novoSacramento.icone || 'pi-star'" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="adm-inline-form__acoes">
+          <button type="button" class="adm-btn adm-btn--primary adm-btn--sm" (click)="adicionarSacramento()">Salvar</button>
+          <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm" (click)="mostrarFormSacramento.set(false)">Cancelar</button>
+        </div>
+      </div>
+    }
+
+    <div class="adm-obs-lista">
+      @for (s of sacramentos(); track s.id) {
+        <div class="adm-obs-item">
+          @if (editSacramentoId() === s.id) {
+            <div class="adm-obs-item__edit">
+              <div class="adm-field adm-field--full">
+                <label [for]="'sac-e-titulo-' + s.id" class="adm-field__label">Título</label>
+                <input [id]="'sac-e-titulo-' + s.id" type="text" [(ngModel)]="editSacramento.titulo" class="adm-field__input">
+              </div>
+              <div class="adm-field adm-field--full">
+                <label [for]="'sac-e-desc-' + s.id" class="adm-field__label">Descrição</label>
+                <textarea [id]="'sac-e-desc-' + s.id" [(ngModel)]="editSacramento.descricao" class="adm-field__input adm-field__textarea" rows="3"></textarea>
+              </div>
+              <div class="adm-field">
+                <label [for]="'sac-e-icone-' + s.id" class="adm-field__label">Ícone PrimeIcons</label>
+                <div class="adm-field__icone-wrap">
+                  <input [id]="'sac-e-icone-' + s.id" type="text" [(ngModel)]="editSacramento.icone" class="adm-field__input" placeholder="pi-star">
+                  <i class="pi adm-field__icone-preview" [ngClass]="editSacramento.icone || 'pi-star'" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div class="adm-obs-item__acoes">
+                <button type="button" class="adm-btn adm-btn--primary adm-btn--sm" (click)="salvarSacramento(s.id)">Salvar</button>
+                <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm" (click)="cancelarEditSacramento()">Cancelar</button>
+              </div>
+            </div>
+          } @else {
+            <div class="adm-obs-item__conteudo adm-obs-item__conteudo--sacramento">
+              <i class="pi adm-sacramento-icone" [ngClass]="s.icone" aria-hidden="true"></i>
+              <div>
+                <strong class="adm-obs-item__titulo">{{ s.titulo }}</strong>
+                <p class="adm-obs-item__desc">{{ s.descricao }}</p>
+              </div>
+            </div>
+            <div class="adm-obs-item__acoes">
+              <button type="button" class="adm-btn-acao adm-btn-acao--edit" (click)="iniciarEditSacramento(s)"
+                [attr.aria-label]="'Editar sacramento: ' + s.titulo">
+                <i class="pi pi-pencil" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="adm-btn-acao adm-btn-acao--delete" (click)="excluirSacramento(s.id)"
+                [attr.aria-label]="'Excluir sacramento: ' + s.titulo">
+                <i class="pi pi-trash" aria-hidden="true"></i>
+              </button>
+            </div>
           }
         </div>
       }
@@ -150,12 +238,12 @@
     </div>
   </section>
 
-  <!-- ── Observações ─────────────────────────────────────────────────────── -->
+  <!-- ── Informações Importantes ──────────────────────────────────────────── -->
   <section class="adm-secao" aria-labelledby="adm-obs-titulo">
     <div class="adm-secao__head">
       <h2 id="adm-obs-titulo" class="adm-secao__titulo">
         <i class="pi pi-info-circle" aria-hidden="true"></i>
-        Observações
+        Informações Importantes
       </h2>
       <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm"
         (click)="toggleFormObservacao()"
@@ -165,14 +253,14 @@
     </div>
 
     @if (mostrarFormObservacao()) {
-      <div class="adm-inline-form" role="form" aria-label="Adicionar observação">
+      <div class="adm-inline-form" role="form" aria-label="Adicionar informação">
         <div class="adm-field adm-field--full">
           <label for="obs-titulo" class="adm-field__label">Título</label>
-          <input id="obs-titulo" type="text" [(ngModel)]="novaObservacao.titulo" class="adm-field__input" placeholder="Título da observação">
+          <input id="obs-titulo" type="text" [(ngModel)]="novaObservacao.titulo" class="adm-field__input" placeholder="Título da informação">
         </div>
         <div class="adm-field adm-field--full">
           <label for="obs-desc" class="adm-field__label">Descrição</label>
-          <textarea id="obs-desc" [(ngModel)]="novaObservacao.descricao" class="adm-field__input adm-field__textarea" rows="3" placeholder="Texto da observação"></textarea>
+          <textarea id="obs-desc" [(ngModel)]="novaObservacao.descricao" class="adm-field__input adm-field__textarea" rows="3" placeholder="Texto da informação"></textarea>
         </div>
         <div class="adm-inline-form__acoes">
           <button type="button" class="adm-btn adm-btn--primary adm-btn--sm" (click)="adicionarObservacao()">Salvar</button>
@@ -206,11 +294,11 @@
             </div>
             <div class="adm-obs-item__acoes">
               <button type="button" class="adm-btn-acao adm-btn-acao--edit" (click)="iniciarEditObservacao(o)"
-                [attr.aria-label]="'Editar observação: ' + o.titulo">
+                [attr.aria-label]="'Editar informação: ' + o.titulo">
                 <i class="pi pi-pencil" aria-hidden="true"></i>
               </button>
               <button type="button" class="adm-btn-acao adm-btn-acao--delete" (click)="excluirObservacao(o.id)"
-                [attr.aria-label]="'Excluir observação: ' + o.titulo">
+                [attr.aria-label]="'Excluir informação: ' + o.titulo">
                 <i class="pi pi-trash" aria-hidden="true"></i>
               </button>
             </div>

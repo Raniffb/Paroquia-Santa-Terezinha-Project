@@ -13,6 +13,7 @@ import { AdminCatEvento } from '../../core/models/admin.models';
 export class EventosListComponent {
   private svc = inject(AdminEventosService);
 
+  loading         = this.svc.loading;
   filtroCategoria = signal<AdminCatEvento | 'todas'>('todas');
   deleteConfirmId = signal<number | null>(null);
 

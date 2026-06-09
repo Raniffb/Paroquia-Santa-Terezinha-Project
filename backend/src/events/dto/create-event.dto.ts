@@ -1,5 +1,7 @@
-import { IsDateString, IsString, MinLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsDateString, IsIn, IsOptional, IsString, MinLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
+const CATEGORIAS = ['missa', 'encontro', 'retiro', 'festivo', 'formacao', 'social'];
 
 export class CreateEventDto {
   @ApiProperty({ example: 'Festa Junina Paroquial 2026' })
@@ -24,4 +26,14 @@ export class CreateEventDto {
   @IsString()
   @MinLength(5)
   description: string;
+
+  @ApiPropertyOptional({ example: 'encontro', enum: CATEGORIAS })
+  @IsOptional()
+  @IsIn(CATEGORIAS)
+  category?: string;
+
+  @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
+  published?: boolean;
 }

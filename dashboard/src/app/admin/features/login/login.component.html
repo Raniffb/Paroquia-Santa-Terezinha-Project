@@ -19,21 +19,21 @@
     <form [formGroup]="form" (ngSubmit)="entrar()" novalidate class="adm-login__form">
 
       <div class="adm-field">
-        <label for="login-usuario" class="adm-field__label">Usuário</label>
+        <label for="login-email" class="adm-field__label">E-mail</label>
         <div class="adm-field__input-wrap">
-          <i class="pi pi-user adm-field__icon" aria-hidden="true"></i>
+          <i class="pi pi-envelope adm-field__icon" aria-hidden="true"></i>
           <input
-            id="login-usuario"
-            type="text"
-            formControlName="usuario"
+            id="login-email"
+            type="email"
+            formControlName="email"
             class="adm-field__input"
-            autocomplete="username"
-            [attr.aria-invalid]="campoUsuario.invalid && campoUsuario.touched"
+            autocomplete="email"
+            [attr.aria-invalid]="campoEmail.invalid && campoEmail.touched"
             aria-required="true"
-            placeholder="Digite seu usuário">
+            placeholder="admin@paroquia.com">
         </div>
-        @if (campoUsuario.invalid && campoUsuario.touched) {
-          <span class="adm-field__erro" role="alert">Campo obrigatório.</span>
+        @if (campoEmail.invalid && campoEmail.touched) {
+          <span class="adm-field__erro" role="alert">E-mail obrigatório e válido.</span>
         }
       </div>
 

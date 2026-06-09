@@ -24,6 +24,9 @@ model News {
   content   String
   imageUrl  String?
   featured  Boolean  @default(false)
+  category  String   @default("paroquia")
+  author    String   @default("Administrador")
+  published Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -34,6 +37,8 @@ model Notice {
   date        DateTime
   description String
   priority    String   @default("normal")
+  category    String   @default("geral")
+  active      Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -45,15 +50,36 @@ model Event {
   time        String
   location    String
   description String
+  category    String   @default("encontro")
+  published   Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model MassSchedule {
   id          Int      @id @default(autoincrement())
-  day         String
-  time        String
+  day         String   @unique
+  times       String
   observation String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Sacramento {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  icon        String   @default("pi-star")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model HorariosInfo {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  sortOrder   Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
