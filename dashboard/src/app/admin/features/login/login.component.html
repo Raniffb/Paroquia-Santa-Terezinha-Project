@@ -1,0 +1,89 @@
+<div class="adm-login">
+
+  <div class="adm-login__card" role="main">
+
+    <div class="adm-login__brand" aria-hidden="true">
+      <span class="adm-login__initials">PST</span>
+    </div>
+
+    <h1 class="adm-login__titulo">Paróquia Santa Teresinha</h1>
+    <p class="adm-login__subtitulo">Painel Administrativo</p>
+
+    @if (erro()) {
+      <div class="adm-login__erro" role="alert" aria-live="assertive">
+        <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+        {{ erro() }}
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="entrar()" novalidate class="adm-login__form">
+
+      <div class="adm-field">
+        <label for="login-usuario" class="adm-field__label">Usuário</label>
+        <div class="adm-field__input-wrap">
+          <i class="pi pi-user adm-field__icon" aria-hidden="true"></i>
+          <input
+            id="login-usuario"
+            type="text"
+            formControlName="usuario"
+            class="adm-field__input"
+            autocomplete="username"
+            [attr.aria-invalid]="campoUsuario.invalid && campoUsuario.touched"
+            aria-required="true"
+            placeholder="Digite seu usuário">
+        </div>
+        @if (campoUsuario.invalid && campoUsuario.touched) {
+          <span class="adm-field__erro" role="alert">Campo obrigatório.</span>
+        }
+      </div>
+
+      <div class="adm-field">
+        <label for="login-senha" class="adm-field__label">Senha</label>
+        <div class="adm-field__input-wrap">
+          <i class="pi pi-lock adm-field__icon" aria-hidden="true"></i>
+          <input
+            id="login-senha"
+            [type]="mostrarSenha() ? 'text' : 'password'"
+            formControlName="senha"
+            class="adm-field__input adm-field__input--com-toggle"
+            autocomplete="current-password"
+            [attr.aria-invalid]="campoSenha.invalid && campoSenha.touched"
+            aria-required="true"
+            placeholder="Digite sua senha">
+          <button
+            type="button"
+            class="adm-field__toggle-senha"
+            (click)="toggleSenha()"
+            [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'">
+            <i [class]="mostrarSenha() ? 'pi pi-eye-slash' : 'pi pi-eye'" aria-hidden="true"></i>
+          </button>
+        </div>
+        @if (campoSenha.invalid && campoSenha.touched) {
+          <span class="adm-field__erro" role="alert">Campo obrigatório.</span>
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="adm-login__btn"
+        [disabled]="carregando()"
+        [attr.aria-busy]="carregando()">
+        @if (carregando()) {
+          <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+          Entrando…
+        } @else {
+          <i class="pi pi-sign-in" aria-hidden="true"></i>
+          Entrar
+        }
+      </button>
+
+    </form>
+
+    <a routerLink="/" class="adm-login__voltar">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i>
+      Voltar ao site
+    </a>
+
+  </div>
+
+</div>

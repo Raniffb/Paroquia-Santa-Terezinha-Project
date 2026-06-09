@@ -1,0 +1,91 @@
+<div class="adm-list-page">
+
+  <div class="adm-list-page__head">
+    <h1 class="adm-page-titulo">Avisos</h1>
+    <a routerLink="/admin/avisos/form" class="adm-btn adm-btn--primary">
+      <i class="pi pi-plus" aria-hidden="true"></i>
+      Novo aviso
+    </a>
+  </div>
+
+  <!-- Filtros -->
+  <div class="adm-filtros" role="group" aria-label="Filtrar por categoria">
+    @for (cat of categorias; track cat.value) {
+      <button
+        type="button"
+        class="adm-filtro-btn"
+        [class.adm-filtro-btn--ativo]="filtroCategoria() === cat.value"
+        (click)="setFiltro(cat.value)"
+        [attr.aria-pressed]="filtroCategoria() === cat.value">
+        {{ cat.label }}
+      </button>
+    }
+  </div>
+
+  @if (lista().length === 0) {
+    <div class="adm-list-page__vazio">
+      <i class="pi pi-inbox" aria-hidden="true"></i>
+      <p>Nenhum aviso encontrado.</p>
+      <a routerLink="/admin/avisos/form" class="adm-btn adm-btn--secondary">Criar primeiro aviso</a>
+    </div>
+  } @else {
+    <div class="adm-table-wrap" role="region" aria-label="Lista de avisos">
+      <table class="adm-table" aria-label="Avisos cadastrados">
+        <thead>
+          <tr>
+            <th scope="col">Título</th>
+            <th scope="col" class="adm-table__col-sm">Categoria</th>
+            <th scope="col" class="adm-table__col-sm">Data</th>
+            <th scope="col" class="adm-table__col-sm">Status</th>
+            <th scope="col" class="adm-table__col-acao"><span class="sr-only">Ações</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (a of lista(); track a.id) {
+            <tr>
+              <td>
+                <span class="adm-table__titulo-linha">{{ a.titulo }}</span>
+                @if (a.urgente) {
+                  <span class="adm-badge adm-badge--urgente">Urgente</span>
+                }
+              </td>
+              <td class="adm-table__col-sm">{{ labelCategoria(a.categoria) }}</td>
+              <td class="adm-table__col-sm">{{ formatarData(a.data) }}</td>
+              <td class="adm-table__col-sm">
+                <span [class]="a.ativo ? 'adm-badge adm-badge--ativo' : 'adm-badge adm-badge--inativo'">
+                  {{ a.ativo ? 'Ativo' : 'Inativo' }}
+                </span>
+              </td>
+              <td class="adm-table__col-acao">
+                @if (deleteConfirmId() === a.id) {
+                  <div class="adm-table__confirm" role="group" aria-label="Confirmar exclusão">
+                    <span class="adm-table__confirm-txt">Excluir?</span>
+                    <button type="button" class="adm-btn-acao adm-btn-acao--danger-ok" (click)="confirmarDelete(a.id)" aria-label="Confirmar exclusão">Sim</button>
+                    <button type="button" class="adm-btn-acao adm-btn-acao--cancel" (click)="cancelarDelete()" aria-label="Cancelar exclusão">Não</button>
+                  </div>
+                } @else {
+                  <div class="adm-table__acoes">
+                    <a
+                      [routerLink]="['/admin/avisos/form', a.id]"
+                      class="adm-btn-acao adm-btn-acao--edit"
+                      [attr.aria-label]="'Editar aviso: ' + a.titulo">
+                      <i class="pi pi-pencil" aria-hidden="true"></i>
+                    </a>
+                    <button
+                      type="button"
+                      class="adm-btn-acao adm-btn-acao--delete"
+                      (click)="solicitarDelete(a.id)"
+                      [attr.aria-label]="'Excluir aviso: ' + a.titulo">
+                      <i class="pi pi-trash" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</div>

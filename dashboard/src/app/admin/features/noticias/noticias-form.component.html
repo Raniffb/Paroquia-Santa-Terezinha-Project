@@ -1,0 +1,100 @@
+<div class="adm-form-page">
+
+  <div class="adm-form-page__head">
+    <a routerLink="/admin/noticias" class="adm-voltar" aria-label="Voltar para lista de notícias">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i>
+    </a>
+    <h1 class="adm-page-titulo">{{ modoEdicao ? 'Editar Notícia' : 'Nova Notícia' }}</h1>
+  </div>
+
+  @if (salvo()) {
+    <div class="adm-form-sucesso" role="status" aria-live="polite">
+      <i class="pi pi-check-circle" aria-hidden="true"></i>
+      Notícia salva com sucesso! Redirecionando…
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="salvar()" novalidate class="adm-form">
+
+    <div class="adm-form__grid">
+
+      <!-- Título -->
+      <div class="adm-field adm-field--full">
+        <label for="n-titulo" class="adm-field__label">Título <span aria-hidden="true">*</span></label>
+        <input id="n-titulo" type="text" formControlName="titulo" class="adm-field__input"
+          [attr.aria-invalid]="err('titulo')" aria-required="true" placeholder="Título da notícia">
+        @if (err('titulo')) { <span class="adm-field__erro" role="alert">Título obrigatório (máx. 120 caracteres).</span> }
+      </div>
+
+      <!-- Data -->
+      <div class="adm-field">
+        <label for="n-data" class="adm-field__label">Data <span aria-hidden="true">*</span></label>
+        <input id="n-data" type="date" formControlName="data" class="adm-field__input"
+          [attr.aria-invalid]="err('data')" aria-required="true">
+        @if (err('data')) { <span class="adm-field__erro" role="alert">Data obrigatória.</span> }
+      </div>
+
+      <!-- Categoria -->
+      <div class="adm-field">
+        <label for="n-categoria" class="adm-field__label">Categoria <span aria-hidden="true">*</span></label>
+        <select id="n-categoria" formControlName="categoria" class="adm-field__input adm-field__select"
+          [attr.aria-invalid]="err('categoria')">
+          @for (c of categorias; track c.value) {
+            <option [value]="c.value">{{ c.label }}</option>
+          }
+        </select>
+        @if (err('categoria')) { <span class="adm-field__erro" role="alert">Categoria obrigatória.</span> }
+      </div>
+
+      <!-- Autor -->
+      <div class="adm-field">
+        <label for="n-autor" class="adm-field__label">Autor <span aria-hidden="true">*</span></label>
+        <input id="n-autor" type="text" formControlName="autor" class="adm-field__input"
+          [attr.aria-invalid]="err('autor')" aria-required="true" placeholder="Nome do autor">
+        @if (err('autor')) { <span class="adm-field__erro" role="alert">Autor obrigatório.</span> }
+      </div>
+
+      <!-- Resumo -->
+      <div class="adm-field adm-field--full">
+        <label for="n-resumo" class="adm-field__label">Resumo <span aria-hidden="true">*</span></label>
+        <textarea id="n-resumo" formControlName="resumo" class="adm-field__input adm-field__textarea"
+          rows="3" [attr.aria-invalid]="err('resumo')" aria-required="true"
+          placeholder="Breve resumo da notícia (máx. 300 caracteres)"></textarea>
+        @if (err('resumo')) { <span class="adm-field__erro" role="alert">Resumo obrigatório (máx. 300 caracteres).</span> }
+      </div>
+
+      <!-- Corpo -->
+      <div class="adm-field adm-field--full">
+        <label for="n-corpo" class="adm-field__label">Texto completo <span aria-hidden="true">*</span></label>
+        <textarea id="n-corpo" formControlName="corpo" class="adm-field__input adm-field__textarea adm-field__textarea--tall"
+          rows="10" [attr.aria-invalid]="err('corpo')" aria-required="true"
+          placeholder="Texto completo da notícia"></textarea>
+        @if (err('corpo')) { <span class="adm-field__erro" role="alert">Texto obrigatório.</span> }
+      </div>
+
+      <!-- Flags -->
+      <div class="adm-field adm-field--full adm-form__flags">
+        <label class="adm-checkbox">
+          <input type="checkbox" formControlName="destaque" class="adm-checkbox__input">
+          <span class="adm-checkbox__label">Notícia em destaque</span>
+        </label>
+        <label class="adm-checkbox">
+          <input type="checkbox" formControlName="publicado" class="adm-checkbox__input">
+          <span class="adm-checkbox__label">Publicar</span>
+        </label>
+      </div>
+
+    </div>
+
+    <!-- Ações -->
+    <div class="adm-form__acoes">
+      <a routerLink="/admin/noticias" class="adm-btn adm-btn--secondary">Cancelar</a>
+      <button type="submit" class="adm-btn adm-btn--primary">
+        <i class="pi pi-save" aria-hidden="true"></i>
+        {{ modoEdicao ? 'Salvar alterações' : 'Publicar notícia' }}
+      </button>
+    </div>
+
+  </form>
+
+</div>

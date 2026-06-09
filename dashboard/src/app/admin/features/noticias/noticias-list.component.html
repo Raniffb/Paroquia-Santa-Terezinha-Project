@@ -1,0 +1,92 @@
+<div class="adm-list-page">
+
+  <div class="adm-list-page__head">
+    <h1 class="adm-page-titulo">Notícias</h1>
+    <a routerLink="/admin/noticias/form" class="adm-btn adm-btn--primary">
+      <i class="pi pi-plus" aria-hidden="true"></i>
+      Nova notícia
+    </a>
+  </div>
+
+  <!-- Filtros -->
+  <div class="adm-filtros" role="group" aria-label="Filtrar por categoria">
+    @for (cat of categorias; track cat.value) {
+      <button
+        type="button"
+        class="adm-filtro-btn"
+        [class.adm-filtro-btn--ativo]="filtroCategoria() === cat.value"
+        (click)="setFiltro(cat.value)"
+        [attr.aria-pressed]="filtroCategoria() === cat.value">
+        {{ cat.label }}
+      </button>
+    }
+  </div>
+
+  <!-- Tabela -->
+  @if (lista().length === 0) {
+    <div class="adm-list-page__vazio">
+      <i class="pi pi-inbox" aria-hidden="true"></i>
+      <p>Nenhuma notícia encontrada.</p>
+      <a routerLink="/admin/noticias/form" class="adm-btn adm-btn--secondary">Criar primeira notícia</a>
+    </div>
+  } @else {
+    <div class="adm-table-wrap" role="region" aria-label="Lista de notícias">
+      <table class="adm-table" aria-label="Notícias cadastradas">
+        <thead>
+          <tr>
+            <th scope="col">Título</th>
+            <th scope="col" class="adm-table__col-sm">Categoria</th>
+            <th scope="col" class="adm-table__col-sm">Data</th>
+            <th scope="col" class="adm-table__col-sm">Status</th>
+            <th scope="col" class="adm-table__col-acao"><span class="sr-only">Ações</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (n of lista(); track n.id) {
+            <tr>
+              <td>
+                <span class="adm-table__titulo-linha">{{ n.titulo }}</span>
+                @if (n.destaque) {
+                  <span class="adm-badge adm-badge--destaque">Destaque</span>
+                }
+              </td>
+              <td class="adm-table__col-sm">{{ labelCategoria(n.categoria) }}</td>
+              <td class="adm-table__col-sm">{{ formatarData(n.data) }}</td>
+              <td class="adm-table__col-sm">
+                <span [class]="n.publicado ? 'adm-badge adm-badge--ativo' : 'adm-badge adm-badge--inativo'">
+                  {{ n.publicado ? 'Publicado' : 'Rascunho' }}
+                </span>
+              </td>
+              <td class="adm-table__col-acao">
+                @if (deleteConfirmId() === n.id) {
+                  <div class="adm-table__confirm" role="group" aria-label="Confirmar exclusão">
+                    <span class="adm-table__confirm-txt">Excluir?</span>
+                    <button type="button" class="adm-btn-acao adm-btn-acao--danger-ok" (click)="confirmarDelete(n.id)" aria-label="Confirmar exclusão">Sim</button>
+                    <button type="button" class="adm-btn-acao adm-btn-acao--cancel" (click)="cancelarDelete()" aria-label="Cancelar exclusão">Não</button>
+                  </div>
+                } @else {
+                  <div class="adm-table__acoes">
+                    <a
+                      [routerLink]="['/admin/noticias/form', n.id]"
+                      class="adm-btn-acao adm-btn-acao--edit"
+                      [attr.aria-label]="'Editar notícia: ' + n.titulo">
+                      <i class="pi pi-pencil" aria-hidden="true"></i>
+                    </a>
+                    <button
+                      type="button"
+                      class="adm-btn-acao adm-btn-acao--delete"
+                      (click)="solicitarDelete(n.id)"
+                      [attr.aria-label]="'Excluir notícia: ' + n.titulo">
+                      <i class="pi pi-trash" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</div>

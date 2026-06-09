@@ -1,0 +1,198 @@
+// ── Page ─────────────────────────────────────────────────────────────────────
+.adm-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f2546;
+  padding: 24px 16px;
+}
+
+// ── Card ─────────────────────────────────────────────────────────────────────
+.adm-login__card {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 36px 32px 28px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// ── Brand ─────────────────────────────────────────────────────────────────────
+.adm-login__brand {
+  margin-bottom: 16px;
+}
+
+.adm-login__initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: #13335c;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 16px;
+  letter-spacing: 1px;
+}
+
+.adm-login__titulo {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #13335c;
+  text-align: center;
+  margin: 0 0 4px;
+}
+
+.adm-login__subtitulo {
+  font-size: 0.85rem;
+  color: #777;
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+// ── Erro ─────────────────────────────────────────────────────────────────────
+.adm-login__erro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #b91c1c;
+  font-size: 0.88rem;
+  margin-bottom: 16px;
+
+  i { font-size: 15px; }
+}
+
+// ── Form ─────────────────────────────────────────────────────────────────────
+.adm-login__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// ── Fields ───────────────────────────────────────────────────────────────────
+.adm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &__label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  &__input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    position: absolute;
+    left: 12px;
+    color: #888;
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  &__input {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px 0 36px;
+    border: 1.5px solid #d1cfc8;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #222;
+    background: #fff;
+    transition: border-color 0.15s;
+
+    &::placeholder { color: #aaa; }
+
+    &:focus {
+      outline: none;
+      border-color: #13335c;
+      box-shadow: 0 0 0 3px rgba(19,51,92,.15);
+    }
+
+    &[aria-invalid='true'] {
+      border-color: #e53e3e;
+    }
+
+    &--com-toggle {
+      padding-right: 44px;
+    }
+  }
+
+  &__toggle-senha {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+
+    &:hover { color: #333; }
+    &:focus-visible { outline: 2px solid #13335c; }
+  }
+
+  &__erro {
+    font-size: 0.8rem;
+    color: #c53030;
+  }
+}
+
+// ── Submit ────────────────────────────────────────────────────────────────────
+.adm-login__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 46px;
+  background: #13335c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.15s;
+
+  i { font-size: 16px; }
+
+  &:hover:not(:disabled) { background: #1a4278; }
+  &:focus-visible { outline: 3px solid #c8971c; outline-offset: 2px; }
+  &:disabled { opacity: 0.65; cursor: not-allowed; }
+}
+
+// ── Voltar ────────────────────────────────────────────────────────────────────
+.adm-login__voltar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  font-size: 0.85rem;
+  color: #555;
+  text-decoration: none;
+
+  i { font-size: 12px; }
+
+  &:hover { color: #13335c; text-decoration: underline; }
+  &:focus-visible { outline: 2px solid #13335c; border-radius: 2px; }
+}

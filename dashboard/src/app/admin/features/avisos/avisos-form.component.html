@@ -1,0 +1,73 @@
+<div class="adm-form-page">
+
+  <div class="adm-form-page__head">
+    <a routerLink="/admin/avisos" class="adm-voltar" aria-label="Voltar para lista de avisos">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i>
+    </a>
+    <h1 class="adm-page-titulo">{{ modoEdicao ? 'Editar Aviso' : 'Novo Aviso' }}</h1>
+  </div>
+
+  @if (salvo()) {
+    <div class="adm-form-sucesso" role="status" aria-live="polite">
+      <i class="pi pi-check-circle" aria-hidden="true"></i>
+      Aviso salvo com sucesso! Redirecionando…
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="salvar()" novalidate class="adm-form">
+    <div class="adm-form__grid">
+
+      <div class="adm-field adm-field--full">
+        <label for="av-titulo" class="adm-field__label">Título <span aria-hidden="true">*</span></label>
+        <input id="av-titulo" type="text" formControlName="titulo" class="adm-field__input"
+          [attr.aria-invalid]="err('titulo')" aria-required="true" placeholder="Título do aviso">
+        @if (err('titulo')) { <span class="adm-field__erro" role="alert">Título obrigatório (máx. 120 caracteres).</span> }
+      </div>
+
+      <div class="adm-field">
+        <label for="av-data" class="adm-field__label">Data <span aria-hidden="true">*</span></label>
+        <input id="av-data" type="date" formControlName="data" class="adm-field__input"
+          [attr.aria-invalid]="err('data')" aria-required="true">
+        @if (err('data')) { <span class="adm-field__erro" role="alert">Data obrigatória.</span> }
+      </div>
+
+      <div class="adm-field">
+        <label for="av-categoria" class="adm-field__label">Categoria <span aria-hidden="true">*</span></label>
+        <select id="av-categoria" formControlName="categoria" class="adm-field__input adm-field__select">
+          @for (c of categorias; track c.value) {
+            <option [value]="c.value">{{ c.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="adm-field adm-field--full">
+        <label for="av-resumo" class="adm-field__label">Texto do aviso <span aria-hidden="true">*</span></label>
+        <textarea id="av-resumo" formControlName="resumo" class="adm-field__input adm-field__textarea"
+          rows="5" [attr.aria-invalid]="err('resumo')" aria-required="true"
+          placeholder="Texto completo do aviso (máx. 300 caracteres)"></textarea>
+        @if (err('resumo')) { <span class="adm-field__erro" role="alert">Texto obrigatório (máx. 300 caracteres).</span> }
+      </div>
+
+      <div class="adm-field adm-field--full adm-form__flags">
+        <label class="adm-checkbox">
+          <input type="checkbox" formControlName="urgente" class="adm-checkbox__input">
+          <span class="adm-checkbox__label">Aviso urgente</span>
+        </label>
+        <label class="adm-checkbox">
+          <input type="checkbox" formControlName="ativo" class="adm-checkbox__input">
+          <span class="adm-checkbox__label">Aviso ativo (visível no site)</span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="adm-form__acoes">
+      <a routerLink="/admin/avisos" class="adm-btn adm-btn--secondary">Cancelar</a>
+      <button type="submit" class="adm-btn adm-btn--primary">
+        <i class="pi pi-save" aria-hidden="true"></i>
+        {{ modoEdicao ? 'Salvar alterações' : 'Criar aviso' }}
+      </button>
+    </div>
+  </form>
+
+</div>

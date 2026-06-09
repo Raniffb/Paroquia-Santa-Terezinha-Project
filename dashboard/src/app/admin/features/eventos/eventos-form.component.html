@@ -1,0 +1,83 @@
+<div class="adm-form-page">
+
+  <div class="adm-form-page__head">
+    <a routerLink="/admin/eventos" class="adm-voltar" aria-label="Voltar para lista de eventos">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i>
+    </a>
+    <h1 class="adm-page-titulo">{{ modoEdicao ? 'Editar Evento' : 'Novo Evento' }}</h1>
+  </div>
+
+  @if (salvo()) {
+    <div class="adm-form-sucesso" role="status" aria-live="polite">
+      <i class="pi pi-check-circle" aria-hidden="true"></i>
+      Evento salvo com sucesso! Redirecionando…
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="salvar()" novalidate class="adm-form">
+    <div class="adm-form__grid">
+
+      <div class="adm-field adm-field--full">
+        <label for="ev-titulo" class="adm-field__label">Título <span aria-hidden="true">*</span></label>
+        <input id="ev-titulo" type="text" formControlName="titulo" class="adm-field__input"
+          [attr.aria-invalid]="err('titulo')" aria-required="true" placeholder="Título do evento">
+        @if (err('titulo')) { <span class="adm-field__erro" role="alert">Título obrigatório (máx. 120 caracteres).</span> }
+      </div>
+
+      <div class="adm-field">
+        <label for="ev-data" class="adm-field__label">Data <span aria-hidden="true">*</span></label>
+        <input id="ev-data" type="date" formControlName="data" class="adm-field__input"
+          [attr.aria-invalid]="err('data')" aria-required="true">
+        @if (err('data')) { <span class="adm-field__erro" role="alert">Data obrigatória.</span> }
+      </div>
+
+      <div class="adm-field">
+        <label for="ev-hora" class="adm-field__label">Hora <span aria-hidden="true">*</span></label>
+        <input id="ev-hora" type="text" formControlName="hora" class="adm-field__input"
+          [attr.aria-invalid]="err('hora')" aria-required="true" placeholder="Ex: 18h00">
+        @if (err('hora')) { <span class="adm-field__erro" role="alert">Hora obrigatória (formato: 18h00).</span> }
+      </div>
+
+      <div class="adm-field">
+        <label for="ev-local" class="adm-field__label">Local <span aria-hidden="true">*</span></label>
+        <input id="ev-local" type="text" formControlName="local" class="adm-field__input"
+          [attr.aria-invalid]="err('local')" aria-required="true" placeholder="Local do evento">
+        @if (err('local')) { <span class="adm-field__erro" role="alert">Local obrigatório.</span> }
+      </div>
+
+      <div class="adm-field">
+        <label for="ev-categoria" class="adm-field__label">Categoria <span aria-hidden="true">*</span></label>
+        <select id="ev-categoria" formControlName="categoria" class="adm-field__input adm-field__select">
+          @for (c of categorias; track c.value) {
+            <option [value]="c.value">{{ c.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="adm-field adm-field--full">
+        <label for="ev-descricao" class="adm-field__label">Descrição <span aria-hidden="true">*</span></label>
+        <textarea id="ev-descricao" formControlName="descricao" class="adm-field__input adm-field__textarea"
+          rows="5" [attr.aria-invalid]="err('descricao')" aria-required="true"
+          placeholder="Descrição detalhada do evento"></textarea>
+        @if (err('descricao')) { <span class="adm-field__erro" role="alert">Descrição obrigatória.</span> }
+      </div>
+
+      <div class="adm-field adm-field--full adm-form__flags">
+        <label class="adm-checkbox">
+          <input type="checkbox" formControlName="publicado" class="adm-checkbox__input">
+          <span class="adm-checkbox__label">Publicar evento (visível no site)</span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="adm-form__acoes">
+      <a routerLink="/admin/eventos" class="adm-btn adm-btn--secondary">Cancelar</a>
+      <button type="submit" class="adm-btn adm-btn--primary">
+        <i class="pi pi-save" aria-hidden="true"></i>
+        {{ modoEdicao ? 'Salvar alterações' : 'Criar evento' }}
+      </button>
+    </div>
+  </form>
+
+</div>

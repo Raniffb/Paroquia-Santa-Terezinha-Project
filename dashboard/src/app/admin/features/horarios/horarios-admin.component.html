@@ -1,0 +1,223 @@
+<div class="adm-horarios">
+
+  <h1 class="adm-page-titulo">Horários das Missas</h1>
+
+  @if (salvo()) {
+    <div class="adm-form-sucesso" role="status" aria-live="polite">
+      <i class="pi pi-check-circle" aria-hidden="true"></i>
+      {{ salvo() }}
+    </div>
+  }
+
+  <!-- ── Missas ──────────────────────────────────────────────────────────── -->
+  <section class="adm-secao" aria-labelledby="adm-missas-titulo">
+    <h2 id="adm-missas-titulo" class="adm-secao__titulo">
+      <i class="pi pi-clock" aria-hidden="true"></i>
+      Missas por dia da semana
+    </h2>
+
+    <div class="adm-horarios__grade">
+      @for (missa of missas(); track missa.id) {
+        <div class="adm-horario-card">
+          <div class="adm-horario-card__dia">{{ missa.dia }}</div>
+
+          @if (editMissaId() === missa.id) {
+            <!-- Modo edição -->
+            <div class="adm-horario-card__edit">
+              @for (h of editMissaHorarios; track trackByIndex($index)) {
+                <div class="adm-horario-card__edit-linha">
+                  <input
+                    type="text"
+                    [(ngModel)]="editMissaHorarios[$index]"
+                    class="adm-field__input adm-field__input--small"
+                    placeholder="Ex: 07h00"
+                    [attr.aria-label]="'Horário ' + ($index + 1)">
+                  <button
+                    type="button"
+                    class="adm-btn-acao adm-btn-acao--delete"
+                    (click)="removerHorarioMissa($index)"
+                    [attr.aria-label]="'Remover horário ' + ($index + 1)">
+                    <i class="pi pi-minus" aria-hidden="true"></i>
+                  </button>
+                </div>
+              }
+              <button type="button" class="adm-link-add" (click)="adicionarHorarioMissa()">
+                <i class="pi pi-plus" aria-hidden="true"></i> Adicionar horário
+              </button>
+              <div class="adm-horario-card__edit-acoes">
+                <button type="button" class="adm-btn adm-btn--primary adm-btn--sm" (click)="salvarMissa(missa.id)">Salvar</button>
+                <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm" (click)="cancelarEditMissa()">Cancelar</button>
+              </div>
+            </div>
+          } @else {
+            <!-- Modo visualização -->
+            <ul class="adm-horario-card__horarios" role="list">
+              @for (h of missa.horarios; track h) {
+                <li>{{ h }}</li>
+              }
+            </ul>
+            <button
+              type="button"
+              class="adm-btn-acao adm-btn-acao--edit"
+              (click)="iniciarEditMissa(missa)"
+              [attr.aria-label]="'Editar horários de ' + missa.dia">
+              <i class="pi pi-pencil" aria-hidden="true"></i>
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ── Confissões ──────────────────────────────────────────────────────── -->
+  <section class="adm-secao" aria-labelledby="adm-confissoes-titulo">
+    <div class="adm-secao__head">
+      <h2 id="adm-confissoes-titulo" class="adm-secao__titulo">
+        <i class="pi pi-book" aria-hidden="true"></i>
+        Confissões
+      </h2>
+      <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm"
+        (click)="toggleFormConfissao()"
+        [attr.aria-expanded]="mostrarFormConfissao()">
+        <i class="pi pi-plus" aria-hidden="true"></i> Adicionar
+      </button>
+    </div>
+
+    @if (mostrarFormConfissao()) {
+      <div class="adm-inline-form" role="form" aria-label="Adicionar confissão">
+        <div class="adm-field">
+          <label for="conf-dia" class="adm-field__label">Dia</label>
+          <input id="conf-dia" type="text" [(ngModel)]="novaConfissao.dia" class="adm-field__input" placeholder="Ex: Sábado">
+        </div>
+        <div class="adm-field">
+          <label for="conf-hora" class="adm-field__label">Horário</label>
+          <input id="conf-hora" type="text" [(ngModel)]="novaConfissao.horario" class="adm-field__input" placeholder="Ex: 17h00 às 17h45">
+        </div>
+        <div class="adm-inline-form__acoes">
+          <button type="button" class="adm-btn adm-btn--primary adm-btn--sm" (click)="adicionarConfissao()">Salvar</button>
+          <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm" (click)="mostrarFormConfissao.set(false)">Cancelar</button>
+        </div>
+      </div>
+    }
+
+    <div class="adm-table-wrap">
+      <table class="adm-table" aria-label="Horários de confissão">
+        <thead>
+          <tr>
+            <th scope="col">Dia</th>
+            <th scope="col">Horário</th>
+            <th scope="col" class="adm-table__col-acao"><span class="sr-only">Ações</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of confissoes(); track c.id) {
+            <tr>
+              @if (editConfissaoId() === c.id) {
+                <td>
+                  <input type="text" [(ngModel)]="editConfissao.dia" class="adm-field__input adm-field__input--small"
+                    [attr.aria-label]="'Dia da confissão'">
+                </td>
+                <td>
+                  <input type="text" [(ngModel)]="editConfissao.horario" class="adm-field__input adm-field__input--small"
+                    [attr.aria-label]="'Horário da confissão'">
+                </td>
+                <td class="adm-table__col-acao">
+                  <div class="adm-table__acoes">
+                    <button type="button" class="adm-btn-acao adm-btn-acao--danger-ok" (click)="salvarConfissao(c.id)" aria-label="Confirmar">OK</button>
+                    <button type="button" class="adm-btn-acao adm-btn-acao--cancel" (click)="cancelarEditConfissao()" aria-label="Cancelar">✕</button>
+                  </div>
+                </td>
+              } @else {
+                <td>{{ c.dia }}</td>
+                <td>{{ c.horario }}</td>
+                <td class="adm-table__col-acao">
+                  <div class="adm-table__acoes">
+                    <button type="button" class="adm-btn-acao adm-btn-acao--edit" (click)="iniciarEditConfissao(c)"
+                      [attr.aria-label]="'Editar confissão de ' + c.dia">
+                      <i class="pi pi-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="adm-btn-acao adm-btn-acao--delete" (click)="excluirConfissao(c.id)"
+                      [attr.aria-label]="'Excluir confissão de ' + c.dia">
+                      <i class="pi pi-trash" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── Observações ─────────────────────────────────────────────────────── -->
+  <section class="adm-secao" aria-labelledby="adm-obs-titulo">
+    <div class="adm-secao__head">
+      <h2 id="adm-obs-titulo" class="adm-secao__titulo">
+        <i class="pi pi-info-circle" aria-hidden="true"></i>
+        Observações
+      </h2>
+      <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm"
+        (click)="toggleFormObservacao()"
+        [attr.aria-expanded]="mostrarFormObservacao()">
+        <i class="pi pi-plus" aria-hidden="true"></i> Adicionar
+      </button>
+    </div>
+
+    @if (mostrarFormObservacao()) {
+      <div class="adm-inline-form" role="form" aria-label="Adicionar observação">
+        <div class="adm-field adm-field--full">
+          <label for="obs-titulo" class="adm-field__label">Título</label>
+          <input id="obs-titulo" type="text" [(ngModel)]="novaObservacao.titulo" class="adm-field__input" placeholder="Título da observação">
+        </div>
+        <div class="adm-field adm-field--full">
+          <label for="obs-desc" class="adm-field__label">Descrição</label>
+          <textarea id="obs-desc" [(ngModel)]="novaObservacao.descricao" class="adm-field__input adm-field__textarea" rows="3" placeholder="Texto da observação"></textarea>
+        </div>
+        <div class="adm-inline-form__acoes">
+          <button type="button" class="adm-btn adm-btn--primary adm-btn--sm" (click)="adicionarObservacao()">Salvar</button>
+          <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm" (click)="mostrarFormObservacao.set(false)">Cancelar</button>
+        </div>
+      </div>
+    }
+
+    <div class="adm-obs-lista">
+      @for (o of observacoes(); track o.id) {
+        <div class="adm-obs-item">
+          @if (editObservacaoId() === o.id) {
+            <div class="adm-obs-item__edit">
+              <div class="adm-field adm-field--full">
+                <label [for]="'obs-e-titulo-' + o.id" class="adm-field__label">Título</label>
+                <input [id]="'obs-e-titulo-' + o.id" type="text" [(ngModel)]="editObservacao.titulo" class="adm-field__input">
+              </div>
+              <div class="adm-field adm-field--full">
+                <label [for]="'obs-e-desc-' + o.id" class="adm-field__label">Descrição</label>
+                <textarea [id]="'obs-e-desc-' + o.id" [(ngModel)]="editObservacao.descricao" class="adm-field__input adm-field__textarea" rows="3"></textarea>
+              </div>
+              <div class="adm-obs-item__acoes">
+                <button type="button" class="adm-btn adm-btn--primary adm-btn--sm" (click)="salvarObservacao(o.id)">Salvar</button>
+                <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm" (click)="cancelarEditObservacao()">Cancelar</button>
+              </div>
+            </div>
+          } @else {
+            <div class="adm-obs-item__conteudo">
+              <strong class="adm-obs-item__titulo">{{ o.titulo }}</strong>
+              <p class="adm-obs-item__desc">{{ o.descricao }}</p>
+            </div>
+            <div class="adm-obs-item__acoes">
+              <button type="button" class="adm-btn-acao adm-btn-acao--edit" (click)="iniciarEditObservacao(o)"
+                [attr.aria-label]="'Editar observação: ' + o.titulo">
+                <i class="pi pi-pencil" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="adm-btn-acao adm-btn-acao--delete" (click)="excluirObservacao(o.id)"
+                [attr.aria-label]="'Excluir observação: ' + o.titulo">
+                <i class="pi pi-trash" aria-hidden="true"></i>
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+</div>

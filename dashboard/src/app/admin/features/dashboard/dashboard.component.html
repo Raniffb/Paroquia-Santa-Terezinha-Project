@@ -1,0 +1,76 @@
+<div class="adm-dashboard">
+
+  <h1 class="adm-page-titulo">Dashboard</h1>
+
+  <!-- Cards de resumo -->
+  <div class="adm-dashboard__cards" role="list" aria-label="Resumo do conteúdo">
+    @for (card of cards(); track card.label) {
+      <a [routerLink]="card.rota" class="adm-card-resumo" role="listitem">
+        <div class="adm-card-resumo__icone" [style.background]="card.cor" aria-hidden="true">
+          <i [class]="card.icone"></i>
+        </div>
+        <div class="adm-card-resumo__info">
+          <span class="adm-card-resumo__valor">{{ card.valor }}</span>
+          <span class="adm-card-resumo__label">{{ card.label }}</span>
+        </div>
+      </a>
+    }
+  </div>
+
+  <!-- Listas rápidas -->
+  <div class="adm-dashboard__listas">
+
+    <!-- Próximos eventos -->
+    <section class="adm-lista-card" aria-labelledby="dash-eventos-titulo">
+      <header class="adm-lista-card__header">
+        <h2 id="dash-eventos-titulo" class="adm-lista-card__titulo">
+          <i class="pi pi-calendar" aria-hidden="true"></i>
+          Próximos Eventos
+        </h2>
+        <a routerLink="/admin/eventos" class="adm-lista-card__link-ver">Ver todos</a>
+      </header>
+
+      @if (proximosEventos().length === 0) {
+        <p class="adm-lista-card__vazio">Nenhum evento cadastrado.</p>
+      } @else {
+        <ul class="adm-lista-card__itens" role="list">
+          @for (ev of proximosEventos(); track ev.id) {
+            <li class="adm-lista-card__item">
+              <span class="adm-lista-card__data">{{ formatarData(ev.data) }}</span>
+              <span class="adm-lista-card__texto">{{ ev.titulo }}</span>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <!-- Últimas notícias -->
+    <section class="adm-lista-card" aria-labelledby="dash-noticias-titulo">
+      <header class="adm-lista-card__header">
+        <h2 id="dash-noticias-titulo" class="adm-lista-card__titulo">
+          <i class="pi pi-file" aria-hidden="true"></i>
+          Últimas Notícias
+        </h2>
+        <a routerLink="/admin/noticias" class="adm-lista-card__link-ver">Ver todas</a>
+      </header>
+
+      @if (ultimasNoticias().length === 0) {
+        <p class="adm-lista-card__vazio">Nenhuma notícia cadastrada.</p>
+      } @else {
+        <ul class="adm-lista-card__itens" role="list">
+          @for (n of ultimasNoticias(); track n.id) {
+            <li class="adm-lista-card__item">
+              <span class="adm-lista-card__data">{{ formatarData(n.data) }}</span>
+              <span class="adm-lista-card__texto">{{ n.titulo }}</span>
+              @if (n.destaque) {
+                <span class="adm-badge adm-badge--destaque">Destaque</span>
+              }
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+  </div>
+
+</div>

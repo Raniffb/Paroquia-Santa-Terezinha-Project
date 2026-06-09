@@ -1,0 +1,156 @@
+// ── Missas grade ─────────────────────────────────────────────────────────────
+.adm-horarios__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.adm-horario-card {
+  background: #fff;
+  border: 1px solid #e8e4db;
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__dia {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #0f2546;
+    border-bottom: 1px solid #ece8df;
+    padding-bottom: 6px;
+  }
+
+  &__horarios {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    li {
+      font-size: 0.9rem;
+      color: #444;
+      background: #f3f0e8;
+      border-radius: 4px;
+      padding: 2px 8px;
+      display: inline-block;
+      width: fit-content;
+    }
+  }
+
+  &__edit { display: flex; flex-direction: column; gap: 6px; }
+
+  &__edit-linha {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  &__edit-acoes {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+}
+
+// ── Sections ──────────────────────────────────────────────────────────────────
+.adm-horarios {
+  .adm-secao {
+    margin-bottom: 32px;
+  }
+
+  .adm-secao__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+}
+
+// ── Inline form ───────────────────────────────────────────────────────────────
+.adm-inline-form {
+  background: #fff;
+  border: 1px solid #e8e4db;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  .adm-field { min-width: 180px; flex: 1; }
+
+  &__acoes {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    flex: 0 0 auto;
+  }
+}
+
+// ── Observations list ─────────────────────────────────────────────────────────
+.adm-obs-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.adm-obs-item {
+  background: #fff;
+  border: 1px solid #e8e4db;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  &__edit {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__conteudo { flex: 1; }
+
+  &__titulo {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0f2546;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  &__desc {
+    font-size: 0.85rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  &__acoes {
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+  }
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+.adm-link-add {
+  background: transparent;
+  border: none;
+  color: #13335c;
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &:hover { text-decoration: underline; }
+  &:focus-visible { outline: 2px solid #c8971c; border-radius: 2px; }
+}

@@ -1,0 +1,90 @@
+<div class="adm-list-page">
+
+  <div class="adm-list-page__head">
+    <h1 class="adm-page-titulo">Eventos</h1>
+    <a routerLink="/admin/eventos/form" class="adm-btn adm-btn--primary">
+      <i class="pi pi-plus" aria-hidden="true"></i>
+      Novo evento
+    </a>
+  </div>
+
+  <div class="adm-filtros" role="group" aria-label="Filtrar por categoria">
+    @for (cat of categorias; track cat.value) {
+      <button
+        type="button"
+        class="adm-filtro-btn"
+        [class.adm-filtro-btn--ativo]="filtroCategoria() === cat.value"
+        (click)="setFiltro(cat.value)"
+        [attr.aria-pressed]="filtroCategoria() === cat.value">
+        {{ cat.label }}
+      </button>
+    }
+  </div>
+
+  @if (lista().length === 0) {
+    <div class="adm-list-page__vazio">
+      <i class="pi pi-inbox" aria-hidden="true"></i>
+      <p>Nenhum evento encontrado.</p>
+      <a routerLink="/admin/eventos/form" class="adm-btn adm-btn--secondary">Criar primeiro evento</a>
+    </div>
+  } @else {
+    <div class="adm-table-wrap" role="region" aria-label="Lista de eventos">
+      <table class="adm-table" aria-label="Eventos cadastrados">
+        <thead>
+          <tr>
+            <th scope="col">Título</th>
+            <th scope="col" class="adm-table__col-sm">Categoria</th>
+            <th scope="col" class="adm-table__col-sm">Data</th>
+            <th scope="col" class="adm-table__col-sm">Hora</th>
+            <th scope="col" class="adm-table__col-sm">Status</th>
+            <th scope="col" class="adm-table__col-acao"><span class="sr-only">Ações</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (ev of lista(); track ev.id) {
+            <tr>
+              <td>
+                <span class="adm-table__titulo-linha">{{ ev.titulo }}</span>
+                <span class="adm-table__subtitulo">{{ ev.local }}</span>
+              </td>
+              <td class="adm-table__col-sm">{{ labelCategoria(ev.categoria) }}</td>
+              <td class="adm-table__col-sm">{{ formatarData(ev.data) }}</td>
+              <td class="adm-table__col-sm">{{ ev.hora }}</td>
+              <td class="adm-table__col-sm">
+                <span [class]="ev.publicado ? 'adm-badge adm-badge--ativo' : 'adm-badge adm-badge--inativo'">
+                  {{ ev.publicado ? 'Publicado' : 'Rascunho' }}
+                </span>
+              </td>
+              <td class="adm-table__col-acao">
+                @if (deleteConfirmId() === ev.id) {
+                  <div class="adm-table__confirm" role="group" aria-label="Confirmar exclusão">
+                    <span class="adm-table__confirm-txt">Excluir?</span>
+                    <button type="button" class="adm-btn-acao adm-btn-acao--danger-ok" (click)="confirmarDelete(ev.id)" aria-label="Confirmar exclusão">Sim</button>
+                    <button type="button" class="adm-btn-acao adm-btn-acao--cancel" (click)="cancelarDelete()" aria-label="Cancelar exclusão">Não</button>
+                  </div>
+                } @else {
+                  <div class="adm-table__acoes">
+                    <a
+                      [routerLink]="['/admin/eventos/form', ev.id]"
+                      class="adm-btn-acao adm-btn-acao--edit"
+                      [attr.aria-label]="'Editar evento: ' + ev.titulo">
+                      <i class="pi pi-pencil" aria-hidden="true"></i>
+                    </a>
+                    <button
+                      type="button"
+                      class="adm-btn-acao adm-btn-acao--delete"
+                      (click)="solicitarDelete(ev.id)"
+                      [attr.aria-label]="'Excluir evento: ' + ev.titulo">
+                      <i class="pi pi-trash" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</div>
