@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 const TOKEN_KEY = 'pst_admin_token';
@@ -32,7 +32,13 @@ export class AuthService {
           this._nomeUsuario.set(res.user.name);
           return true;
         }),
-        catchError(() => of(false))
+        catchError((err: HttpErrorResponse) => {
+          // Credenciais inválidas — o formulário exibe a mensagem adequada
+          if (err.status === 401 || err.status === 400) return of(false);
+          // Erro de rede ou servidor (status 0, 5xx) — propaga para o componente
+          // exibir "serviço indisponível" em vez de "senha inválida"
+          return throwError(() => err);
+        })
       );
   }
 

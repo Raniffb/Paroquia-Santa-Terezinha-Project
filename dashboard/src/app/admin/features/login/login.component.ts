@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -14,6 +14,7 @@ export class LoginComponent {
   private fb     = inject(FormBuilder);
   private auth   = inject(AuthService);
   private router = inject(Router);
+  private route  = inject(ActivatedRoute);
 
   erro         = signal<string | null>(null);
   carregando   = signal(false);
@@ -24,6 +25,13 @@ export class LoginComponent {
     senha: ['', [Validators.required]]
   });
 
+  constructor() {
+    // Exibe mensagem quando o interceptor redireciona por sessão expirada
+    if (this.route.snapshot.queryParamMap.get('sessao') === 'expirada') {
+      this.erro.set('Sua sessão expirou. Faça login novamente.');
+    }
+  }
+
   toggleSenha(): void { this.mostrarSenha.update(v => !v); }
 
   entrar(): void {
@@ -32,12 +40,18 @@ export class LoginComponent {
     this.carregando.set(true);
 
     const { email, senha } = this.form.value;
-    this.auth.login(email!, senha!).subscribe(ok => {
-      this.carregando.set(false);
-      if (ok) {
-        this.router.navigate(['/admin']);
-      } else {
-        this.erro.set('E-mail ou senha inválidos.');
+    this.auth.login(email!, senha!).subscribe({
+      next: ok => {
+        this.carregando.set(false);
+        if (ok) {
+          this.router.navigate(['/admin']);
+        } else {
+          this.erro.set('E-mail ou senha inválidos.');
+        }
+      },
+      error: () => {
+        this.carregando.set(false);
+        this.erro.set('Serviço indisponível. Tente novamente em instantes.');
       }
     });
   }
