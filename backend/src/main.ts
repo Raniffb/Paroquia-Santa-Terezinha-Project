@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
+import cookieParser = require('cookie-parser');
 import { AppModule } from './app.module';
 
 // ── Variáveis obrigatórias para a aplicação funcionar ────────────────────────
@@ -30,13 +31,16 @@ async function bootstrap() {
   const isProd = config.get<string>('NODE_ENV') === 'production';
   const port   = config.get<number>('PORT') ?? 3000;
 
+  // ── Cookie parser — necessário para ler cookies HttpOnly nos guards ────────
+  app.use(cookieParser());
+
   // ── Helmet — cabeçalhos de segurança HTTP ─────────────────────────────────
   // Em dev, CSP desativado para não quebrar o Swagger UI
   app.use(helmet({ contentSecurityPolicy: isProd }));
 
   // ── CORS ──────────────────────────────────────────────────────────────────
   // FRONTEND_URL aceita múltiplas origens separadas por vírgula.
-  // Ex: FRONTEND_URL=https://paroquia.com,https://www.paroquia.com
+  // credentials: true é obrigatório para o browser enviar cookies cross-origin.
   const allowedOrigins = config
     .get<string>('FRONTEND_URL', 'http://localhost:4200')
     .split(',')
@@ -53,9 +57,9 @@ async function bootstrap() {
   // ── Validação global ──────────────────────────────────────────────────────
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,           // remove campos não declarados nos DTOs
-      forbidNonWhitelisted: true, // rejeita requisições com campos desconhecidos
-      transform: true,           // converte tipos automaticamente
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
 
