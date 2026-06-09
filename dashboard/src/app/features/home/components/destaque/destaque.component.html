@@ -1,31 +1,67 @@
-<section
-  id="destaque"
-  class="pst-section"
-  aria-labelledby="destaque-titulo"
-  *ngIf="aviso">
+<section id="destaque" class="pst-section" aria-label="Destaques" *ngIf="!carregando && itens.length > 0 && itemAtual">
 
-  <article class="pst-destaque-card" aria-label="Aviso em destaque">
-    <div class="pst-destaque-card__badge" aria-label="Destaque">
-      <i class="pi pi-star-fill" aria-hidden="true"></i>
-      Destaque
+  <div class="pst-carousel">
+
+    <div class="pst-carousel__viewport">
+      <article
+        [@slide]="animDir"
+        class="pst-destaque-card"
+        aria-live="polite"
+        [attr.aria-label]="'Destaque: ' + itemAtual!.titulo">
+
+        <div class="pst-destaque-card__top">
+          <div class="pst-destaque-card__badge">
+            <i class="pi" [ngClass]="iconeTipo(itemAtual!.tipo)" aria-hidden="true"></i>
+            {{ badgeTipo(itemAtual!.tipo) }}
+          </div>
+          <span *ngIf="itemAtual!.urgente" class="pst-destaque-card__urgente">
+            <i class="pi pi-exclamation-triangle" aria-hidden="true"></i> Urgente
+          </span>
+        </div>
+
+        <h2 class="pst-destaque-card__titulo">{{ itemAtual!.titulo }}</h2>
+
+        <p class="pst-destaque-card__data">
+          <i class="pi pi-calendar" aria-hidden="true"></i>
+          <time [dateTime]="itemAtual!.data">{{ formatarData(itemAtual!.data) }}</time>
+          <span *ngIf="itemAtual!.extra" class="pst-destaque-card__extra">
+            &nbsp;·&nbsp;<i class="pi pi-map-marker" aria-hidden="true"></i> {{ itemAtual!.extra }}
+          </span>
+        </p>
+
+        <p class="pst-destaque-card__resumo">{{ itemAtual!.resumo }}</p>
+
+        <a [routerLink]="itemAtual!.rota" class="pst-btn pst-btn--accent"
+           [attr.aria-label]="'Ver detalhes: ' + itemAtual!.titulo">
+          <i class="pi pi-arrow-right" aria-hidden="true"></i>
+          Ver detalhes
+        </a>
+
+      </article>
     </div>
 
-    <h2 id="destaque-titulo" class="pst-destaque-card__titulo">
-      {{ aviso.titulo }}
-    </h2>
+    <div class="pst-carousel__controls" *ngIf="itens.length > 1">
+      <button class="pst-carousel__btn" (click)="recuar()" aria-label="Anterior">
+        <i class="pi pi-chevron-left" aria-hidden="true"></i>
+      </button>
 
-    <p class="pst-destaque-card__data">
-      <i class="pi pi-calendar" aria-hidden="true"></i>
-      <time [dateTime]="aviso.data">{{ formatarData(aviso.data) }}</time>
-    </p>
+      <div class="pst-carousel__dots" role="tablist" aria-label="Slides">
+        <button
+          *ngFor="let item of itens; let i = index"
+          class="pst-carousel__dot"
+          [class.pst-carousel__dot--ativo]="i === indiceAtual"
+          (click)="irPara(i)"
+          role="tab"
+          [attr.aria-selected]="i === indiceAtual"
+          [attr.aria-label]="'Slide ' + (i + 1)">
+        </button>
+      </div>
 
-    <p class="pst-destaque-card__resumo">{{ aviso.resumo }}</p>
+      <button class="pst-carousel__btn" (click)="avancar()" aria-label="Próximo">
+        <i class="pi pi-chevron-right" aria-hidden="true"></i>
+      </button>
+    </div>
 
-    <button
-      class="pst-btn pst-btn--accent"
-      [attr.aria-label]="'Ver detalhes do aviso: ' + aviso.titulo">
-      <i class="pi pi-arrow-right" aria-hidden="true"></i>
-      Ver detalhes
-    </button>
-  </article>
+  </div>
+
 </section>

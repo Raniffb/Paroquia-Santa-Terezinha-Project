@@ -14,6 +14,7 @@ interface ApiAviso {
   priority: string;
   category: string;
   active: boolean;
+  featured: boolean;
 }
 
 function toAdmin(r: ApiAviso): AdminAviso {
@@ -24,7 +25,8 @@ function toAdmin(r: ApiAviso): AdminAviso {
     resumo: r.description,
     categoria: r.category as AdminCatAviso,
     urgente: r.priority === 'urgent',
-    ativo: r.active
+    ativo: r.active,
+    destaque: r.featured ?? false
   };
 }
 
@@ -35,7 +37,8 @@ function toApi(v: Omit<AdminAviso, 'id'>): object {
     description: v.resumo,
     priority: v.urgente ? 'urgent' : 'normal',
     category: v.categoria,
-    active: v.ativo
+    active: v.ativo,
+    featured: v.destaque
   };
 }
 

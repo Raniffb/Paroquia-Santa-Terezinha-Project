@@ -36,4 +36,9 @@ export class CreateEventDto {
   @IsOptional()
   @IsBoolean()
   published?: boolean;
+
+  @ApiPropertyOptional({ example: false })
+  @IsOptional()
+  @IsBoolean()
+  featured?: boolean;
 }

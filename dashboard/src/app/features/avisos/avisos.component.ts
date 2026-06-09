@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ParishService } from '../../core/services/parish.service';
+import { RealtimeService } from '../../core/services/realtime.service';
 import { Aviso, CategoriaAviso } from '../../core/models/parish.models';
 import { PageHeroComponent } from '../../shared/components/page-hero/page-hero.component';
 
@@ -18,7 +20,8 @@ interface FiltroAviso {
   styleUrl: './avisos.component.scss'
 })
 export class AvisosComponent implements OnInit {
-  private service = inject(ParishService);
+  private service  = inject(ParishService);
+  private realtime = inject(RealtimeService);
 
   todos: Aviso[] = [];
   visiveis: Aviso[] = [];
@@ -33,10 +36,18 @@ export class AvisosComponent implements OnInit {
     { label: 'Social',         valor: 'social',         icon: 'pi-heart' }
   ];
 
+  constructor() {
+    this.realtime.on('notices:changed').pipe(takeUntilDestroyed()).subscribe(() => this.carregar());
+  }
+
   ngOnInit(): void {
+    this.carregar();
+  }
+
+  private carregar(): void {
     this.service.getAvisos().subscribe(a => {
       this.todos = a;
-      this.visiveis = a;
+      this.filtrar(this.categoriaAtiva);
     });
   }
 

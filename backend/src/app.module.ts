@@ -9,10 +9,12 @@ import { EventsModule } from './events/events.module';
 import { MassSchedulesModule } from './mass-schedules/mass-schedules.module';
 import { SacramentosModule } from './sacramentos/sacramentos.module';
 import { HorariosInfoModule } from './horarios-info/horarios-info.module';
+import { RealtimeModule } from './realtime/realtime.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    RealtimeModule,
     PrismaModule,
     AuthModule,
     UsersModule,

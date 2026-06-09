@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, of } from 'rxjs';
+import { Observable, forkJoin, map, of } from 'rxjs';
 import {
   Aviso,
   CategoriaAviso,
@@ -8,6 +8,7 @@ import {
   ContatoInfo,
   Evento,
   CategoriaEvento,
+  ItemDestaque,
   Missa,
   Noticia,
   CategoriaNoticia,
@@ -20,17 +21,17 @@ import { environment } from '../../../environments/environment';
 
 interface ApiNoticia {
   id: number; title: string; date: string; summary: string;
-  content: string; category: string; author?: string; published: boolean;
+  content: string; category: string; author?: string; published: boolean; featured: boolean;
 }
 
 interface ApiAviso {
   id: number; title: string; date: string; description: string;
-  priority: string; category: string; active: boolean;
+  priority: string; category: string; active: boolean; featured: boolean;
 }
 
 interface ApiEvento {
   id: number; title: string; date: string; time: string;
-  location: string; description: string; category: string; published: boolean;
+  location: string; description: string; category: string; published: boolean; featured: boolean;
 }
 
 interface ApiMassa       { id: number; day: string; times: string; }
@@ -115,6 +116,7 @@ export class ParishService {
             resumo: a.description,
             data: a.date.split('T')[0],
             urgente: a.priority === 'urgent',
+            featured: a.featured,
             categoria: a.category as CategoriaAviso
           }))
           .sort((a, b) => b.data.localeCompare(a.data));
@@ -160,6 +162,54 @@ export class ParishService {
         categoria: n.category as CategoriaNoticia,
         autor: n.author
       }))
+    );
+  }
+
+  // ── Destaques (carrossel home) ───────────────────────────────────────────────
+
+  getDestaques(): Observable<ItemDestaque[]> {
+    return forkJoin({
+      avisos:   this.http.get<ApiAviso[]>(`${environment.apiUrl}/notices`),
+      noticias: this.http.get<ApiNoticia[]>(`${environment.apiUrl}/news`),
+      eventos:  this.http.get<ApiEvento[]>(`${environment.apiUrl}/events`),
+    }).pipe(
+      map(({ avisos, noticias, eventos }) => {
+        const itens: ItemDestaque[] = [
+          ...avisos
+            .filter(a => a.active && a.featured)
+            .map(a => ({
+              tipo: 'aviso' as const,
+              id: a.id,
+              titulo: a.title,
+              resumo: a.description,
+              data: a.date.split('T')[0],
+              urgente: a.priority === 'urgent',
+              rota: '/avisos',
+            })),
+          ...noticias
+            .filter(n => n.published && n.featured)
+            .map(n => ({
+              tipo: 'noticia' as const,
+              id: n.id,
+              titulo: n.title,
+              resumo: n.summary,
+              data: n.date.split('T')[0],
+              rota: '/noticias',
+            })),
+          ...eventos
+            .filter(e => e.published && e.featured)
+            .map(e => ({
+              tipo: 'evento' as const,
+              id: e.id,
+              titulo: e.title,
+              resumo: e.description,
+              data: e.date.split('T')[0],
+              rota: '/eventos',
+              extra: e.location,
+            })),
+        ];
+        return itens.sort((a, b) => b.data.localeCompare(a.data));
+      })
     );
   }
 

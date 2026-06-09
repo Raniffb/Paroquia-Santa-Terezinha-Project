@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ParishService } from '../../core/services/parish.service';
+import { RealtimeService } from '../../core/services/realtime.service';
 import { CategoriaEvento, Evento } from '../../core/models/parish.models';
 import { PageHeroComponent } from '../../shared/components/page-hero/page-hero.component';
 
@@ -18,7 +20,8 @@ interface FiltroEvento {
   styleUrl: './eventos.component.scss'
 })
 export class EventosComponent implements OnInit {
-  private service = inject(ParishService);
+  private service  = inject(ParishService);
+  private realtime = inject(RealtimeService);
 
   todos: Evento[] = [];
   visiveis: Evento[] = [];
@@ -27,20 +30,28 @@ export class EventosComponent implements OnInit {
   meses: string[] = [];
 
   filtros: FiltroEvento[] = [
-    { label: 'Todos',    valor: null,        icon: 'pi-list' },
-    { label: 'Missas',   valor: 'missa',     icon: 'pi-sun' },
-    { label: 'Encontros', valor: 'encontro', icon: 'pi-users' },
-    { label: 'Retiros',  valor: 'retiro',    icon: 'pi-home' },
-    { label: 'Festivos', valor: 'festivo',   icon: 'pi-star' },
-    { label: 'Formação', valor: 'formacao',  icon: 'pi-book' },
-    { label: 'Social',   valor: 'social',    icon: 'pi-heart' }
+    { label: 'Todos',     valor: null,        icon: 'pi-list' },
+    { label: 'Missas',    valor: 'missa',     icon: 'pi-sun' },
+    { label: 'Encontros', valor: 'encontro',  icon: 'pi-users' },
+    { label: 'Retiros',   valor: 'retiro',    icon: 'pi-home' },
+    { label: 'Festivos',  valor: 'festivo',   icon: 'pi-star' },
+    { label: 'Formação',  valor: 'formacao',  icon: 'pi-book' },
+    { label: 'Social',    valor: 'social',    icon: 'pi-heart' }
   ];
 
+  constructor() {
+    this.realtime.on('events:changed').pipe(takeUntilDestroyed()).subscribe(() => this.carregar());
+  }
+
   ngOnInit(): void {
+    this.carregar();
+  }
+
+  private carregar(): void {
     this.service.getEventos().subscribe(e => {
       this.todos = e;
-      this.visiveis = e;
       this.meses = [...new Set(e.map(ev => ev.mes + '/' + ev.ano))];
+      this.aplicarFiltros();
     });
   }
 

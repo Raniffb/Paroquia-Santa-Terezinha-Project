@@ -72,6 +72,23 @@
     min-width: 0;
   }
 
+  &__badge-noticia {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: #e8f0fe;
+    color: #1a56db;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 100px;
+    margin-bottom: 0.35rem;
+
+    .pi { font-size: 0.7rem; }
+  }
+
   &__urgente {
     display: inline-flex;
     align-items: center;

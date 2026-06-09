@@ -24,6 +24,7 @@ export interface AdminAviso {
   categoria: AdminCatAviso;
   urgente: boolean;
   ativo: boolean;
+  destaque: boolean;
 }
 
 // ── Eventos ───────────────────────────────────────────────────────────────────
@@ -38,6 +39,7 @@ export interface AdminEvento {
   descricao: string;
   categoria: AdminCatEvento;
   publicado: boolean;
+  destaque: boolean;
 }
 
 // ── Horários ──────────────────────────────────────────────────────────────────

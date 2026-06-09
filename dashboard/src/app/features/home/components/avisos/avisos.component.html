@@ -5,7 +5,7 @@
       <i class="pi pi-bell" aria-hidden="true"></i>
       Avisos e Notícias
     </h2>
-    <a routerLink="/avisos" class="pst-link-ver-tudo" aria-label="Ver todos os avisos">
+    <a routerLink="/avisos" class="pst-link-ver-tudo" aria-label="Ver todos os avisos e notícias">
       Ver tudo
       <i class="pi pi-chevron-right" aria-hidden="true"></i>
     </a>
@@ -16,30 +16,33 @@
     <p class="pst-estado-vazio__texto">Carregando avisos…</p>
   </div>
 
-  <div *ngIf="!carregando && avisos.length === 0" class="pst-estado-vazio">
+  <div *ngIf="!carregando && itens.length === 0" class="pst-estado-vazio">
     <i class="pi pi-bell-slash pst-estado-vazio__icone" aria-hidden="true"></i>
     <p class="pst-estado-vazio__texto">Nenhum aviso no momento.</p>
     <p class="pst-estado-vazio__subtexto">Volte em breve para acompanhar as novidades da paróquia.</p>
   </div>
 
-  <ul *ngIf="!carregando && avisos.length > 0"
-      class="pst-avisos-list" role="list" aria-label="Lista de avisos recentes">
-    <li *ngFor="let aviso of avisos" class="pst-aviso-card">
+  <ul *ngIf="!carregando && itens.length > 0"
+      class="pst-avisos-list" role="list" aria-label="Lista de avisos e notícias recentes">
+    <li *ngFor="let item of itens" class="pst-aviso-card">
 
       <div class="pst-aviso-card__data">
-        <time [dateTime]="aviso.data">{{ formatarData(aviso.data) }}</time>
+        <time [dateTime]="item.data">{{ formatarData(item.data) }}</time>
       </div>
 
       <div class="pst-aviso-card__content">
-        <span *ngIf="aviso.urgente" class="pst-aviso-card__urgente" aria-label="Urgente">
+        <span *ngIf="item.urgente" class="pst-aviso-card__urgente" aria-label="Urgente">
           <i class="pi pi-exclamation-triangle" aria-hidden="true"></i> Urgente
         </span>
-        <h3 class="pst-aviso-card__titulo">{{ aviso.titulo }}</h3>
-        <p class="pst-aviso-card__resumo">{{ aviso.resumo }}</p>
+        <span *ngIf="item.tipo === 'noticia'" class="pst-aviso-card__badge-noticia">
+          <i class="pi pi-book" aria-hidden="true"></i> Notícia
+        </span>
+        <h3 class="pst-aviso-card__titulo">{{ item.titulo }}</h3>
+        <p class="pst-aviso-card__resumo">{{ item.resumo }}</p>
         <a
-          routerLink="/avisos"
+          [routerLink]="item.rota"
           class="pst-aviso-card__link"
-          [attr.aria-label]="'Ver aviso: ' + aviso.titulo">
+          [attr.aria-label]="'Ler mais: ' + item.titulo">
           Ler mais
           <i class="pi pi-arrow-right" aria-hidden="true"></i>
         </a>

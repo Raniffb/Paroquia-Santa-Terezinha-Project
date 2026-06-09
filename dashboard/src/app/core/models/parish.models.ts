@@ -15,6 +15,7 @@ export interface Aviso {
   data: string;
   destaque?: boolean;
   urgente?: boolean;
+  featured?: boolean;
   categoria?: CategoriaAviso;
 }
 
@@ -85,6 +86,22 @@ export interface Evento {
   hora?: string;
   categoria: CategoriaEvento;
   descricao?: string;
+  featured?: boolean;
+}
+
+// ── Destaque (carrossel home) ──────────────────────────────────────────────────
+
+export type TipoDestaque = 'aviso' | 'noticia' | 'evento';
+
+export interface ItemDestaque {
+  tipo: TipoDestaque;
+  id: number;
+  titulo: string;
+  resumo: string;
+  data: string;
+  urgente?: boolean;
+  rota: string;
+  extra?: string; // local (evento) ou categoria formatada
 }
 
 // ── Contato ───────────────────────────────────────────────────────────────────

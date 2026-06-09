@@ -32,13 +32,14 @@ export class EventosFormComponent implements OnInit {
   ];
 
   form = this.fb.group({
-    titulo:    ['', [Validators.required, Validators.maxLength(120)]],
-    data:      ['', [Validators.required]],
-    hora:      ['', [Validators.required, Validators.pattern(/^\d{2}h\d{2}$/)]],
-    local:     ['', [Validators.required, Validators.maxLength(100)]],
-    categoria: ['encontro' as AdminCatEvento, [Validators.required]],
-    descricao: ['', [Validators.required]],
-    publicado: [false]
+    titulo:   ['', [Validators.required, Validators.maxLength(120)]],
+    data:     ['', [Validators.required]],
+    hora:     ['', [Validators.required, Validators.pattern(/^\d{2}h\d{2}$/)]],
+    local:    ['', [Validators.required, Validators.maxLength(100)]],
+    categoria:['encontro' as AdminCatEvento, [Validators.required]],
+    descricao:['', [Validators.required]],
+    publicado:[false],
+    destaque: [false]
   });
 
   get modoEdicao(): boolean { return this.editId() !== null; }
@@ -53,7 +54,8 @@ export class EventosFormComponent implements OnInit {
         this.form.patchValue({
           titulo: item.titulo, data: item.data, hora: item.hora,
           local: item.local, categoria: item.categoria,
-          descricao: item.descricao, publicado: item.publicado
+          descricao: item.descricao, publicado: item.publicado,
+          destaque: item.destaque
         });
       }
     });

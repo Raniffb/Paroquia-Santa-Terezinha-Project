@@ -15,6 +15,7 @@ interface ApiEvento {
   description: string;
   category: string;
   published: boolean;
+  featured: boolean;
 }
 
 function toAdmin(r: ApiEvento): AdminEvento {
@@ -26,7 +27,8 @@ function toAdmin(r: ApiEvento): AdminEvento {
     local: r.location,
     descricao: r.description,
     categoria: r.category as AdminCatEvento,
-    publicado: r.published
+    publicado: r.published,
+    destaque: r.featured ?? false
   };
 }
 
@@ -38,7 +40,8 @@ function toApi(v: Omit<AdminEvento, 'id'>): object {
     location: v.local,
     description: v.descricao,
     category: v.categoria,
-    published: v.publicado
+    published: v.publicado,
+    featured: v.destaque
   };
 }
 

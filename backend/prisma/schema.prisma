@@ -39,6 +39,7 @@ model Notice {
   priority    String   @default("normal")
   category    String   @default("geral")
   active      Boolean  @default(true)
+  featured    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -52,6 +53,7 @@ model Event {
   description String
   category    String   @default("encontro")
   published   Boolean  @default(true)
+  featured    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

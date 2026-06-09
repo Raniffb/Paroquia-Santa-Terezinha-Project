@@ -32,12 +32,13 @@ export class AvisosFormComponent implements OnInit {
   ];
 
   form = this.fb.group({
-    titulo:    ['', [Validators.required, Validators.maxLength(120)]],
-    data:      ['', [Validators.required]],
-    categoria: ['geral' as AdminCatAviso, [Validators.required]],
-    resumo:    ['', [Validators.required, Validators.maxLength(300)]],
-    urgente:   [false],
-    ativo:     [true]
+    titulo:   ['', [Validators.required, Validators.maxLength(120)]],
+    data:     ['', [Validators.required]],
+    categoria:['geral' as AdminCatAviso, [Validators.required]],
+    resumo:   ['', [Validators.required, Validators.maxLength(300)]],
+    urgente:  [false],
+    ativo:    [true],
+    destaque: [false]
   });
 
   get modoEdicao(): boolean { return this.editId() !== null; }
@@ -51,7 +52,8 @@ export class AvisosFormComponent implements OnInit {
         this.editId.set(id);
         this.form.patchValue({
           titulo: item.titulo, data: item.data, categoria: item.categoria,
-          resumo: item.resumo, urgente: item.urgente, ativo: item.ativo
+          resumo: item.resumo, urgente: item.urgente, ativo: item.ativo,
+          destaque: item.destaque
         });
       }
     });

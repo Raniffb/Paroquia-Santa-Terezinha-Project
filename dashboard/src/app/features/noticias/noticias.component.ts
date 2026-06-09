@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ParishService } from '../../core/services/parish.service';
+import { RealtimeService } from '../../core/services/realtime.service';
 import { CategoriaNoticia, Noticia } from '../../core/models/parish.models';
 import { PageHeroComponent } from '../../shared/components/page-hero/page-hero.component';
 
@@ -17,7 +19,8 @@ interface FiltroNoticia {
   styleUrl: './noticias.component.scss'
 })
 export class NoticiasComponent implements OnInit {
-  private service = inject(ParishService);
+  private service  = inject(ParishService);
+  private realtime = inject(RealtimeService);
 
   todas: Noticia[] = [];
   visiveis: Noticia[] = [];
@@ -32,10 +35,18 @@ export class NoticiasComponent implements OnInit {
     { label: 'Formação',  valor: 'formacao' }
   ];
 
+  constructor() {
+    this.realtime.on('news:changed').pipe(takeUntilDestroyed()).subscribe(() => this.carregar());
+  }
+
   ngOnInit(): void {
+    this.carregar();
+  }
+
+  private carregar(): void {
     this.service.getNoticias().subscribe(n => {
       this.todas = n;
-      this.visiveis = n;
+      this.filtrar(this.categoriaAtiva);
     });
   }
 

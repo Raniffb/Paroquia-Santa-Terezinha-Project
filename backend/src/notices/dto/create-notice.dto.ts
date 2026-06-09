@@ -32,4 +32,9 @@ export class CreateNoticeDto {
   @IsOptional()
   @IsBoolean()
   active?: boolean;
+
+  @ApiPropertyOptional({ example: false })
+  @IsOptional()
+  @IsBoolean()
+  featured?: boolean;
 }
