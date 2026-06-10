@@ -22,7 +22,8 @@ export class AdminLayoutComponent {
     { label: 'Notícias',   route: '/admin/noticias', icon: 'pi pi-file' },
     { label: 'Avisos',     route: '/admin/avisos',   icon: 'pi pi-bell' },
     { label: 'Eventos',    route: '/admin/eventos',  icon: 'pi pi-calendar' },
-    { label: 'Horários',   route: '/admin/horarios', icon: 'pi pi-clock' }
+    { label: 'Horários',   route: '/admin/horarios', icon: 'pi pi-clock' },
+    { label: 'Mensagens',  route: '/admin/contato',  icon: 'pi pi-envelope' }
   ];
 
   get nomeUsuario(): string { return this.auth.nomeUsuario(); }

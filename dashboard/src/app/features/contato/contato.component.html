@@ -196,26 +196,35 @@
           <div>
             <p class="pst-info-item__label">Endereço</p>
             <address class="pst-info-item__valor">
-              {{ info.endereco }}<br>
-              {{ info.bairro }} – {{ info.cidade }}/{{ info.estado }}<br>
-              CEP: {{ info.cep }}
+              <a
+                href="https://maps.google.com/?q=Rua+Criciúma+155+B,+Alvorada+II,+Manaus,+AM"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="pst-info-item__link"
+                aria-label="Ver endereço no Google Maps">
+                {{ info.endereco }}<br>
+                {{ info.bairro }} – {{ info.cidade }}/{{ info.estado }}
+              </a>
             </address>
           </div>
         </div>
 
-        <!-- Telefone -->
+        <!-- Telefones -->
         <div class="pst-info-item">
           <div class="pst-info-item__icon" aria-hidden="true">
             <i class="pi pi-phone"></i>
           </div>
           <div>
             <p class="pst-info-item__label">Telefone</p>
-            <a
-              [href]="telHref(info.telefone)"
-              class="pst-info-item__valor pst-info-item__link"
-              [attr.aria-label]="'Ligar para ' + info.telefone">
-              {{ info.telefone }}
-            </a>
+            <div class="pst-info-item__valor pst-phones-lista">
+              <a
+                *ngFor="let tel of info.telefones"
+                [href]="telHref(tel)"
+                class="pst-info-item__link"
+                [attr.aria-label]="'Ligar para ' + tel">
+                {{ tel }}
+              </a>
+            </div>
           </div>
         </div>
 
@@ -255,7 +264,7 @@
           <p class="pst-info-item__label">Redes sociais</p>
           <div class="pst-social-row">
             <a
-              href="#"
+              href="https://www.facebook.com/stateresinhaalvorada/?locale=pt_BR"
               class="pst-social-link"
               target="_blank"
               rel="noopener noreferrer"
@@ -264,7 +273,7 @@
               Facebook
             </a>
             <a
-              href="#"
+              href="https://www.instagram.com/stateresinhaalvorada/"
               class="pst-social-link"
               target="_blank"
               rel="noopener noreferrer"
@@ -273,13 +282,22 @@
               Instagram
             </a>
             <a
-              href="#"
+              href="https://wa.me/5592991797857"
               class="pst-social-link"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp da Paróquia Santa Teresinha">
               <i class="pi pi-whatsapp" aria-hidden="true"></i>
               WhatsApp
+            </a>
+            <a
+              href="https://www.youtube.com/@StaTeresinhaAlvorada/featured"
+              class="pst-social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="YouTube da Paróquia Santa Teresinha">
+              <i class="pi pi-youtube" aria-hidden="true"></i>
+              YouTube
             </a>
           </div>
         </div>

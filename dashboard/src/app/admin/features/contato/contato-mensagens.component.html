@@ -1,0 +1,73 @@
+<div class="adm-page">
+  <div class="adm-page__header">
+    <h1 class="adm-page-titulo">
+      Mensagens de Contato
+      @if (naoLidas > 0) {
+        <span class="adm-badge adm-badge--novo">{{ naoLidas }} nova{{ naoLidas > 1 ? 's' : '' }}</span>
+      }
+    </h1>
+  </div>
+
+  @if (carregando()) {
+    <div class="adm-estado-vazio">
+      <i class="pi pi-spin pi-spinner adm-estado-vazio__icone" aria-hidden="true"></i>
+      <p>Carregando mensagens…</p>
+    </div>
+  } @else if (mensagens().length === 0) {
+    <div class="adm-estado-vazio">
+      <i class="pi pi-inbox adm-estado-vazio__icone" aria-hidden="true"></i>
+      <p>Nenhuma mensagem recebida ainda.</p>
+    </div>
+  } @else {
+    <div class="adm-msgs-lista">
+      @for (msg of mensagens(); track msg.id) {
+        <div
+          class="adm-msg-card"
+          [class.adm-msg-card--nao-lida]="!msg.read"
+          [class.adm-msg-card--expandida]="expandida() === msg.id"
+          (click)="expandir(msg)"
+          role="button"
+          tabindex="0"
+          [attr.aria-expanded]="expandida() === msg.id"
+          (keydown.enter)="expandir(msg)">
+
+          <div class="adm-msg-card__header">
+            @if (!msg.read) {
+              <span class="adm-msg-card__dot" aria-label="Não lida"></span>
+            }
+            <div class="adm-msg-card__info">
+              <span class="adm-msg-card__nome">{{ msg.name }}</span>
+              <span class="adm-msg-card__assunto">{{ msg.subject }}</span>
+            </div>
+            <div class="adm-msg-card__meta">
+              <span class="adm-msg-card__data">{{ formatarData(msg.createdAt) }}</span>
+              <button
+                type="button"
+                class="adm-btn-acao adm-btn-acao--delete"
+                (click)="excluir(msg.id, $event)"
+                aria-label="Excluir mensagem">
+                <i class="pi pi-trash" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+          @if (expandida() === msg.id) {
+            <div class="adm-msg-card__corpo">
+              <div class="adm-msg-card__linha">
+                <i class="pi pi-envelope" aria-hidden="true"></i>
+                <a [href]="'mailto:' + msg.email" (click)="$event.stopPropagation()">{{ msg.email }}</a>
+              </div>
+              @if (msg.phone) {
+                <div class="adm-msg-card__linha">
+                  <i class="pi pi-phone" aria-hidden="true"></i>
+                  <span>{{ msg.phone }}</span>
+                </div>
+              }
+              <p class="adm-msg-card__texto">{{ msg.message }}</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -14,6 +14,7 @@ import { MassSchedulesModule } from './mass-schedules/mass-schedules.module';
 import { SacramentosModule } from './sacramentos/sacramentos.module';
 import { HorariosInfoModule } from './horarios-info/horarios-info.module';
 import { ConfessionSchedulesModule } from './confession-schedules/confession-schedules.module';
+import { ContactMessagesModule } from './contact-messages/contact-messages.module';
 import { RealtimeModule } from './realtime/realtime.module';
 
 @Module({
@@ -46,6 +47,7 @@ import { RealtimeModule } from './realtime/realtime.module';
     SacramentosModule,
     HorariosInfoModule,
     ConfessionSchedulesModule,
+    ContactMessagesModule,
   ],
   providers: [
     // ThrottlerGuard avaliado antes do JWT (ordem de registro)

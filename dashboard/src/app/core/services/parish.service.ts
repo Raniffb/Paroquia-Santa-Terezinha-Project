@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, map, of } from 'rxjs';
+import { Observable, catchError, forkJoin, map, of } from 'rxjs';
 import {
   Aviso,
   CategoriaAviso,
@@ -41,13 +41,12 @@ interface ApiConfessionSchedule { id: number; day: string; schedule: string; }
 
 
 const CONTATO_INFO: ContatoInfo = {
-  endereco: 'Rua das Flores, 123',
-  bairro: 'Aleixo',
+  endereco: 'Rua Criciúma, 155 B',
+  bairro: 'Alvorada II',
   cidade: 'Manaus',
   estado: 'AM',
-  cep: '69060-000',
-  telefone: '(92) 1234-5678',
-  email: 'contato@paroquiasantateresinha.com.br',
+  telefones: ['(92) 3238-5190', '(92) 99179-7857', '(92) 98470-9426'],
+  email: 'santateresinhamanaus@gmail.com',
   horariosSecretaria: [
     { dias: 'Segunda a Sexta', horas: '08h00 às 12h00 e 14h00 às 17h00' },
     { dias: 'Sábado',          horas: '08h00 às 12h00' },
@@ -319,7 +318,12 @@ export class ParishService {
   enviarMensagem(dados: {
     nome: string; email: string; telefone?: string; assunto: string; mensagem: string;
   }): Observable<{ sucesso: boolean; mensagem: string }> {
-    console.log('[contato] Mensagem recebida:', dados);
-    return of({ sucesso: true, mensagem: 'Mensagem enviada com sucesso! Retornaremos em breve.' });
+    return this.http.post(
+      `${environment.apiUrl}/contact-messages`,
+      { name: dados.nome, email: dados.email, phone: dados.telefone, subject: dados.assunto, message: dados.mensagem }
+    ).pipe(
+      map(() => ({ sucesso: true, mensagem: 'Mensagem enviada com sucesso! Retornaremos em breve.' })),
+      catchError(() => of({ sucesso: false, mensagem: 'Erro ao enviar. Tente novamente ou entre em contato por telefone.' }))
+    );
   }
 }

@@ -113,8 +113,8 @@ export interface ContatoInfo {
   bairro: string;
   cidade: string;
   estado: string;
-  cep: string;
-  telefone: string;
+  cep?: string;
+  telefones: string[];
   email: string;
   horariosSecretaria: { dias: string; horas: string }[];
 }

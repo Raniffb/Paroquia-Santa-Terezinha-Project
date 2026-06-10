@@ -3,9 +3,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
+export const NAME_KEY = 'pst_admin_name';
+
 // O token JWT nunca toca o localStorage — fica exclusivamente no cookie HttpOnly.
 // Aqui guardamos apenas o nome do usuário para personalizar a interface.
-const NAME_KEY = 'pst_admin_name';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -55,9 +56,24 @@ export class AuthService {
     this._nomeUsuario.set('');
   }
 
-  // isLoggedIn é um indicador otimista: verdadeiro se há nome salvo.
-  // A validade real do token é garantida pelo cookie HttpOnly + verificação do servidor.
-  // Se o cookie expirar, o primeiro request retorna 401 e o interceptor chama logout().
+  // Chamado pelo APP_INITIALIZER: verifica se o cookie JWT ainda é válido.
+  // Se não for, limpa o estado local silenciosamente (sem redirecionar).
+  // O authGuard cuidará do redirecionamento quando o usuário acessar rota protegida.
+  init(): Observable<void> {
+    if (!this._loggedIn()) return of(undefined);
+    return this.http
+      .get<{ id: number; email: string }>(`${environment.apiUrl}/auth/profile`, { withCredentials: true })
+      .pipe(
+        map(() => undefined),
+        catchError(() => {
+          try { localStorage.removeItem(NAME_KEY); } catch { /* ignore */ }
+          this._loggedIn.set(false);
+          this._nomeUsuario.set('');
+          return of(undefined);
+        })
+      );
+  }
+
   private checkStored(): boolean {
     try { return !!localStorage.getItem(NAME_KEY); } catch { return false; }
   }

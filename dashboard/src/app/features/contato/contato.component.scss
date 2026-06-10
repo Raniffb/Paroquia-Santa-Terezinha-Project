@@ -248,6 +248,13 @@
   }
 }
 
+// ── Lista de telefones ────────────────────────────────────────────────────────
+.pst-phones-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
 // ── Secretaria ───────────────────────────────────────────────────────────────
 .pst-secretaria-lista {
   list-style: none;

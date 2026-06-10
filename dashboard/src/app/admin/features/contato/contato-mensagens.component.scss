@@ -1,0 +1,139 @@
+.adm-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 100px;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+
+  &--novo {
+    background: #dc2626;
+    color: #fff;
+  }
+}
+
+.adm-msgs-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.adm-msg-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  transition: box-shadow 0.15s, border-color 0.15s;
+
+  &:hover { box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+
+  &--nao-lida {
+    border-left: 3px solid var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 4%, var(--color-card));
+  }
+
+  &--expandida {
+    box-shadow: 0 3px 12px rgba(0,0,0,.1);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  &__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  &__nome {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__assunto {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  &__data {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  &__corpo {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border, #e2e8f0);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__linha {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+
+    .pi { font-size: 0.85rem; color: var(--color-accent); }
+
+    a {
+      color: var(--color-primary);
+      &:hover { text-decoration: underline; }
+    }
+  }
+
+  &__texto {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--color-text);
+    white-space: pre-wrap;
+    margin: 0.25rem 0 0;
+    padding: 0.75rem;
+    background: var(--color-bg);
+    border-radius: 6px;
+  }
+}
+
+.adm-estado-vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 4rem 1rem;
+  color: var(--color-text-muted);
+  text-align: center;
+
+  &__icone { font-size: 2.5rem; opacity: 0.4; }
+}

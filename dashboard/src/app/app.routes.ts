@@ -81,6 +81,13 @@ export const routes: Routes = [
           import('./admin/features/eventos/eventos-form.component').then(m => m.EventosFormComponent),
         title: 'Editar Evento – Admin'
       },
+      // Mensagens de contato
+      {
+        path: 'contato',
+        loadComponent: () =>
+          import('./admin/features/contato/contato-mensagens.component').then(m => m.ContatoMensagensComponent),
+        title: 'Mensagens – Admin'
+      },
       // Horários
       {
         path: 'horarios',
