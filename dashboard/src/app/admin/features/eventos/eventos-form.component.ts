@@ -5,6 +5,7 @@ import { EditorModule } from 'primeng/editor';
 import Quill from 'quill';
 import { AdminEventosService } from '../../core/services/admin-eventos.service';
 import { AdminCatEvento } from '../../core/models/admin.models';
+import { normalizeTime } from '../../core/utils/time.utils';
 
 // Extend Quill image format to persist inline style attribute (enables width resize)
 const _ImageBase = Quill.import('formats/image') as any;
@@ -254,7 +255,14 @@ export class EventosFormComponent implements OnInit, OnDestroy {
     });
   }
 
+  normalizeHora(): void {
+    const ctrl = this.form.get('hora')!;
+    const n = normalizeTime(ctrl.value ?? '');
+    if (n) ctrl.setValue(n, { emitEvent: false });
+  }
+
   salvar(): void {
+    this.normalizeHora();
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     this.erro.set(null);
     this.carregando.set(true);

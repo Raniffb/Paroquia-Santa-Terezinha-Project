@@ -34,18 +34,10 @@ interface ApiEvento {
   location: string; summary: string; description: string; category: string; published: boolean; featured: boolean;
 }
 
-interface ApiMassa       { id: number; day: string; times: string; }
-interface ApiSacramento  { id: number; title: string; description: string; icon: string; sortOrder: number; }
-interface ApiHorariosInfo { id: number; title: string; description: string; sortOrder: number; }
-
-// ── Dados estáticos (sem endpoint no backend) ─────────────────────────────────
-
-const CONFISSOES: Confissao[] = [
-  { dia: 'Quarta-feira', horario: '18h00 às 18h45' },
-  { dia: 'Sexta-feira',  horario: '18h00 às 18h45' },
-  { dia: 'Sábado',       horario: '08h00 às 09h00 e 18h00 às 18h45' },
-  { dia: 'Domingo',      horario: '08h00 às 08h45' }
-];
+interface ApiMassa              { id: number; day: string; times: string; }
+interface ApiSacramento         { id: number; title: string; description: string; icon: string; sortOrder: number; }
+interface ApiHorariosInfo        { id: number; title: string; description: string; sortOrder: number; }
+interface ApiConfessionSchedule { id: number; day: string; schedule: string; }
 
 
 const CONTATO_INFO: ContatoInfo = {
@@ -242,7 +234,9 @@ export class ParishService {
   }
 
   getConfissoes(): Observable<Confissao[]> {
-    return of(CONFISSOES);
+    return this.http.get<ApiConfessionSchedule[]>(`${environment.apiUrl}/confession-schedules`).pipe(
+      map(items => items.map(c => ({ dia: c.day, horario: c.schedule })))
+    );
   }
 
   getObservacoesMissa(): Observable<ObservacaoMissa[]> {

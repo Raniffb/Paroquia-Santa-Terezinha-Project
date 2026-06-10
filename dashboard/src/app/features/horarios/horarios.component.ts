@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ParishService } from '../../core/services/parish.service';
+import { RealtimeService } from '../../core/services/realtime.service';
 import { Confissao, Missa, ObservacaoMissa, Sacramento } from '../../core/models/parish.models';
 import { PageHeroComponent } from '../../shared/components/page-hero/page-hero.component';
 
@@ -12,7 +14,8 @@ import { PageHeroComponent } from '../../shared/components/page-hero/page-hero.c
   styleUrl: './horarios.component.scss'
 })
 export class HorariosComponent implements OnInit {
-  private service = inject(ParishService);
+  private service  = inject(ParishService);
+  private realtime = inject(RealtimeService);
 
   missas: Missa[] = [];
   confissoes: Confissao[] = [];
@@ -22,7 +25,15 @@ export class HorariosComponent implements OnInit {
   carregandoSacramentos = true;
   carregandoObservacoes = true;
 
+  constructor() {
+    this.realtime.on('schedules:changed').pipe(takeUntilDestroyed()).subscribe(() => this.carregar());
+  }
+
   ngOnInit(): void {
+    this.carregar();
+  }
+
+  private carregar(): void {
     this.service.getMissas().subscribe(m => this.missas = m);
     this.service.getConfissoes().subscribe(c => this.confissoes = c);
     this.service.getSacramentos().subscribe({

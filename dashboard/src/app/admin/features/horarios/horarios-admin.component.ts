@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { AdminHorariosService } from '../../core/services/admin-horarios.service';
 import { AdminConfissao, AdminMissa, AdminObservacao, AdminSacramento } from '../../core/models/admin.models';
+import { normalizeSchedule, normalizeTime } from '../../core/utils/time.utils';
 
 @Component({
   selector: 'app-horarios-admin',
@@ -74,6 +75,8 @@ export class HorariosAdminComponent {
   }
 
   salvo = signal<string | null>(null);
+  erroMissa      = signal<string | null>(null);
+  erroConfissao  = signal<string | null>(null);
 
   private flashSalvo(msg: string): void {
     this.salvo.set(msg);
@@ -86,10 +89,22 @@ export class HorariosAdminComponent {
     this.editMissaHorarios = [...missa.horarios];
   }
 
-  cancelarEditMissa(): void { this.editMissaId.set(null); }
+  cancelarEditMissa(): void { this.editMissaId.set(null); this.erroMissa.set(null); }
 
   salvarMissa(id: number): void {
-    const horarios = this.editMissaHorarios.map(h => h.trim()).filter(h => h.length > 0);
+    const raw = this.editMissaHorarios.map(h => h.trim()).filter(h => h.length > 0);
+    const horarios: string[] = [];
+    for (const h of raw) {
+      const n = normalizeTime(h);
+      if (!n) {
+        this.erroMissa.set(`"${h}" não é válido. Use o formato 18h00 ou 18:00.`);
+        return;
+      }
+      horarios.push(n);
+    }
+    // Normaliza os valores no array para exibição
+    this.editMissaHorarios = horarios;
+    this.erroMissa.set(null);
     this.svc.updateMissa(id, horarios).subscribe({
       next: () => { this.editMissaId.set(null); this.flashSalvo('Horários de missa salvos!'); },
       error: () => this.flashSalvo('Erro ao salvar horários. Tente novamente.')
@@ -154,17 +169,37 @@ export class HorariosAdminComponent {
 
   salvarConfissao(id: number): void {
     if (!this.editConfissao.dia?.trim() || !this.editConfissao.horario?.trim()) return;
-    this.svc.updateConfissao(id, this.editConfissao.horario!);
-    this.editConfissaoId.set(null);
-    this.flashSalvo('Horário de confissão salvo!');
+    const horarioNorm = normalizeSchedule(this.editConfissao.horario!);
+    if (!horarioNorm) {
+      this.erroConfissao.set('Horário inválido. Use o formato 18h00 ou 18:00. Ex: 08h00 às 08h45');
+      return;
+    }
+    this.erroConfissao.set(null);
+    this.editConfissao.horario = horarioNorm;
+    this.svc.updateConfissao(id, this.editConfissao.dia!, horarioNorm).subscribe({
+      next: () => {
+        this.editConfissaoId.set(null);
+        this.flashSalvo('Horário de confissão salvo!');
+      }
+    });
   }
 
   adicionarConfissao(): void {
     if (!this.novaConfissao.dia?.trim() || !this.novaConfissao.horario?.trim()) return;
-    this.svc.createConfissao(this.novaConfissao.dia!, this.novaConfissao.horario!);
-    this.novaConfissao = { dia: '', horario: '' };
-    this.mostrarFormConfissao.set(false);
-    this.flashSalvo('Confissão adicionada!');
+    const horarioNorm = normalizeSchedule(this.novaConfissao.horario!);
+    if (!horarioNorm) {
+      this.erroConfissao.set('Horário inválido. Use o formato 18h00 ou 18:00. Ex: 08h00 às 08h45');
+      return;
+    }
+    this.erroConfissao.set(null);
+    this.novaConfissao.horario = horarioNorm;
+    this.svc.createConfissao(this.novaConfissao.dia!, horarioNorm).subscribe({
+      next: () => {
+        this.novaConfissao = { dia: '', horario: '' };
+        this.mostrarFormConfissao.set(false);
+        this.flashSalvo('Confissão adicionada!');
+      }
+    });
   }
 
   excluirConfissao(id: number): void {

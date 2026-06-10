@@ -87,3 +87,11 @@ model HorariosInfo {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model ConfessionSchedule {
+  id        Int      @id @default(autoincrement())
+  day       String   @unique
+  schedule  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

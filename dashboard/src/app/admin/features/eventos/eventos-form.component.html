@@ -40,8 +40,9 @@
       <div class="adm-field">
         <label for="ev-hora" class="adm-field__label">Hora <span aria-hidden="true">*</span></label>
         <input id="ev-hora" type="text" formControlName="hora" class="adm-field__input"
-          [attr.aria-invalid]="err('hora')" aria-required="true" placeholder="Ex: 18h00">
-        @if (err('hora')) { <span class="adm-field__erro" role="alert">Hora obrigatória (formato: 18h00).</span> }
+          [attr.aria-invalid]="err('hora')" aria-required="true" placeholder="Ex: 18h00"
+          (blur)="normalizeHora()">
+        @if (err('hora')) { <span class="adm-field__erro" role="alert">Hora inválida. Use 18h00 ou 18:00.</span> }
       </div>
 
       <div class="adm-field">

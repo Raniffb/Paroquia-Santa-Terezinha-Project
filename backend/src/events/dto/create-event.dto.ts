@@ -1,4 +1,4 @@
-import { IsBoolean, IsDateString, IsIn, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsBoolean, IsDateString, IsIn, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 const CATEGORIAS = ['missa', 'encontro', 'retiro', 'festivo', 'formacao', 'social'];
@@ -15,6 +15,7 @@ export class CreateEventDto {
 
   @ApiProperty({ example: '17h00' })
   @IsString()
+  @Matches(/^\d{2}h\d{2}$/, { message: 'Hora deve estar no formato HHhMM. Ex: 17h00' })
   time: string;
 
   @ApiProperty({ example: 'Pátio da Igreja' })

@@ -1,11 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { CreateHorariosInfoDto } from './dto/create-horarios-info.dto';
 import { UpdateHorariosInfoDto } from './dto/update-horarios-info.dto';
 
 @Injectable()
 export class HorariosInfoService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private realtime: RealtimeGateway,
+  ) {}
 
   findAll() {
     return this.prisma.horariosInfo.findMany({ orderBy: { sortOrder: 'asc' } });
@@ -17,17 +21,23 @@ export class HorariosInfoService {
     return item;
   }
 
-  create(dto: CreateHorariosInfoDto) {
-    return this.prisma.horariosInfo.create({ data: dto });
+  async create(dto: CreateHorariosInfoDto) {
+    const item = await this.prisma.horariosInfo.create({ data: dto });
+    this.realtime.emit('schedules:changed');
+    return item;
   }
 
   async update(id: number, dto: UpdateHorariosInfoDto) {
     await this.findOne(id);
-    return this.prisma.horariosInfo.update({ where: { id }, data: dto });
+    const item = await this.prisma.horariosInfo.update({ where: { id }, data: dto });
+    this.realtime.emit('schedules:changed');
+    return item;
   }
 
   async remove(id: number) {
     await this.findOne(id);
-    return this.prisma.horariosInfo.delete({ where: { id } });
+    const item = await this.prisma.horariosInfo.delete({ where: { id } });
+    this.realtime.emit('schedules:changed');
+    return item;
   }
 }

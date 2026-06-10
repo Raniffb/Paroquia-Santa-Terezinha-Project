@@ -7,10 +7,12 @@ import { environment } from '../../../../environments/environment';
 const BASE_MISSAS      = `${environment.apiUrl}/mass-schedules`;
 const BASE_SACRAMENTOS = `${environment.apiUrl}/sacramentos`;
 const BASE_INFO        = `${environment.apiUrl}/horarios-info`;
+const BASE_CONFISSOES  = `${environment.apiUrl}/confession-schedules`;
 
-interface ApiMassa       { id: number; day: string; times: string; }
-interface ApiSacramento  { id: number; title: string; description: string; icon: string; sortOrder: number; }
-interface ApiHorariosInfo { id: number; title: string; description: string; sortOrder: number; }
+interface ApiMassa             { id: number; day: string; times: string; }
+interface ApiSacramento        { id: number; title: string; description: string; icon: string; sortOrder: number; }
+interface ApiHorariosInfo      { id: number; title: string; description: string; sortOrder: number; }
+interface ApiConfessionSchedule { id: number; day: string; schedule: string; }
 
 function toAdminMissa(r: ApiMassa): AdminMissa {
   return { id: r.id, dia: r.day, horarios: r.times ? r.times.split(',').filter(Boolean) : [] };
@@ -24,10 +26,9 @@ function toAdminInfo(r: ApiHorariosInfo): AdminObservacao {
   return { id: r.id, titulo: r.title, descricao: r.description };
 }
 
-const SEED_CONFISSOES: AdminConfissao[] = [
-  { id: 1, dia: 'Sábado',  horario: '17h00 às 17h45' },
-  { id: 2, dia: 'Domingo', horario: '08h00 às 08h45' },
-];
+function toAdminConfissao(r: ApiConfessionSchedule): AdminConfissao {
+  return { id: r.id, dia: r.day, horario: r.schedule };
+}
 
 @Injectable({ providedIn: 'root' })
 export class AdminHorariosService {
@@ -35,7 +36,7 @@ export class AdminHorariosService {
 
   private _missas      = signal<AdminMissa[]>([]);
   private _sacramentos = signal<AdminSacramento[]>([]);
-  private _confissoes  = signal<AdminConfissao[]>(SEED_CONFISSOES.map(c => ({ ...c })));
+  private _confissoes  = signal<AdminConfissao[]>([]);
   private _observacoes = signal<AdminObservacao[]>([]);
 
   readonly missas      = this._missas.asReadonly();
@@ -47,6 +48,7 @@ export class AdminHorariosService {
     this.carregarMissas();
     this.carregarSacramentos();
     this.carregarHorariosInfo();
+    this.carregarConfissoes();
   }
 
   // ── Missas (API) ─────────────────────────────────────────────────────────────
@@ -104,28 +106,38 @@ export class AdminHorariosService {
     });
   }
 
-  // ── Confissões (local) ────────────────────────────────────────────────────────
+  // ── Confissões (API) ──────────────────────────────────────────────────────────
+
+  carregarConfissoes(): void {
+    this.http.get<ApiConfessionSchedule[]>(BASE_CONFISSOES).subscribe({
+      next: data => this._confissoes.set(data.map(toAdminConfissao)),
+      error: () => {}
+    });
+  }
 
   getConfissaoById(id: number): AdminConfissao | undefined {
     return this._confissoes().find(c => c.id === id);
   }
 
-  updateConfissao(id: number, horario: string): boolean {
-    if (!this._confissoes().some(c => c.id === id)) return false;
-    this._confissoes.update(l => l.map(c => c.id === id ? { ...c, horario } : c));
-    return true;
+  createConfissao(dia: string, horario: string): Observable<AdminConfissao> {
+    return this.http.post<ApiConfessionSchedule>(BASE_CONFISSOES, { day: dia, schedule: horario }).pipe(
+      tap(r => this._confissoes.update(l => [...l, toAdminConfissao(r)])),
+      map(toAdminConfissao)
+    );
   }
 
-  createConfissao(dia: string, horario: string): AdminConfissao {
-    const item: AdminConfissao = { id: Date.now(), dia, horario };
-    this._confissoes.update(l => [...l, item]);
-    return item;
+  updateConfissao(id: number, dia: string, horario: string): Observable<void> {
+    return this.http.patch<ApiConfessionSchedule>(`${BASE_CONFISSOES}/${id}`, { day: dia, schedule: horario }).pipe(
+      tap(r => this._confissoes.update(l => l.map(c => c.id === id ? toAdminConfissao(r) : c))),
+      map(() => void 0)
+    );
   }
 
-  deleteConfissao(id: number): boolean {
-    if (!this._confissoes().some(c => c.id === id)) return false;
-    this._confissoes.update(l => l.filter(c => c.id !== id));
-    return true;
+  deleteConfissao(id: number): void {
+    this.http.delete(`${BASE_CONFISSOES}/${id}`).subscribe({
+      next: () => this._confissoes.update(l => l.filter(c => c.id !== id)),
+      error: () => {}
+    });
   }
 
   // ── Informações Importantes (API) ─────────────────────────────────────────────

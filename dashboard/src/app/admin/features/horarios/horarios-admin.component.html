@@ -43,6 +43,9 @@
               <button type="button" class="adm-link-add" (click)="adicionarHorarioMissa()">
                 <i class="pi pi-plus" aria-hidden="true"></i> Adicionar horário
               </button>
+              @if (erroMissa()) {
+                <p class="adm-field__erro" role="alert">{{ erroMissa() }}</p>
+              }
               <div class="adm-horario-card__edit-acoes">
                 <button type="button" class="adm-btn adm-btn--primary adm-btn--sm" (click)="salvarMissa(missa.id)">Salvar</button>
                 <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm" (click)="cancelarEditMissa()">Cancelar</button>
@@ -216,6 +219,9 @@
           <label for="conf-hora" class="adm-field__label">Horário</label>
           <input id="conf-hora" type="text" [(ngModel)]="novaConfissao.horario" class="adm-field__input" placeholder="Ex: 17h00 às 17h45">
         </div>
+        @if (erroConfissao()) {
+          <p class="adm-field__erro adm-field--full" role="alert">{{ erroConfissao() }}</p>
+        }
         <div class="adm-inline-form__acoes">
           <button type="button" class="adm-btn adm-btn--primary adm-btn--sm" (click)="adicionarConfissao()">Salvar</button>
           <button type="button" class="adm-btn adm-btn--secondary adm-btn--sm" (click)="mostrarFormConfissao.set(false)">Cancelar</button>
@@ -245,6 +251,9 @@
                     [attr.aria-label]="'Horário da confissão'">
                 </td>
                 <td class="adm-table__col-acao">
+                  @if (erroConfissao()) {
+                    <p class="adm-field__erro" role="alert" style="white-space:nowrap">{{ erroConfissao() }}</p>
+                  }
                   <div class="adm-table__acoes">
                     <button type="button" class="adm-btn-acao adm-btn-acao--danger-ok" (click)="salvarConfissao(c.id)" aria-label="Confirmar">OK</button>
                     <button type="button" class="adm-btn-acao adm-btn-acao--cancel" (click)="cancelarEditConfissao()" aria-label="Cancelar">✕</button>

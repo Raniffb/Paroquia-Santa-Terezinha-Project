@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { inject } from '@angular/core';
+import { PreloadAllModules, provideRouter, Router, withNavigationErrorHandler, withPreloading } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
@@ -9,7 +10,11 @@ import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(
+      routes,
+      withPreloading(PreloadAllModules),
+      withNavigationErrorHandler(() => inject(Router).navigate(['/']))
+    ),
     provideHttpClient(withInterceptors([jwtInterceptor])),
     provideAnimations()
   ]
