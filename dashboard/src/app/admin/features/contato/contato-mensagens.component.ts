@@ -1,7 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../../environments/environment';
+import { RealtimeService } from '../../../core/services/realtime.service';
 
 interface Mensagem {
   id: number;
@@ -24,11 +26,18 @@ const BASE = `${environment.apiUrl}/contact-messages`;
   styleUrl: './contato-mensagens.component.scss'
 })
 export class ContatoMensagensComponent implements OnInit {
-  private http = inject(HttpClient);
+  private http     = inject(HttpClient);
+  private realtime = inject(RealtimeService);
 
   mensagens = signal<Mensagem[]>([]);
   expandida  = signal<number | null>(null);
   carregando = signal(true);
+
+  constructor() {
+    this.realtime.on('contact-messages:changed')
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.carregar());
+  }
 
   ngOnInit(): void {
     this.carregar();

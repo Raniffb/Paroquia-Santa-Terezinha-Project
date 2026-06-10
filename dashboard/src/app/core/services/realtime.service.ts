@@ -3,7 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { environment } from '../../../environments/environment';
 
-export type RealtimeEvent = 'notices:changed' | 'news:changed' | 'events:changed' | 'schedules:changed';
+export type RealtimeEvent = 'notices:changed' | 'news:changed' | 'events:changed' | 'schedules:changed' | 'contact-messages:changed';
 
 @Injectable({ providedIn: 'root' })
 export class RealtimeService implements OnDestroy {
@@ -13,7 +13,7 @@ export class RealtimeService implements OnDestroy {
   constructor() {
     this.socket = io(environment.apiUrl, { transports: ['websocket', 'polling'] });
 
-    const events: RealtimeEvent[] = ['notices:changed', 'news:changed', 'events:changed', 'schedules:changed'];
+    const events: RealtimeEvent[] = ['notices:changed', 'news:changed', 'events:changed', 'schedules:changed', 'contact-messages:changed'];
     for (const event of events) {
       const subject = new Subject<void>();
       this.subjects.set(event, subject);

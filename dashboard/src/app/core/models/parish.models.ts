@@ -32,7 +32,6 @@ export type CategoriaNoticia =
 export interface Noticia {
   id: number;
   titulo: string;
-  subtitulo?: string;
   resumo: string;
   corpo: string;
   data: string;
