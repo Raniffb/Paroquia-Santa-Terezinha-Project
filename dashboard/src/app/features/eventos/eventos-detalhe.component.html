@@ -1,0 +1,66 @@
+<div class="pst-detalhe-page">
+
+  <!-- Carregando -->
+  <div *ngIf="carregando" class="pst-detalhe-estado">
+    <i class="pi pi-spin pi-spinner pst-detalhe-estado__icone" aria-hidden="true"></i>
+    <p>Carregando evento…</p>
+  </div>
+
+  <!-- Erro -->
+  <div *ngIf="!carregando && erro" class="pst-detalhe-estado pst-detalhe-estado--erro">
+    <i class="pi pi-exclamation-circle pst-detalhe-estado__icone" aria-hidden="true"></i>
+    <p>Evento não encontrado.</p>
+    <a routerLink="/eventos" class="pst-detalhe__voltar pst-detalhe__voltar--btn">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i> Ver todos os eventos
+    </a>
+  </div>
+
+  <!-- Conteúdo -->
+  <article *ngIf="!carregando && evento" class="pst-detalhe">
+
+    <a routerLink="/eventos" class="pst-detalhe__voltar" aria-label="Voltar para eventos">
+      <i class="pi pi-arrow-left" aria-hidden="true"></i>
+      Voltar para eventos
+    </a>
+
+    <header class="pst-detalhe__header">
+
+      <!-- Chip de data -->
+      <div class="pst-detalhe__date-chip"
+           [attr.aria-label]="evento!.diaSemana + ', ' + evento!.dia + ' de ' + evento!.mes + ' de ' + evento!.ano">
+        <span class="pst-detalhe__date-mes" aria-hidden="true">{{ evento!.mes }}</span>
+        <span class="pst-detalhe__date-dia" aria-hidden="true">{{ evento!.dia }}</span>
+        <span class="pst-detalhe__date-ano" aria-hidden="true">{{ evento!.ano }}</span>
+      </div>
+
+      <div class="pst-detalhe__meta">
+        <span
+          class="pst-detalhe__cat"
+          [style.background]="corCategoria(evento!.categoria) + '18'"
+          [style.color]="corCategoria(evento!.categoria)"
+          [style.border-color]="corCategoria(evento!.categoria) + '44'">
+          {{ labelCategoria(evento!.categoria) }}
+        </span>
+        <span class="pst-detalhe__diasemana">
+          {{ evento!.diaSemana }}<span *ngIf="evento!.hora"> &bull; {{ evento!.hora }}</span>
+        </span>
+      </div>
+
+      <h1 class="pst-detalhe__titulo">{{ evento!.titulo }}</h1>
+
+      <p class="pst-detalhe__local">
+        <i class="pi pi-map-marker" aria-hidden="true"></i>
+        {{ evento!.local }}
+      </p>
+
+    </header>
+
+    <div class="pst-detalhe__divisor"></div>
+
+    <p *ngIf="evento!.resumo" class="pst-detalhe__resumo">{{ evento!.resumo }}</p>
+
+    <div class="pst-detalhe__corpo" [innerHTML]="descricaoSegura"></div>
+
+  </article>
+
+</div>

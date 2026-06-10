@@ -12,6 +12,7 @@ interface ApiEvento {
   date: string;
   time: string;
   location: string;
+  summary: string;
   description: string;
   category: string;
   published: boolean;
@@ -25,6 +26,7 @@ function toAdmin(r: ApiEvento): AdminEvento {
     data: r.date.split('T')[0],
     hora: r.time,
     local: r.location,
+    resumo: r.summary,
     descricao: r.description,
     categoria: r.category as AdminCatEvento,
     publicado: r.published,
@@ -38,6 +40,7 @@ function toApi(v: Omit<AdminEvento, 'id'>): object {
     date: v.data,
     time: v.hora,
     location: v.local,
+    summary: v.resumo,
     description: v.descricao,
     category: v.categoria,
     published: v.publicado,

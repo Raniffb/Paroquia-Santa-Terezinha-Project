@@ -63,7 +63,7 @@
 
     p {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 0.5rem;
       font-size: 0.9rem;
       margin: 0;
@@ -71,7 +71,6 @@
       .pi {
         font-size: 0.9rem;
         flex-shrink: 0;
-        margin-top: 0.1rem;
         color: var(--color-accent);
       }
 

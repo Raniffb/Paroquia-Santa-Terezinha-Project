@@ -1,4 +1,4 @@
-import { IsBoolean, IsDateString, IsIn, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsBoolean, IsDateString, IsIn, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 const CATEGORIAS = ['liturgia', 'comunidade', 'administrativo', 'formacao', 'social', 'geral'];
@@ -13,7 +13,13 @@ export class CreateNoticeDto {
   @IsDateString()
   date: string;
 
-  @ApiProperty({ example: 'Arrecadação de roupas até 30 de junho.' })
+  @ApiPropertyOptional({ example: 'Breve descrição exibida na listagem de avisos.' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(400)
+  summary?: string;
+
+  @ApiProperty({ example: '<p>Arrecadação de roupas até 30 de junho.</p>' })
   @IsString()
   @MinLength(5)
   description: string;

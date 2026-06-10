@@ -22,10 +22,12 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
+  overflow-x: hidden;
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
@@ -480,6 +482,13 @@ p {
     color: #333;
 
     span[aria-hidden] { color: #dc2626; margin-left: 2px; }
+  }
+
+  &__label-hint {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: #888;
+    margin-left: 4px;
   }
 
   &__input {

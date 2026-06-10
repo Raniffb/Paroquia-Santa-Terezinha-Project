@@ -63,7 +63,7 @@
 
         <!-- Conteúdo -->
         <h2 class="pst-aviso-item__titulo">{{ aviso.titulo }}</h2>
-        <p class="pst-aviso-item__resumo">{{ aviso.resumo }}</p>
+        <p *ngIf="aviso.resumo" class="pst-aviso-item__resumo">{{ aviso.resumo }}</p>
         <a
           [routerLink]="['/avisos', aviso.id]"
           class="pst-aviso-item__link"

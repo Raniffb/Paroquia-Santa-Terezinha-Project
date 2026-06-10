@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ParishService } from '../../core/services/parish.service';
 import { Aviso } from '../../core/models/parish.models';
 
@@ -12,18 +13,26 @@ import { Aviso } from '../../core/models/parish.models';
   styleUrl: './avisos-detalhe.component.scss'
 })
 export class AvisosDetalheComponent implements OnInit {
-  private service = inject(ParishService);
-  private route   = inject(ActivatedRoute);
+  private service   = inject(ParishService);
+  private route     = inject(ActivatedRoute);
+  private sanitizer = inject(DomSanitizer);
 
   aviso: Aviso | null = null;
+  corpoSeguro: SafeHtml = '';
   carregando = true;
   erro = false;
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.service.getAviso(id).subscribe({
-      next: a => { this.aviso = a; this.carregando = false; },
-      error: ()  => { this.erro = true; this.carregando = false; }
+      next: a => {
+        this.aviso = a;
+        // bypassSecurityTrustHtml preserva atributos style nas imagens (ex: largura
+        // definida pelo admin via resize). Seguro pois só administradores criam este conteúdo.
+        this.corpoSeguro = this.sanitizer.bypassSecurityTrustHtml(a.corpo ?? '');
+        this.carregando = false;
+      },
+      error: () => { this.erro = true; this.carregando = false; }
     });
   }
 

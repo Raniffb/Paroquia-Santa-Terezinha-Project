@@ -10,6 +10,7 @@ interface ApiAviso {
   id: number;
   title: string;
   date: string;
+  summary: string;
   description: string;
   priority: string;
   category: string;
@@ -22,7 +23,8 @@ function toAdmin(r: ApiAviso): AdminAviso {
     id: r.id,
     titulo: r.title,
     data: r.date.split('T')[0],
-    resumo: r.description,
+    resumo: r.summary,
+    corpo: r.description,
     categoria: r.category as AdminCatAviso,
     urgente: r.priority === 'urgent',
     ativo: r.active,
@@ -34,7 +36,8 @@ function toApi(v: Omit<AdminAviso, 'id'>): object {
   return {
     title: v.titulo,
     date: v.data,
-    description: v.resumo,
+    summary: v.resumo,
+    description: v.corpo,
     priority: v.urgente ? 'urgent' : 'normal',
     category: v.categoria,
     active: v.ativo,

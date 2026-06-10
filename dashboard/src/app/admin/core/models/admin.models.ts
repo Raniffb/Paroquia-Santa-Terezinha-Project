@@ -21,6 +21,7 @@ export interface AdminAviso {
   titulo: string;
   data: string;
   resumo: string;
+  corpo: string;
   categoria: AdminCatAviso;
   urgente: boolean;
   ativo: boolean;
@@ -36,6 +37,7 @@ export interface AdminEvento {
   data: string;        // YYYY-MM-DD
   hora: string;        // HHhMM
   local: string;
+  resumo: string;
   descricao: string;
   categoria: AdminCatEvento;
   publicado: boolean;

@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
+import * as express from 'express';
 import cookieParser = require('cookie-parser');
 import { AppModule } from './app.module';
 
@@ -26,10 +27,16 @@ function assertRequiredEnv(): void {
 async function bootstrap() {
   assertRequiredEnv();
 
-  const app = await NestFactory.create(AppModule);
+  // bodyParser: false desativa o parser padrão (100 kb) para podermos
+  // definir um limite maior — necessário para imagens base64 no editor.
+  const app = await NestFactory.create(AppModule, { bodyParser: false });
   const config = app.get(ConfigService);
   const isProd = config.get<string>('NODE_ENV') === 'production';
   const port   = config.get<number>('PORT') ?? 3000;
+
+  // ── Body parsers com limite generoso para base64 de imagens ───────────────
+  app.use(express.json({ limit: '15mb' }));
+  app.use(express.urlencoded({ limit: '15mb', extended: true }));
 
   // ── Cookie parser — necessário para ler cookies HttpOnly nos guards ────────
   app.use(cookieParser());

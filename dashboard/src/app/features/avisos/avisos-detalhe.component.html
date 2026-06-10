@@ -42,7 +42,9 @@
 
     <div class="pst-detalhe__divisor"></div>
 
-    <div class="pst-detalhe__corpo">{{ aviso!.resumo }}</div>
+    <p *ngIf="aviso!.resumo" class="pst-detalhe__resumo">{{ aviso!.resumo }}</p>
+
+    <div class="pst-detalhe__corpo" [innerHTML]="corpoSeguro"></div>
 
   </article>
 

@@ -1,4 +1,4 @@
-import { IsBoolean, IsDateString, IsIn, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsBoolean, IsDateString, IsIn, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 const CATEGORIAS = ['missa', 'encontro', 'retiro', 'festivo', 'formacao', 'social'];
@@ -22,7 +22,13 @@ export class CreateEventDto {
   @MinLength(3)
   location: string;
 
-  @ApiProperty({ example: 'Animação ao vivo, comidas típicas e quadrilha.' })
+  @ApiPropertyOptional({ example: 'Breve descrição exibida na listagem de eventos.' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(400)
+  summary?: string;
+
+  @ApiProperty({ example: '<p>Animação ao vivo, comidas típicas e quadrilha.</p>' })
   @IsString()
   @MinLength(5)
   description: string;

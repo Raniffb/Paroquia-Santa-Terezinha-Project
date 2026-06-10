@@ -1,1 +1,128 @@
 // Shared admin styles are in styles.scss (.adm-* classes)
+
+.adm-editor {
+  position: relative;  // Overlay anchor
+  border-radius: 6px;
+  min-width: 0;
+  max-width: 100%;
+  // No overflow: hidden — would clip the resize handles
+
+  &--erro {
+    ::ng-deep .ql-toolbar.ql-snow,
+    ::ng-deep .ql-container.ql-snow {
+      border-color: #e53e3e;
+    }
+  }
+}
+
+// Resize overlay (created dynamically, appended to .adm-editor)
+// Placed here because ::ng-deep makes these rules global
+::ng-deep .adm-img-resize-overlay {
+  position: absolute;
+  display: none;
+  border: 2px solid #2563eb;
+  pointer-events: none;
+  z-index: 50;
+  box-sizing: border-box;
+}
+
+::ng-deep .adm-img-resize-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #2563eb;
+  border: 2px solid #fff;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.4);
+  pointer-events: all;
+  box-sizing: border-box;
+
+  &--nw { top: -5px;  left: -5px;               cursor: nw-resize; }
+  &--ne { top: -5px;  right: -5px;               cursor: ne-resize; }
+  &--se { bottom: -5px; right: -5px;             cursor: se-resize; }
+  &--sw { bottom: -5px; left: -5px;              cursor: sw-resize; }
+  &--e  { top: 50%; right: -5px;  transform: translateY(-50%); cursor: e-resize; }
+  &--w  { top: 50%; left: -5px;   transform: translateY(-50%); cursor: w-resize; }
+}
+
+::ng-deep .adm-editor {
+  // Oculta o toolbar Angular do PrimeNG; o Quill cria o próprio via [modules]
+  .p-editor-toolbar {
+    display: none;
+  }
+
+  p-editor,
+  .p-editor-container,
+  .p-editor-content {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .ql-toolbar.ql-snow {
+    border: 1px solid var(--color-border, #e2e8f0) !important;
+    border-bottom-color: var(--color-border, #e2e8f0) !important;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    background: #f8fafc;
+    flex-wrap: wrap;
+  }
+
+  .ql-container.ql-snow {
+    border: 1px solid var(--color-border, #e2e8f0) !important;
+    border-top: none !important;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    font-size: 1rem;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .ql-editor {
+    min-height: 200px;
+    line-height: 1.7;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 6px;
+      margin: 0.5rem 0;
+      cursor: pointer;  // Invite click-to-resize
+    }
+
+    p { margin-bottom: 0.4rem; }
+    h1, h2, h3 { margin-bottom: 0.5rem; line-height: 1.3; }
+  }
+
+  // PrimeNG v18 injeta regras com design tokens não definidos (--p-editor-toolbar-item-hover-color)
+  // que resultam em stroke/fill vazio no hover → ícones ficam invisíveis.
+  // Sobrescrevemos com os valores padrão do Quill Snow (#06c para hover, #444 para ativo).
+  .ql-snow.ql-toolbar button:hover .ql-stroke,
+  .ql-snow.ql-toolbar button:focus .ql-stroke,
+  .ql-snow .ql-toolbar button:hover .ql-stroke,
+  .ql-snow .ql-toolbar button:focus .ql-stroke {
+    stroke: #06c !important;
+  }
+
+  .ql-snow.ql-toolbar button:hover .ql-fill,
+  .ql-snow.ql-toolbar button:focus .ql-fill,
+  .ql-snow .ql-toolbar button:hover .ql-fill,
+  .ql-snow .ql-toolbar button:focus .ql-fill {
+    fill: #06c !important;
+  }
+
+  .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+  .ql-snow .ql-toolbar button.ql-active .ql-stroke {
+    stroke: #06c !important;
+  }
+
+  .ql-snow.ql-toolbar button.ql-active .ql-fill,
+  .ql-snow .ql-toolbar button.ql-active .ql-fill {
+    fill: #06c !important;
+  }
+}

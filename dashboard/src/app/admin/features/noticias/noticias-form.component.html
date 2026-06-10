@@ -71,11 +71,13 @@
 
       <!-- Corpo -->
       <div class="adm-field adm-field--full">
-        <label for="n-corpo" class="adm-field__label">Texto completo <span aria-hidden="true">*</span></label>
-        <textarea id="n-corpo" formControlName="corpo" class="adm-field__input adm-field__textarea adm-field__textarea--tall"
-          rows="10" [attr.aria-invalid]="err('corpo')" aria-required="true"
-          placeholder="Texto completo da notícia"></textarea>
-        @if (err('corpo')) { <span class="adm-field__erro" role="alert">Texto obrigatório.</span> }
+        <span class="adm-field__label">Texto completo <span aria-hidden="true">*</span></span>
+        <div class="adm-editor" [class.adm-editor--erro]="err('corpo')" #editorWrapper>
+          <p-editor formControlName="corpo" [modules]="editorModules" [style]="{'height': '320px'}"
+                    (onInit)="onEditorInit($event)">
+          </p-editor>
+        </div>
+        @if (err('corpo')) { <span class="adm-field__erro" role="alert">Texto completo obrigatório.</span> }
       </div>
 
       <!-- Flags -->

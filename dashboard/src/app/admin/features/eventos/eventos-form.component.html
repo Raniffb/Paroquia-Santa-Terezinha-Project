@@ -61,11 +61,28 @@
       </div>
 
       <div class="adm-field adm-field--full">
-        <label for="ev-descricao" class="adm-field__label">Descrição <span aria-hidden="true">*</span></label>
-        <textarea id="ev-descricao" formControlName="descricao" class="adm-field__input adm-field__textarea"
-          rows="5" [attr.aria-invalid]="err('descricao')" aria-required="true"
-          placeholder="Descrição detalhada do evento"></textarea>
-        @if (err('descricao')) { <span class="adm-field__erro" role="alert">Descrição obrigatória.</span> }
+        <label for="ev-resumo" class="adm-field__label">
+          Resumo <span class="adm-field__label-hint">(aparece na listagem — máx. 400 caracteres)</span>
+        </label>
+        <textarea
+          id="ev-resumo"
+          formControlName="resumo"
+          class="adm-field__input adm-field__textarea"
+          rows="3"
+          maxlength="400"
+          placeholder="Breve descrição exibida nos cards da página de eventos…">
+        </textarea>
+        @if (err('resumo')) { <span class="adm-field__erro" role="alert">Resumo muito longo (máx. 400 caracteres).</span> }
+      </div>
+
+      <div class="adm-field adm-field--full">
+        <span class="adm-field__label">Descrição completa do evento <span aria-hidden="true">*</span></span>
+        <div class="adm-editor" [class.adm-editor--erro]="err('descricao')" #editorWrapper>
+          <p-editor formControlName="descricao" [modules]="editorModules" [style]="{'height': '280px'}"
+                    (onInit)="onEditorInit($event)">
+          </p-editor>
+        </div>
+        @if (err('descricao')) { <span class="adm-field__erro" role="alert">Descrição completa obrigatória.</span> }
       </div>
 
       <div class="adm-field adm-field--full adm-form__flags">

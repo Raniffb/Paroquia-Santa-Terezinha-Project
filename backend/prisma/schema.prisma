@@ -35,6 +35,7 @@ model Notice {
   id          Int      @id @default(autoincrement())
   title       String
   date        DateTime
+  summary     String   @default("")
   description String
   priority    String   @default("normal")
   category    String   @default("geral")
@@ -50,6 +51,7 @@ model Event {
   date        DateTime
   time        String
   location    String
+  summary     String   @default("")
   description String
   category    String   @default("encontro")
   published   Boolean  @default(true)

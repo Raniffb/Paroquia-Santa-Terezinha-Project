@@ -25,13 +25,13 @@ interface ApiNoticia {
 }
 
 interface ApiAviso {
-  id: number; title: string; date: string; description: string;
+  id: number; title: string; date: string; summary: string; description: string;
   priority: string; category: string; active: boolean; featured: boolean;
 }
 
 interface ApiEvento {
   id: number; title: string; date: string; time: string;
-  location: string; description: string; category: string; published: boolean; featured: boolean;
+  location: string; summary: string; description: string; category: string; published: boolean; featured: boolean;
 }
 
 interface ApiMassa       { id: number; day: string; times: string; }
@@ -95,7 +95,8 @@ export class ParishService {
         return {
           id: urgente.id,
           titulo: urgente.title,
-          resumo: urgente.description,
+          resumo: urgente.summary,
+          corpo: urgente.description,
           data: urgente.date.split('T')[0],
           destaque: true,
           urgente: urgente.priority === 'urgent',
@@ -113,7 +114,8 @@ export class ParishService {
           .map(a => ({
             id: a.id,
             titulo: a.title,
-            resumo: a.description,
+            resumo: a.summary,
+            corpo: a.description,
             data: a.date.split('T')[0],
             urgente: a.priority === 'urgent',
             featured: a.featured,
@@ -132,7 +134,8 @@ export class ParishService {
       map(a => ({
         id: a.id,
         titulo: a.title,
-        resumo: a.description,
+        resumo: a.summary,
+        corpo: a.description,
         data: a.date.split('T')[0],
         urgente: a.priority === 'urgent',
         featured: a.featured,
@@ -195,7 +198,7 @@ export class ParishService {
               tipo: 'aviso' as const,
               id: a.id,
               titulo: a.title,
-              resumo: a.description,
+              resumo: a.summary,
               data: a.date.split('T')[0],
               urgente: a.priority === 'urgent',
               rota: `/avisos/${a.id}`,
@@ -216,9 +219,9 @@ export class ParishService {
               tipo: 'evento' as const,
               id: e.id,
               titulo: e.title,
-              resumo: e.description,
+              resumo: e.summary,
               data: e.date.split('T')[0],
-              rota: '/eventos',
+              rota: `/eventos/${e.id}`,
               extra: e.location,
             })),
         ];
@@ -274,13 +277,35 @@ export class ParishService {
               ano,
               hora: e.time,
               categoria: e.category as CategoriaEvento,
-              descricao: e.description
+              resumo: e.summary,
+              descricao: e.description,
+              featured: e.featured
             };
           })
           .sort((a, b) => a.data.localeCompare(b.data));
 
         if (categoria) lista = lista.filter(e => e.categoria === categoria);
         return lista;
+      })
+    );
+  }
+
+  getEvento(id: number): Observable<Evento> {
+    return this.http.get<ApiEvento>(`${environment.apiUrl}/events/${id}`).pipe(
+      map(e => {
+        const { diaSemana, dia, mes, ano } = parseDateParts(e.date);
+        return {
+          id: e.id,
+          titulo: e.title,
+          local: e.location,
+          data: e.date.split('T')[0],
+          diaSemana, dia, mes, ano,
+          hora: e.time,
+          categoria: e.category as CategoriaEvento,
+          resumo: e.summary,
+          descricao: e.description,
+          featured: e.featured
+        };
       })
     );
   }

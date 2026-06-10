@@ -47,11 +47,28 @@
       </div>
 
       <div class="adm-field adm-field--full">
-        <label for="av-resumo" class="adm-field__label">Texto do aviso <span aria-hidden="true">*</span></label>
-        <textarea id="av-resumo" formControlName="resumo" class="adm-field__input adm-field__textarea"
-          rows="5" [attr.aria-invalid]="err('resumo')" aria-required="true"
-          placeholder="Texto completo do aviso (máx. 300 caracteres)"></textarea>
-        @if (err('resumo')) { <span class="adm-field__erro" role="alert">Texto obrigatório (máx. 300 caracteres).</span> }
+        <label for="av-resumo" class="adm-field__label">
+          Resumo <span class="adm-field__label-hint">(aparece na listagem — máx. 400 caracteres)</span>
+        </label>
+        <textarea
+          id="av-resumo"
+          formControlName="resumo"
+          class="adm-field__input adm-field__textarea"
+          rows="3"
+          maxlength="400"
+          placeholder="Breve descrição exibida nos cards da página de avisos…">
+        </textarea>
+        @if (err('resumo')) { <span class="adm-field__erro" role="alert">Resumo muito longo (máx. 400 caracteres).</span> }
+      </div>
+
+      <div class="adm-field adm-field--full">
+        <span class="adm-field__label">Texto completo do aviso <span aria-hidden="true">*</span></span>
+        <div class="adm-editor" [class.adm-editor--erro]="err('corpo')" #editorWrapper>
+          <p-editor formControlName="corpo" [modules]="editorModules" [style]="{'height': '280px'}"
+                    (onInit)="onEditorInit($event)">
+          </p-editor>
+        </div>
+        @if (err('corpo')) { <span class="adm-field__erro" role="alert">Texto completo do aviso obrigatório.</span> }
       </div>
 
       <div class="adm-field adm-field--full adm-form__flags">

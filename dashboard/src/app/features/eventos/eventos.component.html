@@ -91,9 +91,17 @@
           {{ evento.local }}
         </p>
 
-        <p *ngIf="evento.descricao" class="pst-evento-item__descricao">
-          {{ evento.descricao }}
+        <p *ngIf="evento.resumo" class="pst-evento-item__descricao">
+          {{ evento.resumo }}
         </p>
+
+        <a
+          [routerLink]="['/eventos', evento.id]"
+          class="pst-evento-item__link"
+          [attr.aria-label]="'Ver detalhes: ' + evento.titulo">
+          Ler mais
+          <i class="pi pi-arrow-right" aria-hidden="true"></i>
+        </a>
       </div>
     </li>
   </ul>

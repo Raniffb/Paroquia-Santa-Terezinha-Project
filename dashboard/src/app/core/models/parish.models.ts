@@ -12,6 +12,7 @@ export interface Aviso {
   id: number;
   titulo: string;
   resumo: string;
+  corpo: string;
   data: string;
   destaque?: boolean;
   urgente?: boolean;
@@ -85,6 +86,7 @@ export interface Evento {
   ano: string;
   hora?: string;
   categoria: CategoriaEvento;
+  resumo?: string;
   descricao?: string;
   featured?: boolean;
 }

@@ -46,7 +46,7 @@
 
     <p class="pst-detalhe__resumo">{{ noticia.resumo }}</p>
 
-    <div class="pst-detalhe__corpo">{{ noticia.corpo }}</div>
+    <div class="pst-detalhe__corpo" [innerHTML]="corpoSeguro"></div>
 
   </article>
 

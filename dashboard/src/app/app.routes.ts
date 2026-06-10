@@ -139,6 +139,12 @@ export const routes: Routes = [
         title: 'Eventos – Paróquia Santa Teresinha'
       },
       {
+        path: 'eventos/:id',
+        loadComponent: () =>
+          import('./features/eventos/eventos-detalhe.component').then(m => m.EventosDetalheComponent),
+        title: 'Evento – Paróquia Santa Teresinha'
+      },
+      {
         path: 'contato',
         loadComponent: () =>
           import('./features/contato/contato.component').then(m => m.ContatoComponent),
