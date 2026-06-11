@@ -24,6 +24,7 @@ export class EventosComponent implements OnInit {
   private service  = inject(ParishService);
   private realtime = inject(RealtimeService);
 
+  carregando = false;
   todos: Evento[] = [];
   visiveis: Evento[] = [];
   categoriaAtiva: CategoriaEvento | null = null;
@@ -49,7 +50,9 @@ export class EventosComponent implements OnInit {
   }
 
   private carregar(): void {
+    this.carregando = true;
     this.service.getEventos().subscribe(e => {
+      this.carregando = false;
       this.todos = e;
       this.meses = [...new Set(e.map(ev => ev.mes + '/' + ev.ano))];
       this.aplicarFiltros();

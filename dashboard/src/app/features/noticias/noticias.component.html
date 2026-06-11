@@ -23,9 +23,26 @@
     </button>
   </div>
 
+  <!-- Esqueleto enquanto carrega -->
+  <div
+    *ngIf="carregando"
+    class="pst-noticias-grid"
+    aria-label="Carregando notícias"
+    aria-busy="true">
+    <div *ngFor="let n of [1,2,3]" class="pst-noticia-card">
+      <div class="pst-noticia-card__header">
+        <span class="pst-skeleton pst-skeleton--badge"></span>
+        <span class="pst-skeleton pst-skeleton--data"></span>
+      </div>
+      <span class="pst-skeleton pst-skeleton--titulo"></span>
+      <span class="pst-skeleton pst-skeleton--linha"></span>
+      <span class="pst-skeleton pst-skeleton--linha-sm"></span>
+    </div>
+  </div>
+
   <!-- Lista de notícias -->
   <div
-    *ngIf="visiveis.length > 0; else semNoticias"
+    *ngIf="!carregando && visiveis.length > 0"
     class="pst-noticias-grid"
     aria-live="polite"
     aria-label="Notícias filtradas">
@@ -65,10 +82,9 @@
     </article>
   </div>
 
-  <ng-template #semNoticias>
-    <div class="pst-empty" role="status" aria-live="polite">
-      <i class="pi pi-inbox" aria-hidden="true"></i>
-      <p>Nenhuma notícia encontrada para esta categoria.</p>
-    </div>
-  </ng-template>
+  <!-- Sem resultados -->
+  <div *ngIf="!carregando && visiveis.length === 0" class="pst-empty" role="status" aria-live="polite">
+    <i class="pi pi-inbox" aria-hidden="true"></i>
+    <p>Nenhuma notícia encontrada para esta categoria.</p>
+  </div>
 </div>

@@ -1,3 +1,20 @@
+<section *ngIf="carregando" class="pst-section" aria-label="Carregando destaques" aria-busy="true">
+  <div class="pst-carousel">
+    <div class="pst-carousel__viewport">
+      <div class="pst-destaque-card">
+        <div class="pst-destaque-card__top">
+          <span class="pst-skeleton pst-skeleton--badge"></span>
+        </div>
+        <span class="pst-skeleton pst-skeleton--titulo-lg"></span>
+        <span class="pst-skeleton pst-skeleton--linha"></span>
+        <span class="pst-skeleton pst-skeleton--linha"></span>
+        <span class="pst-skeleton pst-skeleton--linha-sm"></span>
+        <span class="pst-skeleton pst-skeleton--btn"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="destaque" class="pst-section" aria-label="Destaques" *ngIf="!carregando && itens.length > 0 && itemAtual">
 
   <div class="pst-carousel">

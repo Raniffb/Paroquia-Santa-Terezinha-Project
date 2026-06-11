@@ -23,6 +23,7 @@ export class NoticiasComponent implements OnInit {
   private service  = inject(ParishService);
   private realtime = inject(RealtimeService);
 
+  carregando = false;
   todas: Noticia[] = [];
   visiveis: Noticia[] = [];
   categoriaAtiva: CategoriaNoticia | null = null;
@@ -45,7 +46,9 @@ export class NoticiasComponent implements OnInit {
   }
 
   private carregar(): void {
+    this.carregando = true;
     this.service.getNoticias().subscribe(n => {
+      this.carregando = false;
       this.todas = n;
       this.filtrar(this.categoriaAtiva);
     });

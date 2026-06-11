@@ -11,10 +11,18 @@
     </a>
   </div>
 
-  <div *ngIf="carregando" class="pst-estado-vazio" aria-live="polite" aria-busy="true">
-    <i class="pi pi-spin pi-spinner pst-estado-vazio__icone" aria-hidden="true"></i>
-    <p class="pst-estado-vazio__texto">Carregando avisos…</p>
-  </div>
+  <ul *ngIf="carregando" class="pst-avisos-list" aria-label="Carregando avisos" aria-busy="true">
+    <li *ngFor="let n of [1,2,3]" class="pst-aviso-card">
+      <div class="pst-aviso-card__data">
+        <span class="pst-skeleton pst-skeleton--data"></span>
+      </div>
+      <div class="pst-aviso-card__content">
+        <span class="pst-skeleton pst-skeleton--titulo"></span>
+        <span class="pst-skeleton pst-skeleton--linha"></span>
+        <span class="pst-skeleton pst-skeleton--linha-sm"></span>
+      </div>
+    </li>
+  </ul>
 
   <div *ngIf="!carregando && itens.length === 0" class="pst-estado-vazio">
     <i class="pi pi-bell-slash pst-estado-vazio__icone" aria-hidden="true"></i>

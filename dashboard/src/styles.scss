@@ -624,3 +624,27 @@ p {
 
   i { font-size: 16px; }
 }
+
+/* ── Skeleton / shimmer loading ──────────────────────────────────── */
+@keyframes pst-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.pst-skeleton {
+  background: linear-gradient(90deg, #ede9df 25%, #f5f2ec 50%, #ede9df 75%);
+  background-size: 200% 100%;
+  animation: pst-shimmer 1.4s ease-in-out infinite;
+  border-radius: 6px;
+  display: block;
+
+  &--linha     { height: 14px; width: 100%; margin-bottom: 8px; }
+  &--linha-sm  { height: 12px; width: 55%; margin-bottom: 8px; }
+  &--titulo    { height: 20px; width: 80%; margin-bottom: 10px; margin-top: 10px; }
+  &--titulo-lg { height: 28px; width: 72%; margin-bottom: 12px; margin-top: 16px; }
+  &--badge     { height: 20px; width: 72px; border-radius: 100px; }
+  &--badge-ev  { height: 20px; width: 80px; border-radius: 100px; margin-bottom: 10px; }
+  &--data      { height: 13px; width: 90px; }
+  &--btn       { height: 36px; width: 110px; border-radius: 8px; margin-top: 8px; }
+  &--date-chip { width: 60px; height: 72px; border-radius: 10px; flex-shrink: 0; }
+}
