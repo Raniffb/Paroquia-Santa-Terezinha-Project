@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './paginador.component.scss'
 })
 export class PaginadorComponent implements OnChanges {
+  private el = inject(ElementRef);
+
   @Input() total = 0;
   @Input() porPagina = 5;
   @Input() paginaAtual = 0;
@@ -27,6 +29,15 @@ export class PaginadorComponent implements OnChanges {
   ir(p: number): void {
     if (p >= 0 && p < this.totalPaginas && p !== this.paginaAtual) {
       this.mudouPagina.emit(p);
+      // Após o Angular re-renderizar a lista, rola até o topo da seção pai
+      setTimeout(() => {
+        const ancora: Element | null =
+          this.el.nativeElement.closest('section') ??
+          this.el.nativeElement.closest('.pst-page-content');
+        if (ancora) {
+          ancora.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 0);
     }
   }
 }
