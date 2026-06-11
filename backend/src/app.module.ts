@@ -16,6 +16,7 @@ import { HorariosInfoModule } from './horarios-info/horarios-info.module';
 import { ConfessionSchedulesModule } from './confession-schedules/confession-schedules.module';
 import { ContactMessagesModule } from './contact-messages/contact-messages.module';
 import { RealtimeModule } from './realtime/realtime.module';
+import { CleanupModule } from './cleanup/cleanup.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { RealtimeModule } from './realtime/realtime.module';
     HorariosInfoModule,
     ConfessionSchedulesModule,
     ContactMessagesModule,
+    CleanupModule,
   ],
   providers: [
     // ThrottlerGuard avaliado antes do JWT (ordem de registro)

@@ -70,6 +70,8 @@ export class AvisosFormComponent implements OnInit, OnDestroy {
     ]
   };
 
+  hoje = new Date().toISOString().split('T')[0];
+
   editId     = signal<number | null>(null);
   salvo      = signal(false);
   carregando = signal(false);

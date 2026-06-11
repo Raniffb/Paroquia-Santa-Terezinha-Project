@@ -33,6 +33,7 @@
       <div class="adm-field">
         <label for="av-data" class="adm-field__label">Data <span aria-hidden="true">*</span></label>
         <input id="av-data" type="date" formControlName="data" class="adm-field__input"
+          [min]="modoEdicao ? '' : hoje"
           [attr.aria-invalid]="err('data')" aria-required="true">
         @if (err('data')) { <span class="adm-field__erro" role="alert">Data obrigatória.</span> }
       </div>
