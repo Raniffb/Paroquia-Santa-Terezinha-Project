@@ -10,5 +10,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
 export const environment = {
   production: true,
-  apiUrl: 'https://api.paroquia.com'  // ← substitua pelo domínio real
+  apiUrl: 'https://paroquia-api-lwdk.onrender.com'  // ← substitua pelo domínio real
 };
