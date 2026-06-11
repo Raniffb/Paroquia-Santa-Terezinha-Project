@@ -22,6 +22,8 @@ export class HorariosComponent implements OnInit {
   observacoes: ObservacaoMissa[] = [];
   sacramentos: Sacramento[] = [];
 
+  carregandoMissas      = true;
+  carregandoConfissoes  = true;
   carregandoSacramentos = true;
   carregandoObservacoes = true;
 
@@ -34,8 +36,14 @@ export class HorariosComponent implements OnInit {
   }
 
   private carregar(): void {
-    this.service.getMissas().subscribe(m => this.missas = m);
-    this.service.getConfissoes().subscribe(c => this.confissoes = c);
+    this.service.getMissas().subscribe({
+      next: m => { this.missas = m; this.carregandoMissas = false; },
+      error: ()  => { this.carregandoMissas = false; }
+    });
+    this.service.getConfissoes().subscribe({
+      next: c => { this.confissoes = c; this.carregandoConfissoes = false; },
+      error: ()  => { this.carregandoConfissoes = false; }
+    });
     this.service.getSacramentos().subscribe({
       next: s => { this.sacramentos = s; this.carregandoSacramentos = false; },
       error: ()  => { this.carregandoSacramentos = false; }

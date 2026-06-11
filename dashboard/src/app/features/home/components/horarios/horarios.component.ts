@@ -13,8 +13,12 @@ import { Missa } from '../../../../core/models/parish.models';
 export class HorariosComponent implements OnInit {
   private service = inject(ParishService);
   missas: Missa[] = [];
+  carregando = true;
 
   ngOnInit(): void {
-    this.service.getMissas().subscribe(m => this.missas = m);
+    this.service.getMissas().subscribe({
+      next: m => { this.missas = m; this.carregando = false; },
+      error: ()  => { this.carregando = false; }
+    });
   }
 }

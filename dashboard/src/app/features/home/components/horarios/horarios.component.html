@@ -17,7 +17,25 @@
       Confira sempre os avisos.
     </div>
 
-    <ul class="pst-horarios-list" role="list">
+    <!-- Esqueleto -->
+    <ul *ngIf="carregando" class="pst-horarios-list" aria-busy="true">
+      <li *ngFor="let n of [1,2,3,4,5]" class="pst-horarios-item">
+        <span class="pst-skeleton pst-skeleton--dia"></span>
+        <div class="pst-horarios-item__horarios">
+          <span class="pst-skeleton pst-skeleton--chip"></span>
+          <span class="pst-skeleton pst-skeleton--chip"></span>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Vazio -->
+    <div *ngIf="!carregando && missas.length === 0" class="pst-estado-vazio">
+      <i class="pi pi-clock pst-estado-vazio__icone" aria-hidden="true"></i>
+      <p class="pst-estado-vazio__texto">Horários serão publicados em breve.</p>
+    </div>
+
+    <!-- Dados -->
+    <ul *ngIf="!carregando && missas.length > 0" class="pst-horarios-list" role="list">
       <li
         *ngFor="let missa of missas"
         class="pst-horarios-item">

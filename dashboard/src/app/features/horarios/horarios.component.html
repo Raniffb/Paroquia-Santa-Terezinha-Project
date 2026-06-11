@@ -14,7 +14,27 @@
     </h2>
 
     <div class="pst-horarios-card" role="region" aria-label="Horários das missas regulares">
-      <ul class="pst-horarios-list" role="list">
+
+      <!-- Esqueleto -->
+      <ul *ngIf="carregandoMissas" class="pst-horarios-list" aria-busy="true">
+        <li *ngFor="let n of [1,2,3,4,5]" class="pst-horarios-item">
+          <span class="pst-skeleton pst-skeleton--dia"></span>
+          <div class="pst-horarios-item__chips">
+            <span class="pst-skeleton pst-skeleton--chip"></span>
+            <span class="pst-skeleton pst-skeleton--chip"></span>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Vazio -->
+      <div *ngIf="!carregandoMissas && missas.length === 0" class="pst-estado-vazio">
+        <i class="pi pi-clock pst-estado-vazio__icone" aria-hidden="true"></i>
+        <p class="pst-estado-vazio__texto">Nenhum horário de missa cadastrado no momento.</p>
+        <p class="pst-estado-vazio__subtexto">Consulte a secretaria paroquial para informações atualizadas.</p>
+      </div>
+
+      <!-- Dados -->
+      <ul *ngIf="!carregandoMissas && missas.length > 0" class="pst-horarios-list" role="list">
         <li *ngFor="let missa of missas" class="pst-horarios-item">
           <span class="pst-horarios-item__dia">{{ missa.dia }}</span>
           <div class="pst-horarios-item__chips" role="group" [attr.aria-label]="'Missas de ' + missa.dia">
@@ -25,6 +45,7 @@
           </div>
         </li>
       </ul>
+
     </div>
   </section>
 
@@ -40,7 +61,26 @@
         <i class="pi pi-info-circle" aria-hidden="true"></i>
         A confissão é sempre antes da missa, ou conforme combinado com o padre. Em períodos especiais (Quaresma, Advento), haverá horários extras.
       </div>
-      <ul class="pst-horarios-list" role="list">
+
+      <!-- Esqueleto -->
+      <ul *ngIf="carregandoConfissoes" class="pst-horarios-list" aria-busy="true">
+        <li *ngFor="let n of [1,2,3]" class="pst-horarios-item">
+          <span class="pst-skeleton pst-skeleton--dia"></span>
+          <div class="pst-horarios-item__chips">
+            <span class="pst-skeleton pst-skeleton--chip"></span>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Vazio -->
+      <div *ngIf="!carregandoConfissoes && confissoes.length === 0" class="pst-estado-vazio">
+        <i class="pi pi-heart pst-estado-vazio__icone" aria-hidden="true"></i>
+        <p class="pst-estado-vazio__texto">Nenhum horário de confissão cadastrado no momento.</p>
+        <p class="pst-estado-vazio__subtexto">Entre em contato com a secretaria paroquial para agendar.</p>
+      </div>
+
+      <!-- Dados -->
+      <ul *ngIf="!carregandoConfissoes && confissoes.length > 0" class="pst-horarios-list" role="list">
         <li *ngFor="let conf of confissoes" class="pst-horarios-item">
           <span class="pst-horarios-item__dia">{{ conf.dia }}</span>
           <div class="pst-horarios-item__chips">
@@ -51,6 +91,7 @@
           </div>
         </li>
       </ul>
+
     </div>
   </section>
 
@@ -61,9 +102,13 @@
       Sacramentos e Intenções
     </h2>
 
-    <div *ngIf="carregandoSacramentos" class="pst-estado-vazio" aria-live="polite" aria-busy="true">
-      <i class="pi pi-spin pi-spinner pst-estado-vazio__icone" aria-hidden="true"></i>
-      <p class="pst-estado-vazio__texto">Carregando sacramentos…</p>
+    <div *ngIf="carregandoSacramentos" class="pst-sacramentos-grid" aria-busy="true">
+      <div *ngFor="let n of [1,2,3]" class="pst-sacramento-card">
+        <span class="pst-skeleton pst-skeleton--icon-block"></span>
+        <span class="pst-skeleton pst-skeleton--titulo"></span>
+        <span class="pst-skeleton pst-skeleton--linha"></span>
+        <span class="pst-skeleton pst-skeleton--linha-sm"></span>
+      </div>
     </div>
 
     <div *ngIf="!carregandoSacramentos && sacramentos.length === 0" class="pst-estado-vazio">
@@ -90,10 +135,16 @@
       Informações Importantes
     </h2>
 
-    <div *ngIf="carregandoObservacoes" class="pst-estado-vazio" aria-live="polite" aria-busy="true">
-      <i class="pi pi-spin pi-spinner pst-estado-vazio__icone" aria-hidden="true"></i>
-      <p class="pst-estado-vazio__texto">Carregando informações…</p>
-    </div>
+    <ul *ngIf="carregandoObservacoes" class="pst-obs-lista" aria-busy="true">
+      <li *ngFor="let n of [1,2]" class="pst-obs-item">
+        <span class="pst-skeleton pst-skeleton--icon-circle"></span>
+        <div style="flex:1">
+          <span class="pst-skeleton pst-skeleton--titulo"></span>
+          <span class="pst-skeleton pst-skeleton--linha"></span>
+          <span class="pst-skeleton pst-skeleton--linha-sm"></span>
+        </div>
+      </li>
+    </ul>
 
     <div *ngIf="!carregandoObservacoes && observacoes.length === 0" class="pst-estado-vazio">
       <i class="pi pi-info-circle pst-estado-vazio__icone" aria-hidden="true"></i>
