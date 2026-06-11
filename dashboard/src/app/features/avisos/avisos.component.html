@@ -22,14 +22,29 @@
   </div>
 
   <!-- Contagem -->
-  <p class="pst-result-count" aria-live="polite" aria-atomic="true">
+  <p *ngIf="!carregando" class="pst-result-count" aria-live="polite" aria-atomic="true">
     <strong>{{ visiveis.length }}</strong>
     {{ visiveis.length === 1 ? 'aviso encontrado' : 'avisos encontrados' }}
   </p>
 
+  <!-- Esqueleto enquanto carrega -->
+  <ul *ngIf="carregando" class="pst-avisos-lista" aria-label="Carregando avisos" aria-busy="true">
+    <li *ngFor="let n of [1,2,3]" class="pst-aviso-item">
+      <div class="pst-aviso-item__inner">
+        <div class="pst-aviso-item__meta">
+          <span class="pst-skeleton pst-skeleton--data"></span>
+          <span class="pst-skeleton pst-skeleton--badge"></span>
+        </div>
+        <span class="pst-skeleton pst-skeleton--titulo"></span>
+        <span class="pst-skeleton pst-skeleton--linha"></span>
+        <span class="pst-skeleton pst-skeleton--linha-sm"></span>
+      </div>
+    </li>
+  </ul>
+
   <!-- Lista -->
   <ul
-    *ngIf="visiveis.length > 0; else semAvisos"
+    *ngIf="!carregando && visiveis.length > 0"
     class="pst-avisos-lista"
     role="list"
     aria-label="Lista de avisos"
@@ -75,10 +90,9 @@
     </li>
   </ul>
 
-  <ng-template #semAvisos>
-    <div class="pst-empty" role="status" aria-live="polite">
-      <i class="pi pi-bell-slash" aria-hidden="true"></i>
-      <p>Nenhum aviso encontrado para esta categoria.</p>
-    </div>
-  </ng-template>
+  <!-- Sem resultados -->
+  <div *ngIf="!carregando && visiveis.length === 0" class="pst-empty" role="status" aria-live="polite">
+    <i class="pi pi-bell-slash" aria-hidden="true"></i>
+    <p>Nenhum aviso encontrado para esta categoria.</p>
+  </div>
 </div>

@@ -24,6 +24,7 @@ export class AvisosComponent implements OnInit {
   private service  = inject(ParishService);
   private realtime = inject(RealtimeService);
 
+  carregando = false;
   todos: Aviso[] = [];
   visiveis: Aviso[] = [];
   categoriaAtiva: CategoriaAviso | null = null;
@@ -46,7 +47,9 @@ export class AvisosComponent implements OnInit {
   }
 
   private carregar(): void {
+    this.carregando = true;
     this.service.getAvisos().subscribe(a => {
+      this.carregando = false;
       this.todos = a;
       this.filtrar(this.categoriaAtiva);
     });
