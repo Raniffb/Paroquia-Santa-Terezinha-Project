@@ -372,6 +372,16 @@ p {
   &__col-sm  { white-space: nowrap; width: 1%; }
   &__col-acao { white-space: nowrap; width: 1%; }
 
+  &__meta-mobile {
+    display: none;
+    gap: 4px 8px;
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 4px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
   &__acoes {
     display: flex;
     gap: 6px;
@@ -389,6 +399,14 @@ p {
     font-size: 0.82rem;
     color: #dc2626;
     font-weight: 600;
+  }
+}
+
+@media (max-width: 640px) {
+  .adm-table {
+    &__col-sm   { display: none; }
+
+    &__meta-mobile { display: flex; }
   }
 }
 

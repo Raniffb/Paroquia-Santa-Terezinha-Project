@@ -49,6 +49,15 @@
                 @if (n.destaque) {
                   <span class="adm-badge adm-badge--destaque">Destaque</span>
                 }
+                <span class="adm-table__meta-mobile">
+                  <span>{{ labelCategoria(n.categoria) }}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{{ formatarData(n.data) }}</span>
+                  <span aria-hidden="true">·</span>
+                  <span [class]="n.publicado ? 'adm-badge adm-badge--ativo' : 'adm-badge adm-badge--inativo'">
+                    {{ n.publicado ? 'Publicado' : 'Rascunho' }}
+                  </span>
+                </span>
               </td>
               <td class="adm-table__col-sm">{{ labelCategoria(n.categoria) }}</td>
               <td class="adm-table__col-sm">{{ formatarData(n.data) }}</td>

@@ -46,6 +46,17 @@
               <td>
                 <span class="adm-table__titulo-linha">{{ ev.titulo }}</span>
                 <span class="adm-table__subtitulo">{{ ev.local }}</span>
+                <span class="adm-table__meta-mobile">
+                  <span>{{ labelCategoria(ev.categoria) }}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{{ formatarData(ev.data) }}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{{ ev.hora }}</span>
+                  <span aria-hidden="true">·</span>
+                  <span [class]="ev.publicado ? 'adm-badge adm-badge--ativo' : 'adm-badge adm-badge--inativo'">
+                    {{ ev.publicado ? 'Publicado' : 'Rascunho' }}
+                  </span>
+                </span>
               </td>
               <td class="adm-table__col-sm">{{ labelCategoria(ev.categoria) }}</td>
               <td class="adm-table__col-sm">{{ formatarData(ev.data) }}</td>

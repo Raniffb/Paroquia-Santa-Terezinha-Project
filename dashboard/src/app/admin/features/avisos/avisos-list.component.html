@@ -48,6 +48,15 @@
                 @if (a.urgente) {
                   <span class="adm-badge adm-badge--urgente">Urgente</span>
                 }
+                <span class="adm-table__meta-mobile">
+                  <span>{{ labelCategoria(a.categoria) }}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{{ formatarData(a.data) }}</span>
+                  <span aria-hidden="true">·</span>
+                  <span [class]="a.ativo ? 'adm-badge adm-badge--ativo' : 'adm-badge adm-badge--inativo'">
+                    {{ a.ativo ? 'Ativo' : 'Inativo' }}
+                  </span>
+                </span>
               </td>
               <td class="adm-table__col-sm">{{ labelCategoria(a.categoria) }}</td>
               <td class="adm-table__col-sm">{{ formatarData(a.data) }}</td>
