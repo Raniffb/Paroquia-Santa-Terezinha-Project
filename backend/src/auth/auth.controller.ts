@@ -31,11 +31,13 @@ export class AuthController {
     const isProd = this.config.get<string>('NODE_ENV') === 'production';
     const result = await this.authService.login(dto);
 
-    // Cookie HttpOnly: inacessível via JS, enviado automaticamente pelo browser
+    // Em produção (Vercel + Render são cross-site) o cookie precisa de
+    // sameSite:'none' + Secure para o browser aceitá-lo em AJAX cross-origin.
+    // Em dev (localhost) 'lax' é suficiente e não exige HTTPS.
     res.cookie('pst_token', result.access_token, {
       httpOnly: true,
-      secure: isProd,      // Secure só em HTTPS (produção)
-      sameSite: 'lax',     // paroquia.com → api.paroquia.com é same-site (mesmo eTLD+1)
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: COOKIE_MAX_AGE,
       path: '/',
     });
@@ -49,7 +51,15 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Logout — limpa o cookie de sessão' })
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('pst_token', { path: '/' });
+    const isProd = this.config.get<string>('NODE_ENV') === 'production';
+    // clearCookie deve usar as mesmas opções do Set-Cookie original,
+    // caso contrário o browser não reconhece o cookie a ser removido.
+    res.clearCookie('pst_token', {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
+      path: '/',
+    });
     return { message: 'Logout realizado.' };
   }
 
