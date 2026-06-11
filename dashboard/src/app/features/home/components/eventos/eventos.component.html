@@ -24,7 +24,7 @@
 
   <ul *ngIf="!carregando && eventos.length > 0"
       class="pst-eventos-list" role="list" aria-label="Próximos eventos da paróquia">
-    <li *ngFor="let evento of eventos" class="pst-evento-card">
+    <li *ngFor="let evento of paginados" class="pst-evento-card">
 
       <div
         class="pst-evento-card__date-chip"
@@ -48,5 +48,13 @@
       </div>
     </li>
   </ul>
+
+  <app-paginador
+    *ngIf="!carregando"
+    [total]="eventos.length"
+    [porPagina]="POR_PAGINA"
+    [paginaAtual]="pagina"
+    (mudouPagina)="mudarPagina($event)">
+  </app-paginador>
 
 </section>

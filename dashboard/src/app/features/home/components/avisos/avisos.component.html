@@ -32,7 +32,7 @@
 
   <ul *ngIf="!carregando && itens.length > 0"
       class="pst-avisos-list" role="list" aria-label="Lista de avisos e notícias recentes">
-    <li *ngFor="let item of itens" class="pst-aviso-card">
+    <li *ngFor="let item of paginados" class="pst-aviso-card">
 
       <div class="pst-aviso-card__data">
         <time [dateTime]="item.data">{{ formatarData(item.data) }}</time>
@@ -57,5 +57,13 @@
       </div>
     </li>
   </ul>
+
+  <app-paginador
+    *ngIf="!carregando"
+    [total]="itens.length"
+    [porPagina]="POR_PAGINA"
+    [paginaAtual]="pagina"
+    (mudouPagina)="mudarPagina($event)">
+  </app-paginador>
 
 </section>

@@ -6,6 +6,7 @@ import { ParishService } from '../../core/services/parish.service';
 import { RealtimeService } from '../../core/services/realtime.service';
 import { CategoriaNoticia, Noticia } from '../../core/models/parish.models';
 import { PageHeroComponent } from '../../shared/components/page-hero/page-hero.component';
+import { PaginadorComponent } from '../../shared/components/paginador/paginador.component';
 
 interface FiltroNoticia {
   label: string;
@@ -15,7 +16,7 @@ interface FiltroNoticia {
 @Component({
   selector: 'app-noticias',
   standalone: true,
-  imports: [CommonModule, RouterLink, PageHeroComponent],
+  imports: [CommonModule, RouterLink, PageHeroComponent, PaginadorComponent],
   templateUrl: './noticias.component.html',
   styleUrl: './noticias.component.scss'
 })
@@ -27,6 +28,12 @@ export class NoticiasComponent implements OnInit {
   todas: Noticia[] = [];
   visiveis: Noticia[] = [];
   categoriaAtiva: CategoriaNoticia | null = null;
+  pagina = 0;
+  readonly POR_PAGINA = 6;
+
+  get paginados(): Noticia[] {
+    return this.visiveis.slice(this.pagina * this.POR_PAGINA, (this.pagina + 1) * this.POR_PAGINA);
+  }
 
   filtros: FiltroNoticia[] = [
     { label: 'Todas',     valor: null },
@@ -56,10 +63,13 @@ export class NoticiasComponent implements OnInit {
 
   filtrar(categoria: CategoriaNoticia | null): void {
     this.categoriaAtiva = categoria;
+    this.pagina = 0;
     this.visiveis = categoria
       ? this.todas.filter(n => n.categoria === categoria)
       : this.todas;
   }
+
+  mudarPagina(p: number): void { this.pagina = p; }
 
   formatarData(iso: string): string {
     const [y, m, d] = iso.split('-').map(Number);

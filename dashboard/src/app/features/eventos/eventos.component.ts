@@ -6,6 +6,7 @@ import { ParishService } from '../../core/services/parish.service';
 import { RealtimeService } from '../../core/services/realtime.service';
 import { CategoriaEvento, Evento } from '../../core/models/parish.models';
 import { PageHeroComponent } from '../../shared/components/page-hero/page-hero.component';
+import { PaginadorComponent } from '../../shared/components/paginador/paginador.component';
 
 interface FiltroEvento {
   label: string;
@@ -16,7 +17,7 @@ interface FiltroEvento {
 @Component({
   selector: 'app-eventos',
   standalone: true,
-  imports: [CommonModule, RouterLink, PageHeroComponent],
+  imports: [CommonModule, RouterLink, PageHeroComponent, PaginadorComponent],
   templateUrl: './eventos.component.html',
   styleUrl: './eventos.component.scss'
 })
@@ -30,6 +31,12 @@ export class EventosComponent implements OnInit {
   categoriaAtiva: CategoriaEvento | null = null;
   mesFiltro: string | null = null;
   meses: string[] = [];
+  pagina = 0;
+  readonly POR_PAGINA = 8;
+
+  get paginados(): Evento[] {
+    return this.visiveis.slice(this.pagina * this.POR_PAGINA, (this.pagina + 1) * this.POR_PAGINA);
+  }
 
   filtros: FiltroEvento[] = [
     { label: 'Todos',     valor: null,        icon: 'pi-list' },
@@ -61,13 +68,17 @@ export class EventosComponent implements OnInit {
 
   filtrarCategoria(categoria: CategoriaEvento | null): void {
     this.categoriaAtiva = categoria;
+    this.pagina = 0;
     this.aplicarFiltros();
   }
 
   filtrarMes(mes: string | null): void {
     this.mesFiltro = mes;
+    this.pagina = 0;
     this.aplicarFiltros();
   }
+
+  mudarPagina(p: number): void { this.pagina = p; }
 
   private aplicarFiltros(): void {
     this.visiveis = this.todos.filter(e => {

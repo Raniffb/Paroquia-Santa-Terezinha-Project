@@ -1,0 +1,29 @@
+<nav *ngIf="totalPaginas > 1" class="pst-paginador" aria-label="Paginação">
+
+  <button
+    class="pst-paginador__btn"
+    (click)="ir(paginaAtual - 1)"
+    [disabled]="paginaAtual === 0"
+    aria-label="Página anterior">
+    <i class="pi pi-chevron-left" aria-hidden="true"></i>
+  </button>
+
+  <button
+    *ngFor="let p of paginas"
+    class="pst-paginador__num"
+    [class.pst-paginador__num--ativo]="p === paginaAtual"
+    (click)="ir(p)"
+    [attr.aria-label]="'Página ' + (p + 1)"
+    [attr.aria-current]="p === paginaAtual ? 'page' : null">
+    {{ p + 1 }}
+  </button>
+
+  <button
+    class="pst-paginador__btn"
+    (click)="ir(paginaAtual + 1)"
+    [disabled]="paginaAtual === totalPaginas - 1"
+    aria-label="Próxima página">
+    <i class="pi pi-chevron-right" aria-hidden="true"></i>
+  </button>
+
+</nav>

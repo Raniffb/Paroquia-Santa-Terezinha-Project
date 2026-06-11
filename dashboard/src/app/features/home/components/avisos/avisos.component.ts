@@ -5,6 +5,7 @@ import { forkJoin } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ParishService } from '../../../../core/services/parish.service';
 import { RealtimeService } from '../../../../core/services/realtime.service';
+import { PaginadorComponent } from '../../../../shared/components/paginador/paginador.component';
 
 interface ItemUnificado {
   tipo: 'aviso' | 'noticia';
@@ -19,7 +20,7 @@ interface ItemUnificado {
 @Component({
   selector: 'app-avisos',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, PaginadorComponent],
   templateUrl: './avisos.component.html',
   styleUrl: './avisos.component.scss'
 })
@@ -29,6 +30,12 @@ export class AvisosComponent implements OnInit {
 
   itens: ItemUnificado[] = [];
   carregando = true;
+  pagina = 0;
+  readonly POR_PAGINA = 5;
+
+  get paginados(): ItemUnificado[] {
+    return this.itens.slice(this.pagina * this.POR_PAGINA, (this.pagina + 1) * this.POR_PAGINA);
+  }
 
   constructor() {
     this.realtime.on('notices:changed').pipe(takeUntilDestroyed()).subscribe(() => this.carregar());
@@ -64,11 +71,15 @@ export class AvisosComponent implements OnInit {
             rota: `/noticias/${n.id}`,
           })),
         ];
-        this.itens = combinados.sort((a, b) => b.data.localeCompare(a.data)).slice(0, 4);
+        this.itens = combinados.sort((a, b) => b.data.localeCompare(a.data));
         this.carregando = false;
       },
       error: () => { this.carregando = false; }
     });
+  }
+
+  mudarPagina(p: number): void {
+    this.pagina = p;
   }
 
   formatarData(iso: string): string {

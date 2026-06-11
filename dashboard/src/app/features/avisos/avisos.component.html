@@ -50,7 +50,7 @@
     aria-label="Lista de avisos"
     aria-live="polite">
 
-    <li *ngFor="let aviso of visiveis" class="pst-aviso-item">
+    <li *ngFor="let aviso of paginados" class="pst-aviso-item">
 
       <!-- Indicador urgente -->
       <div *ngIf="aviso.urgente" class="pst-aviso-item__urgente" aria-label="Aviso urgente">
@@ -89,6 +89,14 @@
       </div>
     </li>
   </ul>
+
+  <app-paginador
+    *ngIf="!carregando && visiveis.length > 0"
+    [total]="visiveis.length"
+    [porPagina]="POR_PAGINA"
+    [paginaAtual]="pagina"
+    (mudouPagina)="mudarPagina($event)">
+  </app-paginador>
 
   <!-- Sem resultados -->
   <div *ngIf="!carregando && visiveis.length === 0" class="pst-empty" role="status" aria-live="polite">

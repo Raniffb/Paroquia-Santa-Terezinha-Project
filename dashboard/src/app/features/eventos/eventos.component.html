@@ -68,7 +68,7 @@
     aria-label="Lista de eventos"
     aria-live="polite">
 
-    <li *ngFor="let evento of visiveis" class="pst-evento-item">
+    <li *ngFor="let evento of paginados" class="pst-evento-item">
 
       <!-- Chip de data -->
       <div
@@ -117,6 +117,14 @@
       </div>
     </li>
   </ul>
+
+  <app-paginador
+    *ngIf="!carregando && visiveis.length > 0"
+    [total]="visiveis.length"
+    [porPagina]="POR_PAGINA"
+    [paginaAtual]="pagina"
+    (mudouPagina)="mudarPagina($event)">
+  </app-paginador>
 
   <!-- Sem resultados -->
   <div *ngIf="!carregando && visiveis.length === 0" class="pst-empty" role="status" aria-live="polite">

@@ -6,6 +6,7 @@ import { ParishService } from '../../core/services/parish.service';
 import { RealtimeService } from '../../core/services/realtime.service';
 import { Aviso, CategoriaAviso } from '../../core/models/parish.models';
 import { PageHeroComponent } from '../../shared/components/page-hero/page-hero.component';
+import { PaginadorComponent } from '../../shared/components/paginador/paginador.component';
 
 interface FiltroAviso {
   label: string;
@@ -16,7 +17,7 @@ interface FiltroAviso {
 @Component({
   selector: 'app-avisos',
   standalone: true,
-  imports: [CommonModule, RouterLink, PageHeroComponent],
+  imports: [CommonModule, RouterLink, PageHeroComponent, PaginadorComponent],
   templateUrl: './avisos.component.html',
   styleUrl: './avisos.component.scss'
 })
@@ -28,6 +29,12 @@ export class AvisosComponent implements OnInit {
   todos: Aviso[] = [];
   visiveis: Aviso[] = [];
   categoriaAtiva: CategoriaAviso | null = null;
+  pagina = 0;
+  readonly POR_PAGINA = 8;
+
+  get paginados(): Aviso[] {
+    return this.visiveis.slice(this.pagina * this.POR_PAGINA, (this.pagina + 1) * this.POR_PAGINA);
+  }
 
   filtros: FiltroAviso[] = [
     { label: 'Todos',          valor: null,             icon: 'pi-list' },
@@ -57,10 +64,13 @@ export class AvisosComponent implements OnInit {
 
   filtrar(categoria: CategoriaAviso | null): void {
     this.categoriaAtiva = categoria;
+    this.pagina = 0;
     this.visiveis = categoria
       ? this.todos.filter(a => a.categoria === categoria)
       : this.todos;
   }
+
+  mudarPagina(p: number): void { this.pagina = p; }
 
   formatarData(iso: string): string {
     const [y, m, d] = iso.split('-').map(Number);

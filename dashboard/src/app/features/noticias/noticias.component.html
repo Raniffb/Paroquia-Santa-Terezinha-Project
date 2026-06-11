@@ -48,9 +48,9 @@
     aria-label="Notícias filtradas">
 
     <article
-      *ngFor="let noticia of visiveis; let i = index"
+      *ngFor="let noticia of paginados; let i = index"
       class="pst-noticia-card"
-      [class.pst-noticia-card--destaque]="i === 0 && !categoriaAtiva">
+      [class.pst-noticia-card--destaque]="i === 0 && !categoriaAtiva && pagina === 0">
 
       <div class="pst-noticia-card__header">
         <span class="pst-noticia-card__cat">
@@ -81,6 +81,14 @@
       </div>
     </article>
   </div>
+
+  <app-paginador
+    *ngIf="!carregando && visiveis.length > 0"
+    [total]="visiveis.length"
+    [porPagina]="POR_PAGINA"
+    [paginaAtual]="pagina"
+    (mudouPagina)="mudarPagina($event)">
+  </app-paginador>
 
   <!-- Sem resultados -->
   <div *ngIf="!carregando && visiveis.length === 0" class="pst-empty" role="status" aria-live="polite">
