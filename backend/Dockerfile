@@ -1,18 +1,26 @@
-FROM node:20-alpine
+FROM node:20-bookworm-slim AS builder
+
 WORKDIR /app
 
-# Copia manifests primeiro para aproveitar cache de camadas do Docker
+RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+
 COPY package*.json ./
 RUN npm ci
 
-# Copia todo o código (inclui prisma/ com schema e migrations)
 COPY . .
 
-# Build: gera Prisma Client + compila NestJS para dist/
+RUN npx prisma generate
 RUN npm run build
+
+FROM node:20-bookworm-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /app /app
 
 ENV NODE_ENV=production
 EXPOSE 3000
 
-# Aplica migrations pendentes e inicia o servidor
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
